@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Visi;
+use App\Misi;
+use App\User;
 use DB;
-use App\DraftModel;
-use App\misiDraftModel;
-use App\visiDraftModel;
 
 class KepalaDaerahController extends Controller
 {
@@ -17,42 +17,30 @@ class KepalaDaerahController extends Controller
     }
     public function showVisiMisi()
     {
-    	// $datavisimisi=DB::select('SELECT visi_draft.id_draft as id_draft, visi_draft.isi_visi as visi,visi_draft.id_kd as kd_id,misi_draft.isi_misi as misi FROM visi_draft inner join misi_draft on visi_draft.id_draft=misi_draft.id_draft');
-        $datavisimisi=DB::select('SELECT visi_draft.id as id_visi, visi_draft.isi_visi as visi,visi_draft.id_kd as kd_id,misi_draft.isi_misi as misi FROM visi_draft inner join misi_draft on visi_draft.id=misi_draft.id_visi');
-        return view('kepaladaerah.showvisimisi', ['datavisimisi' => $datavisimisi]); 
+        $id = Auth::user()->id;
+        $VisiMisi = Visi::where('user_id', $id)->first();
+        return view('kepaladaerah.showvisimisi', compact('VisiMisi')); 
     }
     public function storeVisiMisi(request $request)
     {
-    	$id=Auth::user()->id;
-    	// $draft= new DraftModel(
-     //        );
-     //    $draft->save();
-        // $get_last_draft_id=DB::select('SELECT id FROM draft order by id desc limit 1');
-     //    $get_last_draft_id= json_decode( json_encode($get_last_draft_id), true);
+        $validator = \Validator::make($request->all(), [
+                    'visi' => 'required',
+                    'misi' => 'required',
+        ]);
+        $validator->validate();
         
-        $draft_visi=new visiDraftModel(
-            array(
-                    // 'id_draft'  => $get_last_draft_id[0]['id'],
-                    'id_kd'     => $id,
-                    'isi_visi'  => $request->visi
-                )
-        );
-        $draft_visi->save();
-        $get_last_visi_id=DB::select('SELECT id FROM visi_draft order by id desc limit 1');
-        $get_last_visi_id= json_decode( json_encode($get_last_visi_id), true);
-        // return response()->json(['success' => $get_last_visi_id]);
-        foreach ($request->misi as $misis) {
-        $draft_misi= new misiDraftModel(
-        		array(
-        			// 'id_draft'	=> $get_last_draft_id[0]['id'],
 
-                    'id_visi'   => $get_last_visi_id[0]['id'],
-        			'id_kd'		=> $id,
-        			'isi_misi'	=> $misis
-        		)
-        	);
-        $draft_misi->save();
-		}
+        $data = $request->only('visi', 'misi');
+        $data['user_id'] = Auth::user()->id;
+        $visi = Visi::create($data);
+
+        $tempMisi = [];
+        foreach ($data['misi'] as $misiNya) {
+            $tempMisi['misi'] = $misiNya;
+            $tempMisi['visi_id'] = $visi->id;
+            $misi = Misi::create($tempMisi);
+        }
+        // dd($data['misi']);
 		
         return view('kepaladaerah.inputvisimisi');
        

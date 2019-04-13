@@ -12,9 +12,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $dataUsers = array (
-            ['username'=> 'admin', 'password'=>bcrypt('123'),'category'=>'admin'],
-            
-            
+                ['name'=>'admin', 'username'=> 'admin', 'password'=>bcrypt('asdqwe123'),'category_id'=>6],           
             );
         DB::table('users')->insert($dataUsers);
     }

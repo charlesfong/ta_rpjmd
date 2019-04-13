@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUmumsTable extends Migration
+class CreateUserCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +13,9 @@ class CreateUmumsTable extends Migration
      */
     public function up()
     {
-        Schema::create('umums', function (Blueprint $table) {
+        Schema::create('user_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateUmumsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('umums');
+        Schema::dropIfExists('user_categories');
     }
 }

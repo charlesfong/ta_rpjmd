@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use DB;
-use App\ModelUser;
+use Hash;
+use App\User;
+use App\UserCategory;
+use App\RoleUser;
 
 class AdminController extends Controller
 {
@@ -16,28 +21,45 @@ class AdminController extends Controller
      */
     public function showtambahuser()
     {
-        return view('admin.tambahuser');
+        $categories = UserCategory::all();
+        return view('admin.tambahuser', compact('categories'));
     }
     public function storeUser(request $request)
-    {   
-        $user= new ModelUser(
+    {
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'username' => [
+                'required',
+                Rule::unique('users'),
+            ],
+            'password' => 'required|string|min:6',
+            'category' => 'required|exists:user_categories,id',
+        ]);
+        $validator->validate();
+
+        $user = new User(
             array(                
                 'username' => $request->get('username'),
-                'full_name'=> $request->get('full_name'),
-                'password' => bcrypt('123'),
-                'category' => $request->get('category'),
+                'name'=> $request->get('name'),
+                'password' =>  Hash::make($request->get('password')),
+                'category_id' => $request->get('category'),
                 )
             );
         $user->save();
+        $role_user = new RoleUser(
+            array(                
+                'user_id' => $user->id,
+                'user_category_id'=> $request->get('category'),
+                )
+            );
+        $role_user->save();
         
-        return redirect('/admin/home')
-        ->with('status', 'User dengan nama '
-            .$request->get('username').' sudah berhasil disimpan');
+        return redirect()->back()->with("success","berhasil!");
     }
     public function showUser()
     {
-    	$results = DB::select('select * from users');
-        return view('admin.seluruhuser', ['data' => $results]);
+        $data = User::all();
+        return view('admin.seluruhuser', compact('data'));
     }
     public function showaa()
     {

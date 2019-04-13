@@ -39,17 +39,17 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        $this->mapAdminRoutes();
+        // $this->mapAdminRoutes();
 
-        $this->mapKepaladaerahRoutes();
+        // $this->mapKepaladaerahRoutes();
 
-        $this->mapUmumRoutes();
+        // $this->mapUmumRoutes();
 
-        $this->mapAhliRoutes();
+        // $this->mapAhliRoutes();
 
-        $this->mapOpdRoutes();
+        // $this->mapOpdRoutes();
 
-        $this->mapBappedaRoutes();
+        // $this->mapBappedaRoutes();
 
         //
     }

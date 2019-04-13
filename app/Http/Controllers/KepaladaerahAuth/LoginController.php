@@ -67,7 +67,7 @@ class LoginController extends Controller
             'username'=>'required',
             'password'=>'required'
         ]);
-        if (Auth::guard('kepaladaerah')->attempt(['username'=>$request->username,'password'=>$request->password,'category'=>'kepala daerah'],$request->remember)){
+        if (Auth::guard('kepaladaerah')->attempt(['username'=>$request->username,'password'=>$request->password,'category_id'=>1],$request->remember)){
             
         }
         else
