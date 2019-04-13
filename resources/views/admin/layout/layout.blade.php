@@ -1,3 +1,4 @@
+   
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,16 +10,16 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> -->
-  <link href="{{ asset('../asset/bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('asset/bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"/>
   <!-- Font Awesome -->
-  <link href="{{ asset('../asset/bower_components/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('asset/bower_components/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet"/>
   <!-- Ionicons -->
-  <link href="{{ asset('../asset/bower_components/Ionicons/css/ionicons.min.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('asset/bower_components/Ionicons/css/ionicons.min.css') }}" rel="stylesheet"/>
   <!-- Theme style -->
-  <link href="{{ asset('../asset/dist/css/AdminLTE.min.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('asset/dist/css/AdminLTE.min.css') }}" rel="stylesheet"/>
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-  <link href="{{ asset('../asset/dist/css/skins/_all-skins.min.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('asset/dist/css/skins/_all-skins.min.css') }}" rel="stylesheet"/>
   
   <!-- Morris chart -->
   <!-- <link href="{{ asset('../asset/bower_components/morris.js/morris.css') }}" rel="stylesheet"/> -->
@@ -41,16 +42,13 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <style>
-
     html,body{
            width: 100%;
          height: 100%;
     }
-
      body {
         
     }
-
     #circle {
         position: absolute;
         top: 50%;
@@ -59,7 +57,6 @@
       width: 150px;
         height: 150px;  
     }
-
     .loader {
         width: calc(100% - 0px);
       height: calc(100% - 0px);
@@ -121,8 +118,8 @@
   </div>
 
 
-<script src="asset/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="asset/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="{{asset('asset/bower_components/jquery/dist/jquery.min.js')}}"></script>
+<script src="{{asset('asset/bower_components/jquery-ui/jquery-ui.min.js')}}"></script>
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 </script>
@@ -142,12 +139,12 @@
 <!-- <script src="asset/dist/js/adminlte.min.js"></script> -->
 <!-- <script src="asset/dist/js/pages/dashboard.js"></script> -->
 <!-- <script src="asset/dist/js/demo.js"></script> -->
-<script src="../../asset/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="../../asset/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="../../asset/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="../../asset/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{asset('asset/bower_components/jquery/dist/jquery.min.js')}}"></script>
+<script src="{{asset('asset/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('asset/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('asset/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
 <!-- <script src="../../asset/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script> -->
-<script src="../../asset/dist/js/adminlte.min.js"></script>
+<script src="{{asset('asset/dist/js/adminlte.min.js')}}"></script>
 <!-- <script src="../../asset/bower_components/fastclick/lib/fastclick.js"></script> -->
 <!-- <script src="../../asset/dist/js/demo.js"></script> -->
 <script>
@@ -166,3 +163,15 @@
 
 </body>
 </html>
+© 2019 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About

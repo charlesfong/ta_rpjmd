@@ -7,7 +7,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Login</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/admin/login') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
@@ -36,20 +36,6 @@
                                     </span>
                                 @endif
                             </div>
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="sel1" class="col-md-4 control-label">Select Category</label>
-                            <div class="col-md-6">
-                                <select class="form-control " style="width: 350px" id="category">
-                                <option value="KepalaDaerah">   Kepala Daerah</option>
-                                <option value="Bappeda"     >   Bappeda</option>
-                                <option value="KepalaOPD"   >   Kepala OPD</option>
-                                <option value="OPD"         >   OPD</option>
-                                <option value="TimAhli"     >   Tim Ahli</option>
-                                <option value="Admin"     >   Admin</option>
-                              </select>
-                            </div> 
                         </div>
 
                         <div class="form-group">

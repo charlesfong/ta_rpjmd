@@ -1,4 +1,4 @@
-@extends('kepaladaerah.layout.layout')
+@extends('layouts.layout')
 
 @section('content')
 
@@ -17,29 +17,20 @@
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>No</th>
-                  <th>id</th>
                   <th>Visi</th>
                   <th>Misi</th>
                 </tr>
                 </thead>
                 <tbody>
-            @foreach ($datavisimisi as $index => $data)
-            <tr>
-                <td>
-                {{$index+1}}
-                </td>
-                <td>
-                {{$data->id_visi}}
-                </td>
-                <td>
-                {{$data->visi}}
-                </td>
-                <td>
-                {{$data->misi}}
-                </td> 
-            </tr>
-            @endforeach
+                @if($VisiMisi != null)
+                  <tr>
+                      <td rowspan="5">{{$VisiMisi['visi']}}</td>
+                      <td>{{$VisiMisi->misi[0]['misi']}}</td>
+                  </tr>
+                  @for ($j = 1; $j < sizeof($VisiMisi->misi); $j++)
+                    <tr><td>{{$VisiMisi->misi[$j]['misi']}}</td></tr>
+                  @endfor
+                @endif
                 </tfoot>
               </table>
             </div>

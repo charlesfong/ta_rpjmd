@@ -8,11 +8,11 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
-  <link href="{{ asset('../asset/bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"/>
-  <link href="{{ asset('../asset/bower_components/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet"/>
-  <link href="{{ asset('../asset/bower_components/Ionicons/css/ionicons.min.css') }}" rel="stylesheet"/>
-  <link href="{{ asset('../asset/dist/css/AdminLTE.min.css') }}" rel="stylesheet"/>
-  <link href="{{ asset('../asset/dist/css/skins/_all-skins.min.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('asset/bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('asset/bower_components/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('asset/bower_components/Ionicons/css/ionicons.min.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('asset/dist/css/AdminLTE.min.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('asset/dist/css/skins/_all-skins.min.css') }}" rel="stylesheet"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   
 </head>
@@ -84,12 +84,12 @@
 <!-- <script src="asset/dist/js/adminlte.min.js"></script> -->
 <!-- <script src="asset/dist/js/pages/dashboard.js"></script> -->
 <!-- <script src="asset/dist/js/demo.js"></script> -->
-<script src="../../asset/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="../../asset/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="../../asset/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="../../asset/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{ asset('asset/bower_components/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('asset/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('asset/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('asset/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <!-- <script src="../../asset/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script> -->
-<script src="../../asset/dist/js/adminlte.min.js"></script>
+<script src="{{ asset('asset/dist/js/adminlte.min.js') }}"></script>
 <!-- <script src="../../asset/bower_components/fastclick/lib/fastclick.js"></script> -->
 <!-- <script src="../../asset/dist/js/demo.js"></script> -->
 <script>

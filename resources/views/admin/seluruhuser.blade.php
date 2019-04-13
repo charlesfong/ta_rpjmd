@@ -1,4 +1,4 @@
-@extends('admin.layout.layout')
+@extends('layouts.layout')
 @section('content')
   
     <!-- Content Header (Page header) -->
@@ -29,21 +29,21 @@
                 </thead>
                 <tbody>
                 @foreach ($data as $index => $dat)
-            <tr>
-                <td>
-                {{$dat->id}}
-                </td>
-                <td>
-                {{$dat->username}}
-                </td>
-                <td>
-                {{$dat->full_name}}
-                </td>
-                <td>
-                {{$dat->category}}
-                </td>   
-            </tr>
-            @endforeach
+                <tr>
+                    <td>
+                    {{$dat->id}}
+                    </td>
+                    <td>
+                    {{$dat->username}}
+                    </td>
+                    <td>
+                    {{$dat->name}}
+                    </td>
+                    <td>
+                    {{$dat->user_categories[0]['name']}}
+                    </td>   
+                </tr>
+                @endforeach
                 </tfoot>
               </table>
             </div>

@@ -70,17 +70,9 @@ html,body{
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Login
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="{{ url('kepaladaerah/login')}}">Kepala Daerah</a>
-                  <a class="dropdown-item" href="{{ url('bappeda/login')}}">Bappeda</a>
-                  <a class="dropdown-item" href="#">Kepala OPD</a>
-                  <a class="dropdown-item" href="#">OPD</a>
-                  <a class="dropdown-item" href="#">Tim Ahli</a>
-                  <a class="dropdown-item" href="{{ url('admin/login')}}">Admin</a>
-                </div>
+                <form action="{{route('showLogin')}}" method="get">
+                  <button class="btn btn-secondary" type="submit" aria-haspopup="true" aria-expanded="false">Login</button>
+                </form>
               </div>
             </li>
             <!-- <li class="nav-item">
@@ -148,7 +140,7 @@ html,body{
         <!-- <p class="m-0 text-center text-white">Copyright &copy; CFPLA Website 2018</p> -->
       </div>
     </footer>
-  <script src="/js/app.js"></script>
+  <script src="{{asset('js/app.js')}}"></script>
     <!-- Bootstrap core JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 

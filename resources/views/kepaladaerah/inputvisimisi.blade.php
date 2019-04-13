@@ -1,4 +1,4 @@
-@extends('kepaladaerah.layout.layout')
+@extends('layouts.layout')
 
 @section('content')
     <table class="table table-striped">
@@ -8,7 +8,7 @@
             </tr>
              <tr>
                 <td colspan="1">
-                   <form class="well form-horizontal" method="post" action="{{ url('/kepaladaerah/storeVisiMisi') }}">
+                   <form class="well form-horizontal" method="post" action="{{ route('storeVisiMisi') }}">
                     {{ csrf_field() }}
                       <fieldset>
                          <div class="form-group">
@@ -34,19 +34,21 @@
               </tr>
           </tbody>
        </table>
-       <script type="text/javascript">
-           $(document).ready(function() {
+
+       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+       <script>
+     $(document).ready(function() {
 
         var iCnt = 0;
         if (iCnt==0)
         {
             iCnt = iCnt + 1;
-                $('#misi_div').append('<div class="form-group" id="'+iCnt+'"><label class="col-md-1 control-label">Misi '+iCnt+'</label><div class="col-md-11 inputGroupContainer"><div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span><input type=text class="form-control" name="misi[]" required="true" value="" placeholder="Misi '+iCnt+'"/></div></div></div>');
+                $('#misi_div').append('<div class="form-group" id="'+iCnt+'"><label class="col-md-1 control-label">Misi '+iCnt+'</label><div class="col-md-11 inputGroupContainer"><div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span><textarea type=text class="form-control" name="misi[]" required="true" value="" placeholder="Misi '+iCnt+'" style="width: 100%; resize: vertical;"></textarea></div></div></div>');
         }
         
-            $('#btAdd').click(function() {
-                iCnt = iCnt + 1;
-                $('#misi_div').append('<div class="form-group" id="'+iCnt+'"><label class="col-md-1 control-label">Misi '+iCnt+'</label><div class="col-md-11 inputGroupContainer"><div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span><input type=text class="form-control" name="misi[]" required="true" value="" placeholder="Misi '+iCnt+'"/></div></div></div>');
+        $('#btAdd').click(function() {
+            iCnt = iCnt + 1;
+            $('#misi_div').append('<div class="form-group" id="'+iCnt+'"><label class="col-md-1 control-label">Misi '+iCnt+'</label><div class="col-md-11 inputGroupContainer"><div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span><textarea type=text class="form-control" name="misi[]" required="true" value="" placeholder="Misi '+iCnt+'" style="width: 100%; resize: vertical;"></textarea></div></div></div>');
         });
         
         $('#btRemove').click(function() {
