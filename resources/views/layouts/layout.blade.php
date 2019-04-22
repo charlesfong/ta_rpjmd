@@ -107,7 +107,7 @@
                     </a>          
                   </li>
                   <li>
-                    <a href="#">
+                    <a href="{{ route('showNilaiMisi') }}">
                       <i class="fa"></i> <span>Nilai Alternatif Misi</span>           
                     </a>         
                   </li>

@@ -9,6 +9,7 @@ use App\Misi;
 use App\User;
 use App\KriteriaMisi;
 use App\BobotKriteriaMisi;
+use App\BobotMisi;
 use DB;
 
 class KepalaDaerahController extends Controller
@@ -48,12 +49,20 @@ class KepalaDaerahController extends Controller
        
     }
 
-    //AHP
+    //AHPshowNilaiMisi
     public function showKriteriaMisi()
     {
         $Kriteria = KriteriaMisi::all();
         $TipeData = 'Misi';
         return view('nilaikriteria', compact('TipeData', 'Kriteria'));
+    }
+    public function showNilaiMisi()
+    {
+        $id = Auth::user()->id;
+        $VisiMisi = Visi::where('user_id', $id)->first();
+        $Kriteria = $VisiMisi->misi;
+        $TipeData = 'Misi';
+        return view('nilaimisi', compact('TipeData', 'Kriteria'));
     }
     public function addKriteriaMisi()
     {
@@ -104,5 +113,33 @@ class KepalaDaerahController extends Controller
         $Kriteria = KriteriaMisi::all();
         $TipeData = 'Misi';
         return view('nilaikriteria', compact('TipeData', 'Kriteria'));
+    }
+    public function storeNilaiMisi(Request $request)
+    {
+        $id = Auth::user()->id;
+
+        foreach ($request['misi'] as $key => $data) {
+            $pilihan = explode("-",$key);
+            $arr = [];
+            $arr['misi_id'] = $pilihan[0];
+            $arr['misi2_id'] = $pilihan[1];
+            $arr['bobot'] = $data;
+            $arr['user_id'] = $id;
+
+            $bobotNya = BobotMisi::where([['user_id', $id], ['misi_id', $arr['misi_id']], ['misi2_id', $arr['misi2_id']]])->first();
+            if($bobotNya!=null){
+                $bobotNya->bobot = $arr['bobot'];
+                $bobotNya->save();
+            }
+            else{
+                BobotMisi::create($arr);
+            }
+        }
+
+        $id = Auth::user()->id;
+        $VisiMisi = Visi::where('user_id', $id)->first();
+        $Kriteria = $VisiMisi->misi;
+        $TipeData = 'Misi';
+        return view('nilaimisi', compact('TipeData', 'Kriteria'));
     }
 }

@@ -23,4 +23,12 @@ class Misi extends Model
     {
         return $this->hasMany('App\BobotMisi');
     }
+    public function bobotkriteriamisi()
+    {
+        return $this->hasMany('App\BobotMisi', 'misi_id', 'id');
+    }
+    public function bobotkriteriamisi2()
+    {
+        return $this->hasMany('App\BobotMisi', 'misi2_id', 'id');
+    }
 }

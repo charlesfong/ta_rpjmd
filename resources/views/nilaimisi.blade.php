@@ -6,7 +6,7 @@
       $urlStore = route('storeKriteriaMisi');
     }
   @endphp
-  <form method="post" action="{{ route('storeNilaiKriteriaMisi') }}" class="row-fluid margin-none well form-horizontal">
+  <form method="post" action="{{ route('storeNilaiMisi') }}" class="row-fluid margin-none well form-horizontal">
     {{ csrf_field() }}
     <table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="4">
       <tbody>
@@ -29,18 +29,18 @@
 
           <tr>
             <td><input type="hidden" name="" value="1">{{$idx+1}}.</td>
-            <td>{{$a1['kriteria']}}</td>
+            <td>{{$a1['misi']}}</td>
             <td style="text-align:center;">
               @for($j = 9; $j > 0; $j-=2)
-                <input type="radio" id="radio-{{$a1['id']}}-{{$b1['id']}}+{{$j}}" name="kriteria[{{$a1['id']}}-{{$b1['id']}}]" value="{{$j}}">
+                <input type="radio" id="radio-{{$a1['id']}}-{{$b1['id']}}+{{$j}}" name="misi[{{$a1['id']}}-{{$b1['id']}}]" value="{{$j}}">
                 <label style=" margin-right: 20px !important;" for="radio-{{$a1['id']}}-{{$b1['id']}}+{{$j}}">{{$j}}</label>
               @endfor
               @for($j = 3; $j < 10; $j+=2)
-                <input type="radio" id="radio-{{$a1['id']}}-{{$b1['id']}}-{{$j}}" name="kriteria[{{$a1['id']}}-{{$b1['id']}}]" value="{{1/$j}}" required="">
+                <input type="radio" id="radio-{{$a1['id']}}-{{$b1['id']}}-{{$j}}" name="misi[{{$a1['id']}}-{{$b1['id']}}]" value="{{1/$j}}" required="">
                 <label style=" margin-right: 20px !important;" for="radio-{{$a1['id']}}-{{$b1['id']}}-{{$j}}">{{$j}}</label>
               @endfor
             </td>
-            <td>{{$b1['kriteria']}}</td>
+            <td>{{$b1['misi']}}</td>
           </tr>
           @php $idx++; @endphp
           @endfor
@@ -74,11 +74,11 @@
         @endphp
         <tr>
           <td>{{$key['id']}}</td> 
-          <td>K{{$key['id']}} - {{$key['kriteria']}}</td>
+          <td>K{{$key['id']}} - {{$key['misi']}}</td>
 
           @foreach($key->bobotkriteriamisi2 as $bobot)
             @php
-              $arr2d[$key['id']][$bobot['kriteria_id']] = 1/$bobot['bobot'];
+              $arr2d[$key['id']][$bobot['misi_id']] = 1/$bobot['bobot'];
             @endphp
             <td>{{1/$bobot['bobot']}}</td>
           @endforeach
@@ -92,7 +92,7 @@
           
           @foreach($key->bobotkriteriamisi as $bobot)
             @php
-              $arr2d[$key['id']][$bobot['kriteria2_id']] = $bobot['bobot'];
+              $arr2d[$key['id']][$bobot['misi2_id']] = $bobot['bobot'];
             @endphp
             <td>{{$bobot['bobot']}}</td>
           @endforeach
@@ -149,7 +149,7 @@
 
           <tr>
             <td>{{$Kriteria[$i-1]['id']}}</td> 
-            <td>K{{$Kriteria[$i-1]['id']}} - {{$Kriteria[$i-1]['kriteria']}}</td>
+            <td>K{{$Kriteria[$i-1]['id']}} - {{$Kriteria[$i-1]['misi']}}</td>
               @for($j = 1; $j <= sizeof($arr2d[1]); $j++)
                 @php
                   $eigen[$i][$j] = $arr2d[$i][$j]/$sum[$j];
@@ -190,7 +190,10 @@
             <td>CI</td>
 
             @php
-              $CI = ($result-sizeof($arr2d[1]))/(sizeof($arr2d[1])-1);
+              $CI = 0;
+              if($result-sizeof($arr2d[1]) > 0){
+                $CI = ($result-sizeof($arr2d[1]))/(sizeof($arr2d[1])-1);                
+              }
             @endphp
 
             <td>{{$CI}}</td>
@@ -200,6 +203,7 @@
 
             <?php
               $RI = 0;
+              $CR = 0;
               if(sizeof($arr2d[1]) == 3){
                 $RI = 0.58;
               }
@@ -224,7 +228,10 @@
               elseif(sizeof($arr2d[1]) == 10){
                 $RI = 1.49;
               }
-              $CR = $CI/$RI;
+
+              if($CI > 0){
+                $CR = $CI/$RI;
+              }            
             ?>
             <td>{{$CR}}</td>
           </tr>

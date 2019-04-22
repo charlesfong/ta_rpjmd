@@ -29,9 +29,11 @@ Route::group(['prefix' => 'kepaladaerah', 'middleware' => 'auth'], function () {
 
 	//khusus AHP
 	Route::get('/nilai-kriteria-misi', 'KepalaDaerahController@showKriteriaMisi')->name('showKriteriaMisi');
+	Route::get('/nilai-misi', 'KepalaDaerahController@showNilaiMisi')->name('showNilaiMisi');
 	Route::get('/add-kriteria-misi', 'KepalaDaerahController@addKriteriaMisi')->name('addKriteriaMisi');
 	Route::post('/store-kriteria-misi', 'KepalaDaerahController@storeKriteriaMisi')->name('storeKriteriaMisi');
 	Route::post('/store-nilai-kriteria-misi', 'KepalaDaerahController@storeNilaiKriteriaMisi')->name('storeNilaiKriteriaMisi');
+	Route::post('/store-nilai-misi', 'KepalaDaerahController@storeNilaiMisi')->name('storeNilaiMisi');
 });
 
 Route::group(['prefix' => 'bappeda', 'middleware' => 'auth'], function () {
