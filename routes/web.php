@@ -26,6 +26,20 @@ Route::group(['prefix' => 'kepaladaerah', 'middleware' => 'auth'], function () {
 	Route::get('/browse-visimisi', 'KepalaDaerahController@showVisiMisi')->name('browseVisiMisi');
 	Route::get('/add-visimisi', 'KepalaDaerahController@showInputVisiMisi')->name('addVisiMisi');
 	Route::post('/store-visimisi', 'KepalaDaerahController@storeVisiMisi')->name('storeVisiMisi');
+
+	//khusus AHP
+	Route::get('/nilai-kriteria-misi', 'KepalaDaerahController@showKriteriaMisi')->name('showKriteriaMisi');
+	Route::get('/add-kriteria-misi', 'KepalaDaerahController@addKriteriaMisi')->name('addKriteriaMisi');
+	Route::post('/store-kriteria-misi', 'KepalaDaerahController@storeKriteriaMisi')->name('storeKriteriaMisi');
+	Route::post('/store-nilai-kriteria-misi', 'KepalaDaerahController@storeNilaiKriteriaMisi')->name('storeNilaiKriteriaMisi');
+});
+
+Route::group(['prefix' => 'bappeda', 'middleware' => 'auth'], function () {
+	Route::get('/', function () { return view('dashboard'); })->name('dashboard');
+	Route::get('/browse-tujuan', 'BappedaController@showTujuan')->name('browseTujuan');
+	Route::get('/add-tujuan', 'BappedaController@showInputTujuan')->name('addTujuan');
+	Route::post('/store-tujuan', 'BappedaController@storeTujuan')->name('storeTujuan');
+	Route::get('/show-misi', 'BappedaController@showMisi')->name('showMisi');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {

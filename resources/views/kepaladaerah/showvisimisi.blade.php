@@ -17,6 +17,9 @@
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
+                  <th colspan="2" style="text-align: center;"><h3>Kepala Daerah : {{$VisiMisi->user['name']}}</h3></th>
+                </tr>
+                <tr>
                   <th>Visi</th>
                   <th>Misi</th>
                 </tr>

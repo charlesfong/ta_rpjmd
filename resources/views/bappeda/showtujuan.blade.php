@@ -1,4 +1,4 @@
-@extends('bappeda.layout.layout')
+@extends('layouts.layout')
 
 @section('content')
 
@@ -25,25 +25,13 @@
             </tr>
             </thead>
             <tbody>
-        @foreach ($tujuan as $index => $data)
-        <tr>
-            <td>
-            {{$index+1}}
-            </td>
-            <td>
-            {{$data->id}}
-            </td>
-            <td>
-            {{$data->id_visi}}
-            </td>
-            <td>
-            {{$data->id_misi}}
-            </td> 
-            <td>
-            {{$data->isi_tujuan}}
-            </td> 
-        </tr>
-        @endforeach
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td> 
+                <td></td> 
+              </tr>
             </tfoot>
           </table>
         </div>

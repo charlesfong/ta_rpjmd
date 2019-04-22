@@ -13,6 +13,14 @@ class Misi extends Model
 
     public function visi()
     {
-        return $this->belongsTo('App\VIsi');
+        return $this->belongsTo('App\Visi');
+    }
+    public function tujuan()
+    {
+        return $this->hasMany('App\Tujuan');
+    }
+    public function bobotmisi()
+    {
+        return $this->hasMany('App\BobotMisi');
     }
 }

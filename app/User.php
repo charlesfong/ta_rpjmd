@@ -68,4 +68,28 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Visi');
     }
+    public function tujuan()
+    {
+        return $this->hasMany('App\Tujuan');
+    }
+    public function sasaran()
+    {
+        return $this->hasMany('App\Sasaran');
+    }
+    public function program()
+    {
+        return $this->hasMany('App\Program');
+    }
+    public function kegiatan()
+    {
+        return $this->hasMany('App\Kegiatan');
+    }
+    public function bobotmisi()
+    {
+        return $this->hasMany('App\BobotMisi');
+    }
+    public function bobotkriteriamisi()
+    {
+        return $this->hasMany('App\BobotKriteriaMisi');
+    }
 }
