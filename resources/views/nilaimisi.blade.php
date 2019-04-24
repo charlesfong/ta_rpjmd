@@ -6,8 +6,12 @@
       $urlStore = route('storeKriteriaMisi');
     }
   @endphp
-  <form method="post" action="{{ route('storeNilaiMisi') }}" class="row-fluid margin-none well form-horizontal">
+
+  @foreach($allKriteria as $perKriteria)
+
+  <form method="post" action="{{ route('storeNilaiMisi', ['id' => $perKriteria['id']]) }}" class="row-fluid margin-none well form-horizontal">
     {{ csrf_field() }}
+    <h1 style="text-align: center;">{{$perKriteria['kriteria']}}</h1>
     <table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="4">
       <tbody>
         <tr>
@@ -78,9 +82,11 @@
 
           @foreach($key->bobotkriteriamisi2 as $bobot)
             @php
-              $arr2d[$key['id']][$bobot['misi_id']] = 1/$bobot['bobot'];
+              if($bobot['kriteria_id'] == $perKriteria['id']){
+                $arr2d[$key['id']][$bobot['misi_id']] = 1/$bobot['bobot'];
+                echo '<td>'.$bobot['bobot'].'</td>';
+              }
             @endphp
-            <td>{{1/$bobot['bobot']}}</td>
           @endforeach
 
           @php
@@ -92,9 +98,11 @@
           
           @foreach($key->bobotkriteriamisi as $bobot)
             @php
-              $arr2d[$key['id']][$bobot['misi2_id']] = $bobot['bobot'];
+              if($bobot['kriteria_id'] == $perKriteria['id']){
+                $arr2d[$key['id']][$bobot['misi2_id']] = $bobot['bobot'];
+                echo '<td>'.$bobot['bobot'].'</td>';
+              }
             @endphp
-            <td>{{$bobot['bobot']}}</td>
           @endforeach
         </tr>
         @endforeach
@@ -251,6 +259,7 @@
     </table>
 
     <br>
+  @endforeach
      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
      <script>
         $(document).ready(function() {

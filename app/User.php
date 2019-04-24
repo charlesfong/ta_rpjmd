@@ -92,4 +92,12 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\BobotKriteriaMisi');
     }
+    public function eigenmisis()
+    {
+        return $this->hasMany('App\EigenMisi');
+    }
+    public function eigenkriteriamisi()
+    {
+        return $this->hasMany('App\EigenKriteriaMisi');
+    }
 }

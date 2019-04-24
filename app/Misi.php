@@ -31,4 +31,8 @@ class Misi extends Model
     {
         return $this->hasMany('App\BobotMisi', 'misi2_id', 'id');
     }
+    public function EigenMisi()
+    {
+        return $this->hasMany('App\eigenmisi');
+    }
 }

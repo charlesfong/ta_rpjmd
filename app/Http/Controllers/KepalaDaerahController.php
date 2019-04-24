@@ -10,6 +10,8 @@ use App\User;
 use App\KriteriaMisi;
 use App\BobotKriteriaMisi;
 use App\BobotMisi;
+use App\EigenMisi;
+use App\EigenKriteriaMisi;
 use DB;
 
 class KepalaDaerahController extends Controller
@@ -62,7 +64,8 @@ class KepalaDaerahController extends Controller
         $VisiMisi = Visi::where('user_id', $id)->first();
         $Kriteria = $VisiMisi->misi;
         $TipeData = 'Misi';
-        return view('nilaimisi', compact('TipeData', 'Kriteria'));
+        $allKriteria = KriteriaMisi::all();
+        return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria'));
     }
     public function addKriteriaMisi()
     {
@@ -114,7 +117,7 @@ class KepalaDaerahController extends Controller
         $TipeData = 'Misi';
         return view('nilaikriteria', compact('TipeData', 'Kriteria'));
     }
-    public function storeNilaiMisi(Request $request)
+    public function storeNilaiMisi(Request $request, KriteriaMisi $kriteria)
     {
         $id = Auth::user()->id;
 
@@ -125,8 +128,9 @@ class KepalaDaerahController extends Controller
             $arr['misi2_id'] = $pilihan[1];
             $arr['bobot'] = $data;
             $arr['user_id'] = $id;
+            $arr['kriteria_id'] = $kriteria['id'];
 
-            $bobotNya = BobotMisi::where([['user_id', $id], ['misi_id', $arr['misi_id']], ['misi2_id', $arr['misi2_id']]])->first();
+            $bobotNya = BobotMisi::where([['user_id', $id], ['misi_id', $arr['misi_id']], ['misi2_id', $arr['misi2_id']], ['kriteria_id', $arr['kriteria_id']]])->first();
             if($bobotNya!=null){
                 $bobotNya->bobot = $arr['bobot'];
                 $bobotNya->save();
@@ -136,6 +140,62 @@ class KepalaDaerahController extends Controller
             }
         }
 
+        $id = Auth::user()->id;
+        $VisiMisi = Visi::where('user_id', $id)->first();
+        $Kriteria = $VisiMisi->misi;
+        $TipeData = 'Misi';
+        return view('nilaimisi', compact('TipeData', 'Kriteria'));
+    }
+    public function storeEigenKriteria(Request $request)
+    {
+        $id = Auth::user()->id;
+        if($request->has('eigen') && $request->has('kriteria')){
+            for($i = 1; $i <= sizeof($request['kriteria']); $i++){
+                $arr = [];
+                $arr['eigen'] = $request['eigen'][$i];
+                $arr['user_id'] = $id;
+                $arr['kriteria_id'] = $i;
+
+                $eigenNya = EigenKriteriaMisi::where([['user_id', $id], ['kriteria_id', $i]])->first();
+                if($eigenNya!=null){
+                    $eigenNya->eigen = $arr['eigen'];
+                    $eigenNya->save();
+                }
+                else{
+                    EigenKriteriaMisi::create($arr);
+                }
+            }
+        }
+        
+        return response()->json(['result' => 'Berhasil']);
+        
+    }
+    public function storeEigenMisi(Request $request)
+    {
+        $id = Auth::user()->id;
+        if($request->has('eigen') && $request->has('kriteria')){
+            for($i = 1; $i <= sizeof($request['kriteria']); $i++){
+                $arr = [];
+                $arr['eigen'] = $request['eigen'][$i];
+                $arr['user_id'] = $id;
+                $arr['kriteria_id'] = $i;
+
+                $eigenNya = EigenKriteriaMisi::where([['user_id', $id], ['kriteria_id', $i]])->first();
+                if($eigenNya!=null){
+                    $eigenNya->eigen = $arr['eigen'];
+                    $eigenNya->save();
+                }
+                else{
+                    EigenKriteriaMisi::create($arr);
+                }
+            }
+        }
+        
+        return response()->json(['result' => 'Berhasil']);
+        
+    }
+    public function hasilAhpMisi()
+    {
         $id = Auth::user()->id;
         $VisiMisi = Visi::where('user_id', $id)->first();
         $Kriteria = $VisiMisi->misi;

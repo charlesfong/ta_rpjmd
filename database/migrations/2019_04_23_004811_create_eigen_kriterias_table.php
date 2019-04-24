@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBobotKriteriaMisisTable extends Migration
+class CreateEigenKriteriasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateBobotKriteriaMisisTable extends Migration
      */
     public function up()
     {
-        Schema::create('bobot_kriteria_misis', function (Blueprint $table) {
+        Schema::create('eigen_kriteria_misis', function (Blueprint $table) {
             $table->increments('id');
-            $table->float('bobot')->default("0");
+            $table->float('eigen')->default("0");
             $table->integer('kriteria_id')->unsigned();
             $table->foreign('kriteria_id')->references('id')->on('kriteria_misis');
-            $table->integer('kriteria2_id')->unsigned();
-            $table->foreign('kriteria2_id')->references('id')->on('kriteria_misis');
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateBobotKriteriaMisisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bobot_kriteria_misis');
+        Schema::dropIfExists('eigen_kriteria_misis');
     }
 }
