@@ -253,10 +253,27 @@
     </table>
 
     <br>
+      <script type="text/javascript"> </script>
      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
      <script>
         $(document).ready(function() {
-
+          var kriteria = <?php echo json_encode($arr2d); ?>;
+          var eigen = <?php echo json_encode($avg); ?>;
+          $.ajax({
+              headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+              },
+              type: 'post',
+              url: "{{route('storeEigenKriteria')}}",
+              data: {
+                  'kriteria': kriteria,
+                  'eigen': eigen,
+              },
+              success: function (data) {
+                var data = data['result'];
+                console.log(data);
+              },
+          });
         });
      </script>
 @endsection

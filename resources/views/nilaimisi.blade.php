@@ -5,9 +5,16 @@
     if($TipeData == 'Misi'){
       $urlStore = route('storeKriteriaMisi');
     }
+     
+    $avg = []; 
+    $arr2d = [];
   @endphp
-  <form method="post" action="{{ route('storeNilaiMisi') }}" class="row-fluid margin-none well form-horizontal">
+
+  @foreach($allKriteria as $perKriteria)
+
+  <form method="post" action="{{ route('storeNilaiMisi', ['id' => $perKriteria['id']]) }}" class="row-fluid margin-none well form-horizontal">
     {{ csrf_field() }}
+    <h1 style="text-align: center;">{{$perKriteria['kriteria']}}</h1>
     <table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="4">
       <tbody>
         <tr>
@@ -65,12 +72,12 @@
       <tbody>
         @php 
           $idx = 1; 
-          $arr2d = [];
+          $arr2d[$perKriteria['id']] = [];
         @endphp
 
         @foreach($Kriteria as $key)
         @php
-          $arr2d[$key['id']] = [];
+          $arr2d[$perKriteria['id']][$key['id']] = [];
         @endphp
         <tr>
           <td>{{$key['id']}}</td> 
@@ -78,13 +85,15 @@
 
           @foreach($key->bobotkriteriamisi2 as $bobot)
             @php
-              $arr2d[$key['id']][$bobot['misi_id']] = 1/$bobot['bobot'];
+              if($bobot['kriteria_id'] == $perKriteria['id']){
+                $arr2d[$perKriteria['id']][$key['id']][$bobot['misi_id']] = 1/$bobot['bobot'];
+                echo '<td>'.$bobot['bobot'].'</td>';
+              }
             @endphp
-            <td>{{1/$bobot['bobot']}}</td>
           @endforeach
 
           @php
-            $arr2d[$key['id']][$key['id']] = 1;
+            $arr2d[$perKriteria['id']][$key['id']][$key['id']] = 1;
           @endphp
           <td style="background-color: gray;">1.0</td>
           
@@ -92,9 +101,11 @@
           
           @foreach($key->bobotkriteriamisi as $bobot)
             @php
-              $arr2d[$key['id']][$bobot['misi2_id']] = $bobot['bobot'];
+              if($bobot['kriteria_id'] == $perKriteria['id']){
+                $arr2d[$perKriteria['id']][$key['id']][$bobot['misi2_id']] = $bobot['bobot'];
+                echo '<td>'.$bobot['bobot'].'</td>';
+              }
             @endphp
-            <td>{{$bobot['bobot']}}</td>
           @endforeach
         </tr>
         @endforeach
@@ -102,10 +113,10 @@
         <!-- SUM -->
         @php
           $sum = [];
-          for($i = 1; $i <= sizeof($arr2d[1]); $i++){
+          for($i = 1; $i <= sizeof($arr2d[$perKriteria['id']][1]); $i++){
             $sum[$i] = 0;
-            for($j = 1; $j <= sizeof($arr2d[1]); $j++){
-              $sum[$i] += $arr2d[$j][$i];
+            for($j = 1; $j <= sizeof($arr2d[$perKriteria['id']][1]); $j++){
+              $sum[$i] += $arr2d[$perKriteria['id']][$j][$i];
             }
           }
         @endphp
@@ -138,30 +149,30 @@
       <tbody>
         @php
           $eigen = [];
-          $avg = [];
+          $avg[$perKriteria['id']] = [];
         @endphp
 
-        @for($i = 1; $i <= sizeof($arr2d[1]); $i++)
+        @for($i = 1; $i <= sizeof($arr2d[$perKriteria['id']][1]); $i++)
           @php
             $eigen[$i] = [];
-            $avg[$i] = 0;
+            $avg[$perKriteria['id']][$i] = 0;
           @endphp
 
           <tr>
             <td>{{$Kriteria[$i-1]['id']}}</td> 
             <td>K{{$Kriteria[$i-1]['id']}} - {{$Kriteria[$i-1]['misi']}}</td>
-              @for($j = 1; $j <= sizeof($arr2d[1]); $j++)
+              @for($j = 1; $j <= sizeof($arr2d[$perKriteria['id']][1]); $j++)
                 @php
-                  $eigen[$i][$j] = $arr2d[$i][$j]/$sum[$j];
-                  $avg[$i] += $eigen[$i][$j];
+                  $eigen[$i][$j] = $arr2d[$perKriteria['id']][$i][$j]/$sum[$j];
+                  $avg[$perKriteria['id']][$i] += $eigen[$i][$j];
                 @endphp
                 <td>{{ $eigen[$i][$j] }}</td>
               @endfor
 
               @php
-                $avg[$i] = $avg[$i]/sizeof($arr2d[1]);
+                $avg[$perKriteria['id']][$i] = $avg[$perKriteria['id']][$i]/sizeof($arr2d[$perKriteria['id']][1]);
               @endphp
-            <td>{{ $avg[$i] }}</td>
+            <td>{{ $avg[$perKriteria['id']][$i] }}</td>
           </tr>
         @endfor
       </tbody>
@@ -179,9 +190,9 @@
               $result = 0;
             @endphp
 
-            @for($j = 1; $j <= sizeof($arr2d[1]); $j++)
+            @for($j = 1; $j <= sizeof($arr2d[$perKriteria['id']][1]); $j++)
               @php
-                $result += $avg[$j]*$sum[$j];
+                $result += $avg[$perKriteria['id']][$j]*$sum[$j];
               @endphp
             @endfor
             <td>{{$result}}</td>
@@ -191,8 +202,8 @@
 
             @php
               $CI = 0;
-              if($result-sizeof($arr2d[1]) > 0){
-                $CI = ($result-sizeof($arr2d[1]))/(sizeof($arr2d[1])-1);                
+              if($result-sizeof($arr2d[$perKriteria['id']][1]) > 0){
+                $CI = ($result-sizeof($arr2d[$perKriteria['id']][1]))/(sizeof($arr2d[$perKriteria['id']][1])-1);                
               }
             @endphp
 
@@ -204,28 +215,28 @@
             <?php
               $RI = 0;
               $CR = 0;
-              if(sizeof($arr2d[1]) == 3){
+              if(sizeof($arr2d[$perKriteria['id']][1]) == 3){
                 $RI = 0.58;
               }
-              elseif(sizeof($arr2d[1]) == 4){
+              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 4){
                 $RI = 0.9;
               }
-              elseif(sizeof($arr2d[1]) == 5){
+              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 5){
                 $RI = 1.12;
               }
-              elseif(sizeof($arr2d[1]) == 6){
+              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 6){
                 $RI = 1.24;
               }
-              elseif(sizeof($arr2d[1]) == 7){
+              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 7){
                 $RI = 1.32;
               }
-              elseif(sizeof($arr2d[1]) == 8){
+              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 8){
                 $RI = 1.41;
               }
-              elseif(sizeof($arr2d[1]) == 9){
+              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 9){
                 $RI = 1.45;
               }
-              elseif(sizeof($arr2d[1]) == 10){
+              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 10){
                 $RI = 1.49;
               }
 
@@ -251,10 +262,27 @@
     </table>
 
     <br>
+  @endforeach
      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
      <script>
         $(document).ready(function() {
-
+          var kriteria = <?php echo json_encode($arr2d); ?>;
+          var eigen = <?php echo json_encode($avg); ?>;
+          $.ajax({
+              headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+              },
+              type: 'post',
+              url: "{{route('storeEigenMisi')}}",
+              data: {
+                  'kriteria': kriteria,
+                  'eigen': eigen,
+              },
+              success: function (data) {
+                var data = data['result'];
+                console.log(data);
+              },
+          });
         });
      </script>
 @endsection

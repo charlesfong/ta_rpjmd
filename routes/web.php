@@ -31,9 +31,13 @@ Route::group(['prefix' => 'kepaladaerah', 'middleware' => 'auth'], function () {
 	Route::get('/nilai-kriteria-misi', 'KepalaDaerahController@showKriteriaMisi')->name('showKriteriaMisi');
 	Route::get('/nilai-misi', 'KepalaDaerahController@showNilaiMisi')->name('showNilaiMisi');
 	Route::get('/add-kriteria-misi', 'KepalaDaerahController@addKriteriaMisi')->name('addKriteriaMisi');
+	Route::get('/hasil-ahp-misi', 'KepalaDaerahController@hasilAhpMisi')->name('hasilAhpMisi');
 	Route::post('/store-kriteria-misi', 'KepalaDaerahController@storeKriteriaMisi')->name('storeKriteriaMisi');
 	Route::post('/store-nilai-kriteria-misi', 'KepalaDaerahController@storeNilaiKriteriaMisi')->name('storeNilaiKriteriaMisi');
-	Route::post('/store-nilai-misi', 'KepalaDaerahController@storeNilaiMisi')->name('storeNilaiMisi');
+	Route::post('/store-nilai-misi/{kriteria}', 'KepalaDaerahController@storeNilaiMisi')->name('storeNilaiMisi');
+	Route::post('/store-eigen-kriteria-misi/', 'KepalaDaerahController@storeEigenKriteria')->name('storeEigenKriteria');
+	Route::post('/store-eigen-misi/', 'KepalaDaerahController@storeEigenMisi')->name('storeEigenMisi');
+	Route::post('/store-bobot-misi/', 'KepalaDaerahController@storeBobotMisi')->name('storeBobotMisi');
 });
 
 Route::group(['prefix' => 'bappeda', 'middleware' => 'auth'], function () {
@@ -49,6 +53,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 	Route::get('/browse-user', 'AdminController@showUser')->name('browseUser');
 	Route::get('/add-user', 'AdminController@showtambahuser')->name('addUser');
 	Route::post('/store-user', 'AdminController@storeUser')->name('storeUser');
+});
+
+Route::group(['prefix' => 'opd', 'middleware' => 'auth'], function () {
+	Route::get('/', function () { return view('dashboard'); })->name('dashboard');
+	Route::get('/browse-tujuan', 'OpdController@showTujuan')->name('browseTujuan');
+	Route::get('/add-tujuan', 'OpdController@showInputTujuan')->name('addTujuan');
+	Route::post('/store-tujuan', 'OpdController@storeTujuan')->name('storeTujuan');
+	Route::get('/show-misi', 'OpdController@showMisi')->name('showMisi');
 });
 
 // Route::group(['prefix' => 'bappeda'], function () {
