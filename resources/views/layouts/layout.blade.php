@@ -112,7 +112,7 @@
                     </a>         
                   </li>
                   <li>
-                    <a href="#">
+                    <a href="{{ route('hasilAhpMisi') }}">
                       <i class="fa"></i> <span>Hasil Seleksi Misi</span>            
                     </a>          
                   </li>    

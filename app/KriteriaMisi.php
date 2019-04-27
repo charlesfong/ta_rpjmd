@@ -23,7 +23,7 @@ class KriteriaMisi extends Model
 
     public function eigenkriteriamisi()
     {
-        return $this->hasMany('App\EigenKriteriaMisi');
+        return $this->hasMany('App\EigenKriteriaMisi', 'kriteria_id', 'id');
     }
 
     public function eigenmisi()

@@ -13,7 +13,7 @@ class EigenKriteriaMisi extends Model
 
     public function kriteria()
     {
-        return $this->belongsTo('App\KriteriaMisi');
+        return $this->belongsTo('App\KriteriaMisi', 'id', 'kriteria_id');
     }
     public function user()
     {

@@ -37,6 +37,7 @@ Route::group(['prefix' => 'kepaladaerah', 'middleware' => 'auth'], function () {
 	Route::post('/store-nilai-misi/{kriteria}', 'KepalaDaerahController@storeNilaiMisi')->name('storeNilaiMisi');
 	Route::post('/store-eigen-kriteria-misi/', 'KepalaDaerahController@storeEigenKriteria')->name('storeEigenKriteria');
 	Route::post('/store-eigen-misi/', 'KepalaDaerahController@storeEigenMisi')->name('storeEigenMisi');
+	Route::post('/store-bobot-misi/', 'KepalaDaerahController@storeBobotMisi')->name('storeBobotMisi');
 });
 
 Route::group(['prefix' => 'bappeda', 'middleware' => 'auth'], function () {
