@@ -45,6 +45,7 @@ Route::group(['prefix' => 'bappeda', 'middleware' => 'auth'], function () {
 	Route::get('/browse-tujuan', 'BappedaController@showTujuan')->name('browseTujuan');
 	Route::get('/add-tujuan', 'BappedaController@addTujuan')->name('addTujuan');
 	Route::post('/store-tujuan', 'BappedaController@storeTujuan')->name('storeTujuan');
+	Route::get('/show-misi', 'BappedaController@showMisi')->name('showMisi');
 
 	//khusus AHP
 	Route::get('/nilai-kriteria-tujuan', 'BappedaController@showKriteriaTujuan')->name('showKriteriaTujuan');

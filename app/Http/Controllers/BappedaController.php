@@ -10,6 +10,7 @@ use App\Tujuan;
 use App\Visi;
 use App\Misi;
 use App\KriteriaTujuan;
+use App\BobotKriteriaTujuan;
 
 
 class BappedaController extends Controller
@@ -18,6 +19,16 @@ class BappedaController extends Controller
     { 
         $VisiMisi = Visi::all();
         return view('bappeda.inputtujuan',compact('VisiMisi'));
+    }
+
+    public function showMisi(Request $request){
+        if ($request->has('id')) {
+            $misis = Misi::where('visi_id', $request->input('id'))->get();
+            return response()->json(['result' => $misis]);
+        } 
+        else {
+            return response()->json(['result' => 'Gagal!!']);
+        }
     }
 
     public function showTujuan(Request $request)
@@ -52,15 +63,15 @@ class BappedaController extends Controller
         $TipeData = 'Tujuan';
         return view('nilaikriteria', compact('TipeData', 'Kriteria'));
     }
-    // public function showNilaiMisi()
-    // {
-    //     $id = Auth::user()->id;
-    //     $VisiMisi = Visi::where('user_id', $id)->first();
-    //     $Kriteria = $VisiMisi->misi;
-    //     $TipeData = 'Misi';
-    //     $allKriteria = KriteriaMisi::all();
-    //     return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria'));
-    // }
+    public function showNilaiTujuan()
+    {
+        $id = Auth::user()->id;
+        $idMisi = Misi::all()[1]['id'];
+        $Kriteria = Tujuan::where('misi_id', $idMisi)->get();
+        $TipeData = 'Tujuan';
+        $allKriteria = KriteriaTujuan::all();
+        return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria'));
+    }
     public function addKriteriaTujuan()
     {
         $Kriteria = KriteriaTujuan::all();

@@ -27,11 +27,11 @@ class Tujuan extends Model
     {
         return $this->hasMany('App\BobotTujuan');
     }
-    public function bobotkriteriatujuan()
+    public function bobotkriteriamisi()
     {
         return $this->hasMany('App\BobotTujuan', 'tujuan_id', 'id');
     }
-    public function bobotkriteriatujuan2()
+    public function bobotkriteriamisi2()
     {
         return $this->hasMany('App\BobotTujuan', 'tujuan2_id', 'id');
     }
