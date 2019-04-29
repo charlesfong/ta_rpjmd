@@ -19,6 +19,7 @@
           <td width="55%" style="text-align:center;">Pilih Nilai</td>
           <td width="18%">Kriteria</td>
         </tr>
+
         @php $idx = 0; @endphp
         @for($i = 0; $i < sizeof($Kriteria); $i++)
           <?php 
@@ -193,7 +194,12 @@
             <td>CI</td>
 
             @php
+            $CI=0;
+            $CR=0;
+            if ($result-sizeof($arr2d[1])!=0)
+            {
               $CI = ($result-sizeof($arr2d[1]))/(sizeof($arr2d[1])-1);
+            }
             @endphp
 
             <td>{{$CI}}</td>
@@ -227,7 +233,10 @@
               elseif(sizeof($arr2d[1]) == 10){
                 $RI = 1.49;
               }
-              $CR = $CI/$RI;
+              if ($CI!=0)
+              {
+                $CR = $CI/$RI;
+              }
             ?>
             <td>{{$CR}}</td>
           </tr>
