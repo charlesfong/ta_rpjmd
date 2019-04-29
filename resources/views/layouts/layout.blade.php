@@ -126,7 +126,29 @@
                 <a href="{{ route('addTujuan') }}">
                   <i class="fa"></i> <span>Input Tujuan</span>            
                 </a>          
-              </li>          
+              </li>
+              <li>
+                <a href="#"><span>AHP</span></a>
+                  <li>
+                    <a href="{{ route('addKriteriaTujuan') }}">
+                      <i class="fa"></i> <span>Input Kriteria Tujuan</span>            
+                    </a>          
+                  </li>
+                  <li>
+                    <a href="{{ route('showKriteriaTujuan') }}">
+                      <i class="fa"></i> <span>Nilai Kriteria Tujuan</span>            
+                    </a>          
+                  </li>
+                  <li>
+                    <a href="{{ route('showNilaiTujuan') }}">
+                      <i class="fa"></i> <span>Nilai Alternatif Tujuan</span>           
+                    </a>         
+                  </li>
+                  <li>
+                    <a href="{{ route('hasilAhpTujuan') }}">
+                      <i class="fa"></i> <span>Hasil Seleksi Tujuan</span>            
+                    </a>          
+                  </li>    
               </li>
             @elseif(Auth::user()->inRole('admin'))
               <li>

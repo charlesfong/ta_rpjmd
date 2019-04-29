@@ -23,4 +23,20 @@ class Tujuan extends Model
     {
         return $this->hasMany('App\Sasaran');
     }
+    public function bobottujuan()
+    {
+        return $this->hasMany('App\BobotTujuan');
+    }
+    public function bobotkriteriatujuan()
+    {
+        return $this->hasMany('App\BobotTujuan', 'tujuan_id', 'id');
+    }
+    public function bobotkriteriatujuan2()
+    {
+        return $this->hasMany('App\BobotTujuan', 'tujuan2_id', 'id');
+    }
+    public function eigentujuan()
+    {
+        return $this->hasMany('App\EigenTujuan');
+    }
 }

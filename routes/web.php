@@ -43,9 +43,20 @@ Route::group(['prefix' => 'kepaladaerah', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'bappeda', 'middleware' => 'auth'], function () {
 	Route::get('/', function () { return view('dashboard'); })->name('dashboard');
 	Route::get('/browse-tujuan', 'BappedaController@showTujuan')->name('browseTujuan');
-	Route::get('/add-tujuan', 'BappedaController@showInputTujuan')->name('addTujuan');
+	Route::get('/add-tujuan', 'BappedaController@addTujuan')->name('addTujuan');
 	Route::post('/store-tujuan', 'BappedaController@storeTujuan')->name('storeTujuan');
-	Route::get('/show-misi', 'BappedaController@showMisi')->name('showMisi');
+
+	//khusus AHP
+	Route::get('/nilai-kriteria-tujuan', 'BappedaController@showKriteriaTujuan')->name('showKriteriaTujuan');
+	Route::get('/nilai-tujuan', 'BappedaController@showNilaiTujuan')->name('showNilaiTujuan');
+	Route::get('/add-kriteria-tujuan', 'BappedaController@addKriteriaTujuan')->name('addKriteriaTujuan');
+	Route::get('/hasil-ahp-tujuan', 'BappedaController@hasilAhpTujuan')->name('hasilAhpTujuan');
+	Route::post('/store-kriteria-tujuan', 'BappedaController@storeKriteriaTujuan')->name('storeKriteriaTujuan');
+	Route::post('/store-nilai-kriteria-tujuan', 'BappedaController@storeNilaiKriteriaTujuan')->name('storeNilaiKriteriaTujuan');
+	Route::post('/store-nilai-tujuan/{kriteria}', 'BappedaController@storeNilaiTujuan')->name('storeNilaiTujuan');
+	Route::post('/store-eigen-kriteria-tujuan/', 'BappedaController@storeEigenKriteria')->name('storeEigenKriteria');
+	Route::post('/store-eigen-tujuan/', 'BappedaController@storeEigenTujuan')->name('storeEigenTujuan');
+	Route::post('/store-bobot-tujuan/', 'BappedaController@storeBobotTujuan')->name('storeBobotTujuan');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
@@ -55,13 +66,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 	Route::post('/store-user', 'AdminController@storeUser')->name('storeUser');
 });
 
-Route::group(['prefix' => 'opd', 'middleware' => 'auth'], function () {
-	Route::get('/', function () { return view('dashboard'); })->name('dashboard');
-	Route::get('/browse-tujuan', 'OpdController@showTujuan')->name('browseTujuan');
-	Route::get('/add-tujuan', 'OpdController@showInputTujuan')->name('addTujuan');
-	Route::post('/store-tujuan', 'OpdController@storeTujuan')->name('storeTujuan');
-	Route::get('/show-misi', 'OpdController@showMisi')->name('showMisi');
-});
+// Route::group(['prefix' => 'opd', 'middleware' => 'auth'], function () {
+// 	Route::get('/', function () { return view('dashboard'); })->name('dashboard');
+// 	Route::get('/browse-tujuan', 'OpdController@showTujuan')->name('browseTujuan');
+// 	Route::get('/add-tujuan', 'OpdController@showInputTujuan')->name('addTujuan');
+// 	Route::post('/store-tujuan', 'OpdController@storeTujuan')->name('storeTujuan');
+// 	Route::get('/show-misi', 'OpdController@showMisi')->name('showMisi');
+// });
 
 // Route::group(['prefix' => 'bappeda'], function () {
 //   Route::get('/login', 'BappedaAuth\LoginController@showLoginForm')->name('login');

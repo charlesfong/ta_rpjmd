@@ -9,51 +9,106 @@ use App\Input;
 use App\Tujuan;
 use App\Visi;
 use App\Misi;
+use App\KriteriaTujuan;
+
 
 class BappedaController extends Controller
 {
-    public function showInputTujuan()
+    public function addTujuan()
     { 
         $VisiMisi = Visi::all();
         return view('bappeda.inputtujuan',compact('VisiMisi'));
     }
-    public function showMisi(Request $request)
+
+    public function showTujuan(Request $request)
     {
-        // return response()->json(['result' => 'Gagal!!']);
-    	if ($request->has('id')) {
-            $misis = Misi::where('visi_id', $request->input('id'))->get();
-            return response()->json(['result' => $misis]);
-        } 
-        else {
-            return response()->json(['result' => 'Gagal!!']);
-        }
+        $Misis = Misi::all()->sortByDesc('bobot');
+        return view('bappeda.showtujuan',compact('Misis'));
     }
-    public function showTujuan()
-    {
-        // $id=Auth::user()->id;
-        // $tujuan = tujuanDraftModel::where('id_bappeda', $id)->get();
-        // return view('bappeda.showtujuan',compact('tujuan')); 
-    }
+
     public function storeTujuan(request $request)
+    {        $validator = \Validator::make($request->all(), [
+                    'tujuan' => 'required',
+                    'misi' => 'required',
+        ]);
+        $validator->validate();
+
+        $data = $request->only('misi');
+        $data['misi_id'] = $data['misi'];
+        $data['tujuan'] = $request->tujuan;
+        $data['user_id'] = Auth::user()->id;
+        foreach ($request->tujuan as $data['tujuan']) {
+            Tujuan::create($data);
+        }
+
+        $VisiMisi = Visi::all();
+        return view('bappeda.inputtujuan',compact('VisiMisi'));
+    }
+
+    //AHPshowNilaiMisi
+    public function showKriteriaTujuan()
     {
-        // $id=Auth::user()->id;
+        $Kriteria = KriteriaTujuan::all();
+        $TipeData = 'Tujuan';
+        return view('nilaikriteria', compact('TipeData', 'Kriteria'));
+    }
+    // public function showNilaiMisi()
+    // {
+    //     $id = Auth::user()->id;
+    //     $VisiMisi = Visi::where('user_id', $id)->first();
+    //     $Kriteria = $VisiMisi->misi;
+    //     $TipeData = 'Misi';
+    //     $allKriteria = KriteriaMisi::all();
+    //     return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria'));
+    // }
+    public function addKriteriaTujuan()
+    {
+        $Kriteria = KriteriaTujuan::all();
+        $TipeData = 'Tujuan';
+        return view('inputkriteria', compact('TipeData', 'Kriteria')); 
+    }
+    public function storeKriteriaTujuan(request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+                    'kriteria' => 'required',
+        ]);
+        $validator->validate();
         
-        // foreach ($request->tujuan as $tujuans) {
-        // $draft_tujuan= new tujuanDraftModel(
-        //         array(
 
-        //             'id_visi'     => $request->visi,
-        //             'id_misi'     => $request->misi,
-        //             'id_bappeda'  => $id,
-        //             'isi_tujuan'  => $tujuans
-        //         )
-        //     );
-        // $draft_tujuan->save();
-        // }
+        $data = $request->only('kriteria');
+        KriteriaTujuan::create($data);
 
-        // $dataVisi = visiDraftModel::all();
-        // $datamisi = misiDraftModel::all();
-        // return view('bappeda.inputtujuan',compact('dataVisi','datamisi'));
+
+        $Kriteria = KriteriaTujuan::all();
+        $TipeData = 'Tujuan';
+        
+        return view('inputkriteria', compact('TipeData', 'Kriteria')); 
        
+    }
+    public function storeNilaiKriteriaTujuan(Request $request)
+    {
+        $id = Auth::user()->id;
+
+        foreach ($request['kriteria'] as $key => $data) {
+            $pilihan = explode("-",$key);
+            $arr = [];
+            $arr['kriteria_id'] = $pilihan[0];
+            $arr['kriteria2_id'] = $pilihan[1];
+            $arr['bobot'] = $data;
+            $arr['user_id'] = $id;
+
+            $bobotNya = BobotKriteriaTujuan::where([['user_id', $id], ['kriteria_id', $arr['kriteria_id']], ['kriteria2_id', $arr['kriteria2_id']]])->first();
+            if($bobotNya!=null){
+                $bobotNya->bobot = $arr['bobot'];
+                $bobotNya->save();
+            }
+            else{
+                BobotKriteriaTujuan::create($arr);
+            }
+        }
+
+        $Kriteria = KriteriaTujuan::all();
+        $TipeData = 'Tujuan';
+        return view('nilaikriteria', compact('TipeData', 'Kriteria'));
     }
 }

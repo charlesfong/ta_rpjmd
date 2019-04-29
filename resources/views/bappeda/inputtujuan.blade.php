@@ -89,6 +89,7 @@
             $("#tujuan_div").empty();
             $("#btAdd").show();
             $("#btRemove").show();
+            $("#btsimpan").show();
             iCnt=0;
             // if (iCnt > 0) { $('#' + iCnt).remove(); iCnt =0; }
             if (iCnt==0)

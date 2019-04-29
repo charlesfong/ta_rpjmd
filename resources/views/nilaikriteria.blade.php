@@ -3,10 +3,13 @@
 @section('content')
   @php
     if($TipeData == 'Misi'){
-      $urlStore = route('storeKriteriaMisi');
+      $urlStore = route('storeNilaiKriteriaMisi');
+    }
+    else if($TipeData == 'Tujuan'){
+      $urlStore = route('storeNilaiKriteriaTujuan');
     }
   @endphp
-  <form method="post" action="{{ route('storeNilaiKriteriaMisi') }}" class="row-fluid margin-none well form-horizontal">
+  <form method="post" action="{{ $urlStore }}" class="row-fluid margin-none well form-horizontal">
     {{ csrf_field() }}
     <table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="4">
       <tbody>

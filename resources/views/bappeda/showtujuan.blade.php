@@ -17,21 +17,32 @@
           <table id="example1" class="table table-bordered table-striped">
             <thead>
             <tr>
-              <th>No</th>
-              <th>id</th>
-              <th>id visi</th>
-              <th>id misi</th>
-              <th>isi tujuan</th>
+              <th>Misi</th>
+              <th>Tujuan</th>
             </tr>
             </thead>
             <tbody>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td> 
-                <td></td> 
-              </tr>
+              @foreach($Misis as $misi)
+                @php
+                  $totalBaris = 1;
+                  if( sizeof($misi->tujuan) > 0){
+                    $totalBaris = sizeof($misi->tujuan);                    
+                  }
+                @endphp
+                <tr>
+                  <td rowspan="{{$totalBaris}}">{{$misi['misi']}}</td>
+                  @if(sizeof($misi->tujuan) > 0)
+                    <td>{{$misi->tujuan[0]['tujuan']}}</td>
+                  @else
+                    <td>-</td>
+                  @endif
+                </tr>
+                @for($i = 1; $i < sizeof($misi->tujuan); $i++)
+                  <tr>
+                    <td>{{$misi->tujuan[$i]['tujuan']}}</td>
+                  </tr>
+                @endfor
+              @endforeach
             </tfoot>
           </table>
         </div>
