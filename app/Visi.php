@@ -20,4 +20,8 @@ class Visi extends Model
     {
         return $this->hasMany('App\Misi');
     }
+    public function misiSort()
+    {
+        return $this->hasMany('App\Misi')->orderBy('bobot', 'desc');
+    }
 }

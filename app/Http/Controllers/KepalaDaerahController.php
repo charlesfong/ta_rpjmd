@@ -204,7 +204,7 @@ class KepalaDaerahController extends Controller
     {
         $id = Auth::user()->id;
         $VisiMisi = Visi::where('user_id', $id)->first();
-        $Misis = $VisiMisi->misi;
+        $Misis = $VisiMisi->misiSort;
         $TipeData = 'Misi';
         $Kriterias = KriteriaMisi::all();
         return view('hasilseleksi', compact('TipeData', 'Misis', 'Kriterias'));

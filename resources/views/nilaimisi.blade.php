@@ -102,13 +102,15 @@
             @php
               if($bobot['kriteria_id'] == $perKriteria['id']){
                 $arr2d[$perKriteria['id']][$key['id']][$bobot[$tipeId]] = 1/$bobot['bobot'];
-                echo '<td>'.$bobot['bobot'].'</td>';
+                echo '<script> console.log("['.$perKriteria['id'].']['.$key['id'].']['.$bobot[$tipeId].'] = '.(1/$bobot['bobot']).'"); </script>';
+                echo '<td>'.(1/$bobot['bobot']).'</td>';
               }
             @endphp
           @endforeach
 
           @php
             $arr2d[$perKriteria['id']][$key['id']][$key['id']] = 1;
+            echo '<script> console.log("DONE"); </script>';
           @endphp
           <td style="background-color: gray;">1.0</td>
           
@@ -128,12 +130,26 @@
         <!-- SUM -->
         @php
           $sum = [];
-          reset($arr2d[$perKriteria['id']]);
-          dd($arr2d[$perKriteria['id']]);
-          for($i = 1; $i <= sizeof($arr2d[$perKriteria['id']][1]); $i++){
-            $sum[$i] = 0;
-            for($j = 1; $j <= sizeof($arr2d[$perKriteria['id']][1]); $j++){
-              $sum[$i] += $arr2d[$perKriteria['id']][$j][$i];
+          $idxSum = 1;
+          $isDone = false;
+          // dd($arr2d[$perKriteria['id']]);
+          // for($i = 1; $i <= sizeof($arr2d[$perKriteria['id']][1]); $i++){
+          //   $sum[$i] = 0;
+          //   for($j = 1; $j <= sizeof($arr2d[$perKriteria['id']][1]); $j++){
+          //     $sum[$i] += $arr2d[$perKriteria['id']][$j][$i];
+          //   }
+          // }
+          foreach ($arr2d[$perKriteria['id']] as $j => $value) {
+            $idxSum = 1;
+            foreach ($value as $k => $isiNya) {
+              if($isDone == false){
+                $sum[$idxSum] = 0;
+              }
+              $sum[$idxSum] += $isiNya;
+              $idxSum++;
+            }
+            if($isDone == false){
+              $isDone = true;
             }
           }
         @endphp
@@ -169,7 +185,8 @@
           $avg[$perKriteria['id']] = [];
         @endphp
 
-        @for($i = 1; $i <= sizeof($arr2d[$perKriteria['id']][1]); $i++)
+        {{-- @for($i = 1; $i <= sizeof($arr2d[$perKriteria['id']][1]); $i++) --}}
+        @foreach ($arr2d[$perKriteria['id']] as $i => $value)
           @php
             $eigen[$i] = [];
             $avg[$perKriteria['id']][$i] = 0;
@@ -191,7 +208,7 @@
               @endphp
             <td>{{ $avg[$perKriteria['id']][$i] }}</td>
           </tr>
-        @endfor
+        @endforeach
       </tbody>
     </table>
 
