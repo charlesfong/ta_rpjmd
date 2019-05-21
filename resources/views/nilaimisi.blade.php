@@ -318,5 +318,6 @@
               },
           });
         });
+        console.log('wawadsd');
      </script>
 @endsection
