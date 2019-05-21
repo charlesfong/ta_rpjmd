@@ -95,6 +95,15 @@
                 </a>          
               </li>
               <li>
+                <a href="{{ route('browseTujuan') }}">
+                  <i class="fa"></i> <span>Seluruh Tujuan</span>            
+                </a>
+              <li>
+                <a href="{{ route('addTujuan') }}">
+                  <i class="fa"></i> <span>Input Tujuan</span>            
+                </a>          
+              </li>
+              <li>
                 <a href="#"><span>AHP</span></a>
                   <li>
                     <a href="{{ route('addKriteriaMisi') }}">
@@ -116,16 +125,6 @@
                       <i class="fa"></i> <span>Hasil Seleksi Misi</span>            
                     </a>          
                   </li>    
-              </li>
-            @elseif(Auth::user()->inRole('bappeda'))
-              <li>
-                <a href="{{ route('browseTujuan') }}">
-                  <i class="fa"></i> <span>Seluruh Tujuan</span>            
-                </a>
-              <li>
-                <a href="{{ route('addTujuan') }}">
-                  <i class="fa"></i> <span>Input Tujuan</span>            
-                </a>          
               </li>
               <li>
                 <a href="#"><span>AHP</span></a>

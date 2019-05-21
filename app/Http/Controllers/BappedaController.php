@@ -11,6 +11,7 @@ use App\Visi;
 use App\Misi;
 use App\KriteriaTujuan;
 use App\BobotKriteriaTujuan;
+use App\BobotTujuan;
 
 
 class BappedaController extends Controller
@@ -66,11 +67,22 @@ class BappedaController extends Controller
     public function showNilaiTujuan()
     {
         $id = Auth::user()->id;
-        $idMisi = Misi::all()[1]['id'];
+        $idMisi = Misi::all()[0]['id'];
+        $allMisi = Misi::all();
         $Kriteria = Tujuan::where('misi_id', $idMisi)->get();
         $TipeData = 'Tujuan';
         $allKriteria = KriteriaTujuan::all();
-        return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria'));
+        return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria', 'allMisi'));
+    }
+    public static function showNilaiTujuanById($id)
+    {
+        $allMisi = Misi::all();
+        $id = Auth::user()->id;
+        $idMisi = Misi::where('id', $id)->first()['id'];
+        $Kriteria = Tujuan::where('misi_id', $idMisi)->get();
+        $TipeData = 'Tujuan';
+        $allKriteria = KriteriaTujuan::all();
+        return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria','allMisi'));
     }
     public function addKriteriaTujuan()
     {
@@ -121,5 +133,36 @@ class BappedaController extends Controller
         $Kriteria = KriteriaTujuan::all();
         $TipeData = 'Tujuan';
         return view('nilaikriteria', compact('TipeData', 'Kriteria'));
+    }
+    public function storeNilaiTujuan(Request $request, KriteriaTujuan $kriteria)
+    {
+        $id = Auth::user()->id;
+
+        foreach ($request['tujuan'] as $key => $data) {
+            $pilihan = explode("-",$key);
+            $arr = [];
+            $arr['tujuan_id'] = $pilihan[0];
+            $arr['tujuan2_id'] = $pilihan[1];
+            $arr['bobot'] = $data;
+            $arr['user_id'] = $id;
+            $arr['kriteria_id'] = $kriteria['id'];
+
+            $bobotNya = BobotTujuan::where([['user_id', $id], ['tujuan_id', $arr['tujuan_id']], ['tujuan2_id', $arr['tujuan2_id']], ['kriteria_id', $arr['kriteria_id']]])->first();
+            if($bobotNya!=null){
+                $bobotNya->bobot = $arr['bobot'];
+                $bobotNya->save();
+            }
+            else{
+                BobotTujuan::create($arr);
+            }
+        }
+
+        $id = Auth::user()->id;
+        $allMisi = Misi::all();
+        $idMisi = Misi::all()[0]['id'];
+        $Kriteria = Tujuan::where('misi_id', $idMisi)->get();
+        $TipeData = 'Tujuan';
+        $allKriteria = KriteriaTujuan::all();
+        return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria','allMisi'));
     }
 }

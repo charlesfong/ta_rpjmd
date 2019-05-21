@@ -4,13 +4,14 @@
   @php
     $parentNya = "";
     if($TipeData == 'Misi'){
-      $urlStore = route('storeKriteriaMisi');
+      $urlPush = 
+      $urlStore = route('storeEigenMisi');
       $tipeId = 'misi_id';
       $tipeId2 = 'misi2_id';
       $tipeName = 'misi';
     }
     else if($TipeData == 'Tujuan'){
-      $urlStore = route('storeKriteriaMisi');
+      $urlStore = route('storeEigenTujuan');
       $tipeId = 'tujuan_id';
       $tipeId2 = 'tujuan2_id';
       $tipeName = 'tujuan';
@@ -20,9 +21,27 @@
     $arr2d = [];
   @endphp
 
-  @foreach($allKriteria as $perKriteria)
+  @if($TipeData == 'Tujuan')
+  <h1 style="text-align: center; margin: 10px auto">PILIH MISI</h1>
+    <select id="pilihMisi" class="form-control" style="width: 60%; margin: 10px auto">
+      @foreach($allMisi as $val)
+        <option value="{{$val['id']}}">{{$val['misi']}}</option>
+      @endforeach
+    </select>
+  @endif
 
-  <form method="post" action="{{ route('storeNilaiMisi', ['id' => $perKriteria['id']]) }}" class="row-fluid margin-none well form-horizontal">
+  @foreach($allKriteria as $perKriteria)\
+
+  @php
+    if($TipeData == 'Misi'){
+      $urlPush = route('storeNilaiMisi', ['id' => $perKriteria['id']]);
+    }
+    else if($TipeData == 'Tujuan'){
+      $urlPush = route('storeNilaiTujuan', ['id' => $perKriteria['id']]);
+    }
+  @endphp
+
+  <form method="post" action="{{ $urlPush }}" class="row-fluid margin-none well form-horizontal">
     {{ csrf_field() }}
 
     @php
@@ -72,6 +91,7 @@
     <button id="send" type="submit" name="btn_simpan" class="tombol-large w_biru hvr-fade">Simpan Data</button>
     </form>
 
+    @dd($Kriteria);
     <!-- Matriks -->
     <span>Matriks Nilai Perbandingan</span>
     <table class="table table-bordered table-striped">
@@ -183,6 +203,7 @@
         @php
           $eigen = [];
           $avg[$perKriteria['id']] = [];
+          $idxKriteria = 1;
         @endphp
 
         {{-- @for($i = 1; $i <= sizeof($arr2d[$perKriteria['id']][1]); $i++) --}}
@@ -190,21 +211,24 @@
           @php
             $eigen[$i] = [];
             $avg[$perKriteria['id']][$i] = 0;
+            $idxSum = 1;
           @endphp
 
           <tr>
-            <td>{{$Kriteria[$i-1]['id']}}</td> 
-            <td>K{{$Kriteria[$i-1]['id']}} - {{$Kriteria[$i-1][$tipeName]}}</td>
-              @for($j = 1; $j <= sizeof($arr2d[$perKriteria['id']][1]); $j++)
+            <td>{{$Kriteria[$idxKriteria-1]['id']}}</td> 
+            <td>K{{$Kriteria[$idxKriteria-1]['id']}} - {{$Kriteria[$idxKriteria-1][$tipeName]}}</td>
+              @foreach ($arr2d[$perKriteria['id']][$i] as $j => $value)
                 @php
-                  $eigen[$i][$j] = $arr2d[$perKriteria['id']][$i][$j]/$sum[$j];
+                  $eigen[$i][$j] = $arr2d[$perKriteria['id']][$i][$j]/$sum[$idxSum];
                   $avg[$perKriteria['id']][$i] += $eigen[$i][$j];
+                  $idxSum++;
                 @endphp
                 <td>{{ $eigen[$i][$j] }}</td>
-              @endfor
+              @endforeach
 
               @php
-                $avg[$perKriteria['id']][$i] = $avg[$perKriteria['id']][$i]/sizeof($arr2d[$perKriteria['id']][1]);
+                $avg[$perKriteria['id']][$i] = $avg[$perKriteria['id']][$i]/sizeof($arr2d[$perKriteria['id']][$i]);
+                $idxKriteria++;
               @endphp
             <td>{{ $avg[$perKriteria['id']][$i] }}</td>
           </tr>
@@ -222,13 +246,17 @@
             <td>λ Max</td> 
             @php
               $result = 0;
+              $idxSum = 1;
             @endphp
 
-            @for($j = 1; $j <= sizeof($arr2d[$perKriteria['id']][1]); $j++)
+            @foreach ($arr2d[$perKriteria['id']] as $i => $value)
               @php
-                $result += $avg[$perKriteria['id']][$j]*$sum[$j];
+                if(sizeof($sum) == sizeof($arr2d[$perKriteria['id']])){
+                  $result += $avg[$perKriteria['id']][$i]*$sum[$idxSum];
+                  $idxSum++;
+                }
               @endphp
-            @endfor
+            @endforeach
             <td>{{$result}}</td>
           </tr>
           <tr>
@@ -236,11 +264,12 @@
 
             @php
               $CI = 0;
-              if($result-sizeof($arr2d[$perKriteria['id']][1]) > 0){
-                $CI = ($result-sizeof($arr2d[$perKriteria['id']][1]))/(sizeof($arr2d[$perKriteria['id']][1])-1);                
+              if($result-sizeof($arr2d[$perKriteria['id']]) > 0){
+                $CI = ($result-sizeof($arr2d[$perKriteria['id']]))/(sizeof($arr2d[$perKriteria['id']])-1);                
               }
             @endphp
 
+          {{-- @php dd($sum); @endphp --}}
             <td>{{$CI}}</td>
           </tr>
           <tr>
@@ -249,28 +278,28 @@
             <?php
               $RI = 0;
               $CR = 0;
-              if(sizeof($arr2d[$perKriteria['id']][1]) == 3){
+              if(sizeof($arr2d[$perKriteria['id']]) == 3){
                 $RI = 0.58;
               }
-              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 4){
+              elseif(sizeof($arr2d[$perKriteria['id']]) == 4){
                 $RI = 0.9;
               }
-              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 5){
+              elseif(sizeof($arr2d[$perKriteria['id']]) == 5){
                 $RI = 1.12;
               }
-              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 6){
+              elseif(sizeof($arr2d[$perKriteria['id']]) == 6){
                 $RI = 1.24;
               }
-              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 7){
+              elseif(sizeof($arr2d[$perKriteria['id']]) == 7){
                 $RI = 1.32;
               }
-              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 8){
+              elseif(sizeof($arr2d[$perKriteria['id']]) == 8){
                 $RI = 1.41;
               }
-              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 9){
+              elseif(sizeof($arr2d[$perKriteria['id']]) == 9){
                 $RI = 1.45;
               }
-              elseif(sizeof($arr2d[$perKriteria['id']][1]) == 10){
+              elseif(sizeof($arr2d[$perKriteria['id']]) == 10){
                 $RI = 1.49;
               }
 
@@ -307,7 +336,7 @@
                   'X-CSRF-TOKEN': '{{ csrf_token() }}'
               },
               type: 'post',
-              url: "{{route('storeEigenMisi')}}",
+              url: "{{ $urlStore }}",
               data: {
                   'kriteria': kriteria,
                   'eigen': eigen,
@@ -318,6 +347,11 @@
               },
           });
         });
+
+        $('#pilihMisi').change(function(){
+          @php \App\Http\Controllers\BappedaController::showNilaiTujuanById(0); @endphp
+        });
+
         console.log('wawadsd');
      </script>
 @endsection

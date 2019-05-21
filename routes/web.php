@@ -21,7 +21,7 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::get('/dashboard', function () { return view('dashboard'); })->middleware('auth')->name('dashboard');
 
-Route::group(['prefix' => 'kepaladaerah', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'kepaladaerah'], function () {
 	Route::get('/', function () { return view('dashboard'); })->name('dashboard');
 	Route::get('/browse-visimisi', 'KepalaDaerahController@showVisiMisi')->name('browseVisiMisi');
 	Route::get('/add-visimisi', 'KepalaDaerahController@showInputVisiMisi')->name('addVisiMisi');
@@ -40,7 +40,7 @@ Route::group(['prefix' => 'kepaladaerah', 'middleware' => 'auth'], function () {
 	Route::post('/store-bobot-misi/', 'KepalaDaerahController@storeBobotMisi')->name('storeBobotMisi');
 });
 
-Route::group(['prefix' => 'bappeda', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'bappeda'], function () {
 	Route::get('/', function () { return view('dashboard'); })->name('dashboard');
 	Route::get('/browse-tujuan', 'BappedaController@showTujuan')->name('browseTujuan');
 	Route::get('/add-tujuan', 'BappedaController@addTujuan')->name('addTujuan');
