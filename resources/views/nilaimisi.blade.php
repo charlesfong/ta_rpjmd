@@ -24,6 +24,7 @@
   @if($TipeData == 'Tujuan')
   <h1 style="text-align: center; margin: 10px auto">PILIH MISI</h1>
     <select id="pilihMisi" class="form-control" style="width: 60%; margin: 10px auto">
+      <option disabled="" selected="">PILIH MISI</option>
       @foreach($allMisi as $val)
         <option value="{{$val['id']}}">{{$val['misi']}}</option>
       @endforeach
@@ -349,9 +350,9 @@
         });
 
         $('#pilihMisi').change(function(){
-          @php \App\Http\Controllers\BappedaController::showNilaiTujuanById(0); @endphp
+          var url = '{{ route('showNilaiTujuanById', ['id' => '']) }}';
+          var idPilihan = $(this).val();
+          window.location.href = url +'/'+idPilihan;
         });
-
-        console.log('wawadsd');
      </script>
 @endsection

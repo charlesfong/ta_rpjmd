@@ -50,6 +50,7 @@ Route::group(['prefix' => 'bappeda'], function () {
 	//khusus AHP
 	Route::get('/nilai-kriteria-tujuan', 'BappedaController@showKriteriaTujuan')->name('showKriteriaTujuan');
 	Route::get('/nilai-tujuan', 'BappedaController@showNilaiTujuan')->name('showNilaiTujuan');
+	Route::get('/nilai-tujuan/{id}', 'BappedaController@showNilaiTujuanById')->name('showNilaiTujuanById');
 	Route::get('/add-kriteria-tujuan', 'BappedaController@addKriteriaTujuan')->name('addKriteriaTujuan');
 	Route::get('/hasil-ahp-tujuan', 'BappedaController@hasilAhpTujuan')->name('hasilAhpTujuan');
 	Route::post('/store-kriteria-tujuan', 'BappedaController@storeKriteriaTujuan')->name('storeKriteriaTujuan');

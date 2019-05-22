@@ -76,9 +76,9 @@ class BappedaController extends Controller
     }
     public static function showNilaiTujuanById($id)
     {
+        $idMisi = Misi::find($id)['id'];
         $allMisi = Misi::all();
         $id = Auth::user()->id;
-        $idMisi = Misi::where('id', $id)->first()['id'];
         $Kriteria = Tujuan::where('misi_id', $idMisi)->get();
         $TipeData = 'Tujuan';
         $allKriteria = KriteriaTujuan::all();
