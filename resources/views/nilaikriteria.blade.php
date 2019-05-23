@@ -4,9 +4,11 @@
   @php
     if($TipeData == 'Misi'){
       $urlStore = route('storeNilaiKriteriaMisi');
+      $urlEigen = route('storeEigenKriteriaMisi');
     }
     else if($TipeData == 'Tujuan'){
       $urlStore = route('storeNilaiKriteriaTujuan');
+      $urlEigen = route('storeEigenKriteriaTujuan');
     }
   @endphp
   <form method="post" action="{{ $urlStore }}" class="row-fluid margin-none well form-horizontal">
@@ -267,7 +269,7 @@
                   'X-CSRF-TOKEN': '{{ csrf_token() }}'
               },
               type: 'post',
-              url: "{{route('storeEigenKriteria')}}",
+              url: "{{ $urlEigen }}",
               data: {
                   'kriteria': kriteria,
                   'eigen': eigen,

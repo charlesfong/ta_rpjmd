@@ -22,7 +22,7 @@
   @endphp
 
   @if($TipeData == 'Tujuan')
-  <h1 style="text-align: center; margin: 10px auto">PILIH MISI</h1>
+  <h1 style="text-align: center; margin: 10px auto">MISI : {{ sizeof($Kriteria) > 0 ? $Kriteria[0]->misi['misi'] : "-" }}</h1>
     <select id="pilihMisi" class="form-control" style="width: 60%; margin: 10px auto">
       <option disabled="" selected="">PILIH MISI</option>
       @foreach($allMisi as $val)
@@ -91,8 +91,7 @@
     </table>
     <button id="send" type="submit" name="btn_simpan" class="tombol-large w_biru hvr-fade">Simpan Data</button>
     </form>
-
-    @dd($Kriteria);
+    
     <!-- Matriks -->
     <span>Matriks Nilai Perbandingan</span>
     <table class="table table-bordered table-striped">

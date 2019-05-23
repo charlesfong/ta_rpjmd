@@ -4,16 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EigenMisi extends Model
+class EigenTujuan extends Model
 {
     protected $fillable = [
-        'eigen', 'misi_id', 'user_id', 'kriteria_id'
+        'eigen', 'tujuan_id', 'user_id', 'kriteria_id'
     ];
 
 
-    public function misi()
+    public function tujuan()
     {
-        return $this->belongsTo('App\Misi');
+        return $this->belongsTo('App\Tujuan');
     }
     public function user()
     {
@@ -21,6 +21,6 @@ class EigenMisi extends Model
     }
     public function kriteria()
     {
-        return $this->belongsTo('App\KriteriaMisi', 'kriteria_id', 'id');
+        return $this->belongsTo('App\KriteriaTujuan', 'kriteria_id', 'id');
     }
 }

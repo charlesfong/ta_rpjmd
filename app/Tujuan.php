@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Tujuan extends Model
 {
@@ -29,11 +30,11 @@ class Tujuan extends Model
     }
     public function bobotkriteriamisi()
     {
-        return $this->hasMany('App\BobotTujuan', 'tujuan_id', 'id');
+        return $this->hasMany('App\BobotTujuan', 'tujuan_id', 'id')->where('user_id', Auth::user()->id);
     }
     public function bobotkriteriamisi2()
     {
-        return $this->hasMany('App\BobotTujuan', 'tujuan2_id', 'id');
+        return $this->hasMany('App\BobotTujuan', 'tujuan2_id', 'id')->where('user_id', Auth::user()->id);
     }
     public function eigentujuan()
     {

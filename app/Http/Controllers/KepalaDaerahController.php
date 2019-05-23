@@ -147,7 +147,7 @@ class KepalaDaerahController extends Controller
         $allKriteria = KriteriaMisi::all();
         return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria'));
     }
-    public function storeEigenKriteria(Request $request)
+    public function storeEigenKriteriaMisi(Request $request)
     {
         $id = Auth::user()->id;
         if($request->has('eigen') && $request->has('kriteria')){

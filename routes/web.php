@@ -35,7 +35,7 @@ Route::group(['prefix' => 'kepaladaerah'], function () {
 	Route::post('/store-kriteria-misi', 'KepalaDaerahController@storeKriteriaMisi')->name('storeKriteriaMisi');
 	Route::post('/store-nilai-kriteria-misi', 'KepalaDaerahController@storeNilaiKriteriaMisi')->name('storeNilaiKriteriaMisi');
 	Route::post('/store-nilai-misi/{kriteria}', 'KepalaDaerahController@storeNilaiMisi')->name('storeNilaiMisi');
-	Route::post('/store-eigen-kriteria-misi/', 'KepalaDaerahController@storeEigenKriteria')->name('storeEigenKriteria');
+	Route::post('/store-eigen-kriteria-misi/', 'KepalaDaerahController@storeEigenKriteriaMisi')->name('storeEigenKriteriaMisi');
 	Route::post('/store-eigen-misi/', 'KepalaDaerahController@storeEigenMisi')->name('storeEigenMisi');
 	Route::post('/store-bobot-misi/', 'KepalaDaerahController@storeBobotMisi')->name('storeBobotMisi');
 });
@@ -56,7 +56,7 @@ Route::group(['prefix' => 'bappeda'], function () {
 	Route::post('/store-kriteria-tujuan', 'BappedaController@storeKriteriaTujuan')->name('storeKriteriaTujuan');
 	Route::post('/store-nilai-kriteria-tujuan', 'BappedaController@storeNilaiKriteriaTujuan')->name('storeNilaiKriteriaTujuan');
 	Route::post('/store-nilai-tujuan/{kriteria}', 'BappedaController@storeNilaiTujuan')->name('storeNilaiTujuan');
-	Route::post('/store-eigen-kriteria-tujuan/', 'BappedaController@storeEigenKriteria')->name('storeEigenKriteria');
+	Route::post('/store-eigen-kriteria-tujuan/', 'BappedaController@storeEigenKriteriaTujuan')->name('storeEigenKriteriaTujuan');
 	Route::post('/store-eigen-tujuan/', 'BappedaController@storeEigenTujuan')->name('storeEigenTujuan');
 	Route::post('/store-bobot-tujuan/', 'BappedaController@storeBobotTujuan')->name('storeBobotTujuan');
 });

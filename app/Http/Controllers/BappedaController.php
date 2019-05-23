@@ -11,7 +11,8 @@ use App\Visi;
 use App\Misi;
 use App\KriteriaTujuan;
 use App\BobotKriteriaTujuan;
-use App\BobotTujuan;
+use App\EigenKriteriaTujuan;
+use App\EigenTujuan;
 
 
 class BappedaController extends Controller
@@ -137,6 +138,7 @@ class BappedaController extends Controller
     public function storeNilaiTujuan(Request $request, KriteriaTujuan $kriteria)
     {
         $id = Auth::user()->id;
+        $misiId = 0;
 
         foreach ($request['tujuan'] as $key => $data) {
             $pilihan = explode("-",$key);
@@ -155,14 +157,81 @@ class BappedaController extends Controller
             else{
                 BobotTujuan::create($arr);
             }
+
+            $misiId = Tujuan::find($pilihan[0])['misi_id'];
         }
 
         $id = Auth::user()->id;
         $allMisi = Misi::all();
-        $idMisi = Misi::all()[0]['id'];
+        $idMisi = Misi::find($misiId)['id'];
         $Kriteria = Tujuan::where('misi_id', $idMisi)->get();
         $TipeData = 'Tujuan';
         $allKriteria = KriteriaTujuan::all();
         return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria','allMisi'));
+    }
+
+    public function storeEigenKriteriaTujuan(Request $request)
+    {
+        // return response()->json(['result' => $request['kriteria']]);
+        $id = Auth::user()->id;
+        if($request->has('eigen') && $request->has('kriteria')){
+            for($i = 1; $i <= sizeof($request['kriteria']); $i++){
+                $arr = [];
+                $arr['eigen'] = $request['eigen'][$i];
+                $arr['user_id'] = $id;
+                $arr['kriteria_id'] = $i;
+
+                $eigenNya = EigenKriteriaTujuan::where([['user_id', $id], ['kriteria_id', $i]])->first();
+                if($eigenNya!=null){
+                    $eigenNya->eigen = $arr['eigen'];
+                    $eigenNya->save();
+                }
+                else{
+                    EigenKriteriaTujuan::create($arr);
+                }
+            }
+        }
+        
+        return response()->json(['result' => 'Berhasil']);
+        
+    }
+    public function storeEigenTujuan(Request $request)
+    {
+        $id = Auth::user()->id;
+        $allKriteria = KriteriaTujuan::all();
+        if($request->has('eigen') && $request->has('kriteria')){
+            foreach ($allKriteria as $kriteriaNya) {
+                foreach ($request['eigen'][$kriteriaNya['id']] as $key => $value){
+                    $arr = [];
+                    $arr['tujuan_id'] = $key;
+                    $arr['eigen'] = $request['eigen'][$kriteriaNya['id']][$key];
+                    $arr['user_id'] = $id;
+                    $arr['kriteria_id'] = $kriteriaNya['id'];
+
+                    $eigenNya = EigenTujuan::where([['user_id', $arr['user_id']], ['kriteria_id', $arr['kriteria_id']], ['tujuan_id', $arr['tujuan_id']]])->first();
+                    if($eigenNya!=null){
+                        $eigenNya->eigen = $arr['eigen'];
+                        $eigenNya->save();
+                    }
+                    else{
+                        EigenTujuan::create($arr);
+                    }
+                }
+
+            }
+        }
+        
+        return response()->json(['result' => 'Berhasil']);
+        
+    }
+    public function hasilAhpTujuan()
+    {
+        $id = Auth::user()->id;
+        $VisiMisi = Visi::where('user_id', $id)->first();
+        $Misis = $VisiMisi->misiSort;
+        $Misis = $Misis[0]->tujuan;
+        $TipeData = 'Misi';
+        $Kriterias = KriteriaTujuan::all();
+        return view('hasilseleksi', compact('TipeData', 'Misis', 'Kriterias'));
     }
 }

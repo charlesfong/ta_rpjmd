@@ -5,6 +5,9 @@
     if($TipeData == 'Misi'){
       $urlStore = route('storeKriteriaMisi');
     }
+    else if($TipeData == 'Tujuan'){
+      $urlStore = route('storeKriteriaMisi');
+    }
   @endphp
         <h1>Hasil Akumulasi Kriteria</h1>
        <table class="table table-bordered table-striped">
