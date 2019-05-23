@@ -120,7 +120,7 @@ class KepalaDaerahController extends Controller
     public function storeNilaiMisi(Request $request, KriteriaMisi $kriteria)
     {
         $id = Auth::user()->id;
-
+        
         foreach ($request['misi'] as $key => $data) {
             $pilihan = explode("-",$key);
             $arr = [];

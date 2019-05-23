@@ -21,12 +21,12 @@ class KriteriaTujuan extends Model
         return $this->hasMany('App\BobotKriteriaTujuan', 'kriteria2_id', 'id');
     }
 
-    public function eigenkriteriatujuan()
+    public function eigenkriteriamisi()
     {
         return $this->hasMany('App\EigenKriteriaTujuan', 'kriteria_id', 'id');
     }
 
-    public function eigentujuan()
+    public function eigenmisi()
     {
         return $this->hasMany('App\EigenTujuan');
     }

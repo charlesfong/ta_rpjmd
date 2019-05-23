@@ -4,7 +4,6 @@
   @php
     $parentNya = "";
     if($TipeData == 'Misi'){
-      $urlPush = 
       $urlStore = route('storeEigenMisi');
       $tipeId = 'misi_id';
       $tipeId2 = 'misi2_id';
@@ -74,11 +73,11 @@
             <td>{{$a1[$tipeName]}}</td>
             <td style="text-align:center;">
               @for($j = 9; $j > 0; $j-=2)
-                <input type="radio" id="radio-{{$a1['id']}}-{{$b1['id']}}+{{$j}}" name="tujuan[{{$a1['id']}}-{{$b1['id']}}]" value="{{$j}}">
+                <input type="radio" id="radio-{{$a1['id']}}-{{$b1['id']}}+{{$j}}" name="{{$tipeName}}[{{$a1['id']}}-{{$b1['id']}}]" value="{{$j}}">
                 <label style=" margin-right: 20px !important;" for="radio-{{$a1['id']}}-{{$b1['id']}}+{{$j}}">{{$j}}</label>
               @endfor
               @for($j = 3; $j < 10; $j+=2)
-                <input type="radio" id="radio-{{$a1['id']}}-{{$b1['id']}}-{{$j}}" name="tujuan[{{$a1['id']}}-{{$b1['id']}}]" value="{{1/$j}}" required="">
+                <input type="radio" id="radio-{{$a1['id']}}-{{$b1['id']}}-{{$j}}" name="{{$tipeName}}[{{$a1['id']}}-{{$b1['id']}}]" value="{{1/$j}}" required="">
                 <label style=" margin-right: 20px !important;" for="radio-{{$a1['id']}}-{{$b1['id']}}-{{$j}}">{{$j}}</label>
               @endfor
             </td>

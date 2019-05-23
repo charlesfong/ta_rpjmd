@@ -13,7 +13,7 @@ class EigenTujuan extends Model
 
     public function tujuan()
     {
-        return $this->belongsTo('App\Tujuan');
+        return $this->belongsTo('App\Tujuan', 'id', 'tujuan_id');
     }
     public function user()
     {

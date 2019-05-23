@@ -6,9 +6,20 @@
       $urlStore = route('storeKriteriaMisi');
     }
     else if($TipeData == 'Tujuan'){
-      $urlStore = route('storeKriteriaMisi');
+      $urlStore = route('storeKriteriaTujuan');
     }
   @endphp
+
+        @if($TipeData == 'Tujuan')
+        <h1 style="text-align: center; margin: 10px auto">MISI : {{ sizeof($Misis) > 0 ? $Misis[0]->misi['misi'] : "-" }}</h1>
+          <select id="pilihMisi" class="form-control" style="width: 60%; margin: 10px auto">
+            <option disabled="" selected="">PILIH MISI</option>
+            @foreach($allMisi as $val)
+              <option value="{{$val['id']}}">{{$val['misi']}}</option>
+            @endforeach
+          </select>
+        @endif
+
         <h1>Hasil Akumulasi Kriteria</h1>
        <table class="table table-bordered table-striped">
         <thead>
@@ -82,6 +93,7 @@
                 $totalEigen = 1;
                 $totalUser = 0;
                 $hasilEigen[$key] = 0;
+                dd($misi->eigenmisi);
                 foreach($misi->eigenmisi as $eigenKriteria){
                   if($eigenKriteria['kriteria_id'] == $kriteriaNya['id']){
                     $totalEigen *= $eigenKriteria['eigen'];

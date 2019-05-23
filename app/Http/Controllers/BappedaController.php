@@ -10,6 +10,7 @@ use App\Tujuan;
 use App\Visi;
 use App\Misi;
 use App\KriteriaTujuan;
+use App\BobotTujuan;
 use App\BobotKriteriaTujuan;
 use App\EigenKriteriaTujuan;
 use App\EigenTujuan;
@@ -228,10 +229,10 @@ class BappedaController extends Controller
     {
         $id = Auth::user()->id;
         $VisiMisi = Visi::where('user_id', $id)->first();
-        $Misis = $VisiMisi->misiSort;
-        $Misis = $Misis[0]->tujuan;
-        $TipeData = 'Misi';
+        $allMisi = $VisiMisi->misiSort;
+        $Misis = $allMisi[0]->tujuan;
+        $TipeData = 'Tujuan';
         $Kriterias = KriteriaTujuan::all();
-        return view('hasilseleksi', compact('TipeData', 'Misis', 'Kriterias'));
+        return view('hasilseleksi', compact('TipeData', 'Misis', 'Kriterias', 'allMisi'));
     }
 }
