@@ -81,9 +81,7 @@
                 <i class="fa"></i> <span>Dashboard</span>            
               </a>          
             </li>
-
             </li>
-            @if(Auth::user()->inRole('kepala-daerah'))
               <li>
                 <a href="{{ route('browseVisiMisi') }}">
                   <i class="fa"></i> <span>Seluruh Visi Misi</span>            
@@ -104,7 +102,25 @@
                 </a>          
               </li>
               <li>
-                <a href="#"><span>AHP</span></a>
+                <a href="{{ route('browseSasaran') }}">
+                  <i class="fa"></i> <span>Seluruh Sasaran</span>
+                </a>
+              <li>
+                <a href="{{ route('addSasaran') }}">
+                  <i class="fa"></i> <span>Input Sasaran</span>            
+                </a>          
+              </li>
+              <li>
+                <a href="{{ route('browseSasaran') }}">
+                  <i class="fa"></i> <span>Seluruh Indikator</span>
+                </a>
+              <li>
+                <a href="{{ route('addSasaran') }}">
+                  <i class="fa"></i> <span>Input Indikator</span>
+                </a>          
+              </li>
+              <li>
+                <a href="#"><span>AHP MISI</span></a>
                   <li>
                     <a href="{{ route('addKriteriaMisi') }}">
                       <i class="fa"></i> <span>Input Kriteria Misi</span>            
@@ -127,7 +143,7 @@
                   </li>    
               </li>
               <li>
-                <a href="#"><span>AHP</span></a>
+                <a href="#"><span>AHP TUJUAN</span></a>
                   <li>
                     <a href="{{ route('addKriteriaTujuan') }}">
                       <i class="fa"></i> <span>Input Kriteria Tujuan</span>            
@@ -149,7 +165,30 @@
                     </a>          
                   </li>    
               </li>
-            @elseif(Auth::user()->inRole('admin'))
+              <li>
+                <a href="#"><span>AHP SASARAN</span></a>
+                  <li>
+                    <a href="{{ route('addKriteriaSasaran') }}">
+                      <i class="fa"></i> <span>Input Kriteria Sasaran</span>            
+                    </a>          
+                  </li>
+                  <li>
+                    <a href="{{ route('showKriteriaSasaran') }}">
+                      <i class="fa"></i> <span>Nilai Kriteria Sasaran</span>            
+                    </a>          
+                  </li>
+                  <li>
+                    <a href="{{ route('showNilaiSasaran') }}">
+                      <i class="fa"></i> <span>Nilai Alternatif Sasaran</span>           
+                    </a>         
+                  </li>
+                  <li>
+                    <a href="{{ route('hasilAhpSasaran') }}">
+                      <i class="fa"></i> <span>Hasil Seleksi Sasaran</span>            
+                    </a>          
+                  </li>    
+              </li>
+            @if(Auth::user()->inRole('admin'))
               <li>
                 <a href="{{ route('addUser') }}">
                   <i class="fa"></i> <span>Tambah User</span>            

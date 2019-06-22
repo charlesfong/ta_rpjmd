@@ -15,6 +15,12 @@
       $tipeId2 = 'tujuan2_id';
       $tipeName = 'tujuan';
     }
+    else if($TipeData == 'Sasaran'){
+      $urlStore = route('storeEigenSasaran');
+      $tipeId = 'sasaran_id';
+      $tipeId2 = 'sasaran2_id';
+      $tipeName = 'sasaran';
+    }
      
     $avg = []; 
     $arr2d = [];
@@ -30,6 +36,21 @@
     </select>
   @endif
 
+  @if($TipeData == 'Sasaran')
+  <h1 style="text-align: center; margin: 10px auto">MISI : {{ sizeof($Kriteria) > 0 ? $Kriteria[0]->tujuan->misi['misi'] : "-" }}</h1>
+    <select id="pilihMisi" class="form-control" style="width: 60%; margin: 10px auto">
+      <option disabled="" selected="">PILIH MISI</option>
+      @foreach($allMisi as $val)
+        <option value="{{$val['id']}}">{{$val['misi']}}</option>
+      @endforeach
+    </select>
+  <h1 style="text-align: center; margin: 10px auto">TUJUAN : {{ sizeof($Kriteria) > 0 ? $Kriteria[0]->tujuan['tujuan'] : "-" }}</h1>
+    <select id="tujuan" class="form-control" style="width: 60%; margin: 10px auto">
+      <option disabled="" selected="">PILIH TUJUAN</option>
+
+    </select>
+  @endif
+
   @foreach($allKriteria as $perKriteria)\
 
   @php
@@ -38,6 +59,9 @@
     }
     else if($TipeData == 'Tujuan'){
       $urlPush = route('storeNilaiTujuan', ['id' => $perKriteria['id']]);
+    }
+    else if($TipeData == 'Sasaran'){
+      $urlPush = route('storeNilaiSasaran', ['id' => $perKriteria['id']]);
     }
   @endphp
 
@@ -348,7 +372,39 @@
         });
 
         $('#pilihMisi').change(function(){
-          var url = '{{ route('showNilaiTujuanById', ['id' => '']) }}';
+          @if($TipeData == 'Tujuan')
+            var url = '{{ route('showNilaiTujuanById', ['id' => '']) }}';
+            var idPilihan = $(this).val();
+            window.location.href = url +'/'+idPilihan;
+          @else
+            var id = $(this).val();
+            $.ajax({
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              type: 'get',
+              url: "{{ route('showTujuan') }}",
+              data: {
+                  'id': id
+              },
+              success: function (data) {
+                  var tujuan = data['result'];
+                  $("#tujuan").empty();
+                  select = document.getElementById("tujuan");
+                  for(var i = 0; i < tujuan.length; i++){
+                    var opt = document.createElement('option');
+                    opt.setAttribute("name", "tujuan");
+                    opt.value = tujuan[i]['id'];
+                    opt.innerHTML = tujuan[i]['tujuan'];
+                    select.appendChild(opt);
+                    }
+                },
+            });
+          @endif
+        });
+
+        $('#tujuan').change(function(){
+          var url = '{{ route('showNilaiSasaranById', ['id' => '']) }}';
           var idPilihan = $(this).val();
           window.location.href = url +'/'+idPilihan;
         });

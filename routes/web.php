@@ -21,7 +21,7 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::get('/dashboard', function () { return view('dashboard'); })->middleware('auth')->name('dashboard');
 
-Route::group(['prefix' => 'kepaladaerah'], function () {
+Route::group(['prefix' => 'visimisi'], function () {
 	Route::get('/', function () { return view('dashboard'); })->name('dashboard');
 	Route::get('/browse-visimisi', 'KepalaDaerahController@showVisiMisi')->name('browseVisiMisi');
 	Route::get('/add-visimisi', 'KepalaDaerahController@showInputVisiMisi')->name('addVisiMisi');
@@ -40,7 +40,7 @@ Route::group(['prefix' => 'kepaladaerah'], function () {
 	Route::post('/store-bobot-misi/', 'KepalaDaerahController@storeBobotMisi')->name('storeBobotMisi');
 });
 
-Route::group(['prefix' => 'bappeda'], function () {
+Route::group(['prefix' => 'tujuan'], function () {
 	Route::get('/', function () { return view('dashboard'); })->name('dashboard');
 	Route::get('/browse-tujuan', 'BappedaController@showTujuan')->name('browseTujuan');
 	Route::get('/add-tujuan', 'BappedaController@addTujuan')->name('addTujuan');
@@ -53,12 +53,36 @@ Route::group(['prefix' => 'bappeda'], function () {
 	Route::get('/nilai-tujuan/{id}', 'BappedaController@showNilaiTujuanById')->name('showNilaiTujuanById');
 	Route::get('/add-kriteria-tujuan', 'BappedaController@addKriteriaTujuan')->name('addKriteriaTujuan');
 	Route::get('/hasil-ahp-tujuan', 'BappedaController@hasilAhpTujuan')->name('hasilAhpTujuan');
+	Route::get('/hasil-ahp-tujuan/{idMisi}', 'BappedaController@hasilAhpTujuanById')->name('hasilAhpTujuanById');
 	Route::post('/store-kriteria-tujuan', 'BappedaController@storeKriteriaTujuan')->name('storeKriteriaTujuan');
 	Route::post('/store-nilai-kriteria-tujuan', 'BappedaController@storeNilaiKriteriaTujuan')->name('storeNilaiKriteriaTujuan');
 	Route::post('/store-nilai-tujuan/{kriteria}', 'BappedaController@storeNilaiTujuan')->name('storeNilaiTujuan');
 	Route::post('/store-eigen-kriteria-tujuan/', 'BappedaController@storeEigenKriteriaTujuan')->name('storeEigenKriteriaTujuan');
 	Route::post('/store-eigen-tujuan/', 'BappedaController@storeEigenTujuan')->name('storeEigenTujuan');
 	Route::post('/store-bobot-tujuan/', 'BappedaController@storeBobotTujuan')->name('storeBobotTujuan');
+});
+
+Route::group(['prefix' => 'sasaran'], function () {
+	Route::get('/', function () { return view('dashboard'); })->name('dashboard');
+	Route::get('/browse-sasaran', 'SasaranController@showSasaran')->name('browseSasaran');
+	Route::get('/add-sasaran', 'SasaranController@addSasaran')->name('addSasaran');
+	Route::post('/store-sasaran', 'SasaranController@storeSasaran')->name('storeSasaran');
+	Route::get('/show-misi', 'SasaranController@showMisi')->name('showMisi');
+	Route::get('/show-tujuan', 'SasaranController@showTujuan')->name('showTujuan');
+
+	//khusus AHP
+	Route::get('/nilai-kriteria-sasaran', 'SasaranController@showKriteriaSasaran')->name('showKriteriaSasaran');
+	Route::get('/nilai-sasaran', 'SasaranController@showNilaiSasaran')->name('showNilaiSasaran');
+	Route::get('/nilai-sasaran/{id}', 'SasaranController@showNilaiSasaranById')->name('showNilaiSasaranById');
+	Route::get('/add-kriteria-sasaran', 'SasaranController@addKriteriaSasaran')->name('addKriteriaSasaran');
+	Route::get('/hasil-ahp-sasaran', 'SasaranController@hasilAhpSasaran')->name('hasilAhpSasaran');
+	Route::get('/hasil-ahp-sasaran/{idMisi}', 'SasaranController@hasilAhpSasaranById')->name('hasilAhpSasaranById');
+	Route::post('/store-kriteria-sasaran', 'SasaranController@storeKriteriaSasaran')->name('storeKriteriaSasaran');
+	Route::post('/store-nilai-kriteria-sasaran', 'SasaranController@storeNilaiKriteriaSasaran')->name('storeNilaiKriteriaSasaran');
+	Route::post('/store-nilai-sasaran/{kriteria}', 'SasaranController@storeNilaiSasaran')->name('storeNilaiSasaran');
+	Route::post('/store-eigen-kriteria-sasaran/', 'SasaranController@storeEigenKriteriaSasaran')->name('storeEigenKriteriaSasaran');
+	Route::post('/store-eigen-sasaran/', 'SasaranController@storeEigenSasaran')->name('storeEigenSasaran');
+	Route::post('/store-bobot-sasaran/', 'SasaranController@storeBobotSasaran')->name('storeBobotSasaran');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {

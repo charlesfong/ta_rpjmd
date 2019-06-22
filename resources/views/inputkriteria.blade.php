@@ -8,6 +8,9 @@
     else if($TipeData == 'Tujuan'){
       $urlStore = route('storeKriteriaTujuan');
     }
+    else if($TipeData == 'Sasaran'){
+      $urlStore = route('storeKriteriaSasaran');
+    }
   @endphp
     <table class="table table-striped">
           <tbody>

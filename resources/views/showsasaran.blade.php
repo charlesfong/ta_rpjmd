@@ -32,7 +32,18 @@
                 <tr>
                   <td rowspan="{{$totalBaris}}">{{$misi['misi']}}</td>
                   @if(sizeof($misi->tujuanSort) > 0)
-                    <td>{{$misi->tujuanSort[0]['tujuan']}}</td>
+                    @php
+                      $totalBaris = 1;
+                      if( sizeof($misi->tujuanSort[0]->sasaran) > 0){
+                        $totalBaris = sizeof($misi->tujuanSort[0]);
+                      }
+                    @endphp
+                    <td rowspan="{{$totalBaris}}">{{$misi->tujuanSort[0]['tujuan']}}</td>
+                    @if(sizeof($misi->tujuanSort[0]->sasaran) > 0)
+                      <td>{{$misi->tujuanSort[0]->sasaran[0]['sasaran']}}</td>
+                    @else
+                      <td>-</td>
+                    @endif
                   @else
                     <td>-</td>
                   @endif

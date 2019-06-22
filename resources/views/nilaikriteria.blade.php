@@ -10,6 +10,10 @@
       $urlStore = route('storeNilaiKriteriaTujuan');
       $urlEigen = route('storeEigenKriteriaTujuan');
     }
+    else if($TipeData == 'Sasaran'){
+      $urlStore = route('storeNilaiKriteriaSasaran');
+      $urlEigen = route('storeEigenKriteriaSasaran');
+    }
   @endphp
   <form method="post" action="{{ $urlStore }}" class="row-fluid margin-none well form-horizontal">
     {{ csrf_field() }}

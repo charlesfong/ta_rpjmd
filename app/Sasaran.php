@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Sasaran extends Model
 {
@@ -19,8 +20,20 @@ class Sasaran extends Model
     {
         return $this->belongsTo('App\User');
     }
-    public function program()
+    public function bobotsasaran()
     {
-        return $this->hasMany('App\Program');
+        return $this->hasMany('App\BobotSasaran');
+    }
+    public function bobotkriteriamisi()
+    {
+        return $this->hasMany('App\BobotSasaran', 'sasaran_id', 'id')->where('user_id', Auth::user()->id);
+    }
+    public function bobotkriteriamisi2()
+    {
+        return $this->hasMany('App\BobotSasaran', 'sasaran2_id', 'id')->where('user_id', Auth::user()->id);
+    }
+    public function eigenmisi()
+    {
+        return $this->hasMany('App\EigenSasaran', 'sasaran_id', 'id');
     }
 }

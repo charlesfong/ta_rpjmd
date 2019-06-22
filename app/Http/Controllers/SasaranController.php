@@ -6,22 +6,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use DB;
 use App\Input;
-use App\Tujuan;
 use App\Visi;
 use App\Misi;
-use App\KriteriaTujuan;
-use App\BobotTujuan;
-use App\BobotKriteriaTujuan;
-use App\EigenKriteriaTujuan;
-use App\EigenTujuan;
+use App\Tujuan;
+use App\Sasaran;
+use App\KriteriaSasaran;
+use App\BobotKriteriaSasaran;
+use App\EigenKriteriaSasaran;
+use App\BobotSasaran;
+use App\EigenSasaran;
 
-
-class BappedaController extends Controller
+class SasaranController extends Controller
 {
-    public function addTujuan()
+	public function addSasaran()
     { 
         $VisiMisi = Visi::all();
-        return view('bappeda.inputtujuan',compact('VisiMisi'));
+        return view('inputsasaran',compact('VisiMisi'));
     }
 
     public function showMisi(Request $request){
@@ -34,65 +34,77 @@ class BappedaController extends Controller
         }
     }
 
-    public function showTujuan(Request $request)
-    {
-        $Misis = Misi::all()->sortByDesc('bobot');
-        return view('bappeda.showtujuan',compact('Misis'));
+    public function showTujuan(Request $request){
+        if ($request->has('id')) {
+            $tujuans = Tujuan::where('misi_id', $request->input('id'))->get();
+            return response()->json(['result' => $tujuans]);
+        } 
+        else {
+            return response()->json(['result' => 'Gagal!!']);
+        }
     }
 
-    public function storeTujuan(request $request)
-    {        $validator = \Validator::make($request->all(), [
+    public function showSasaran(Request $request)
+    {
+        $Misis = Misi::all()->sortByDesc('bobot');
+        return view('showsasaran',compact('Misis'));
+    }
+
+    public function storeSasaran(request $request)
+    {      
+    	$validator = \Validator::make($request->all(), [
+    				'sasaran' => 'required',
                     'tujuan' => 'required',
-                    'misi' => 'required',
         ]);
         $validator->validate();
 
-        $data = $request->only('misi');
-        $data['misi_id'] = $data['misi'];
-        $data['tujuan'] = $request->tujuan;
+        $data = $request->only('tujuan');
+        $data['tujuan_id'] = $data['tujuan'];
+        $data['sasaran'] = $request->sasaran;
         $data['user_id'] = Auth::user()->id;
-        foreach ($request->tujuan as $data['tujuan']) {
-            Tujuan::create($data);
+        foreach ($request->sasaran as $data['sasaran']) {
+            Sasaran::create($data);
         }
 
         $VisiMisi = Visi::all();
-        return view('bappeda.inputtujuan',compact('VisiMisi'));
+        return view('inputsasaran',compact('VisiMisi'));
     }
 
-    //AHPshowNilaiMisi
-    public function showKriteriaTujuan()
+    //AHPshowNilaiSasaran
+    ///blom selesai
+    public function showKriteriaSasaran()
     {
-        $Kriteria = KriteriaTujuan::all();
-        $TipeData = 'Tujuan';
+        $Kriteria = KriteriaSasaran::all();
+        $TipeData = 'Sasaran';
         return view('nilaikriteria', compact('TipeData', 'Kriteria'));
     }
-    public function showNilaiTujuan()
+    public function showNilaiSasaran()
     {
         $id = Auth::user()->id;
-        $idMisi = Misi::all()[0]['id'];
+        $idMisi = Misi::all()[0]->tujuan[0]['id'];
         $allMisi = Misi::all();
-        $Kriteria = Tujuan::where('misi_id', $idMisi)->get();
-        $TipeData = 'Tujuan';
-        $allKriteria = KriteriaTujuan::all();
+        $Kriteria = Sasaran::where('tujuan_id', $idMisi)->get();
+        $TipeData = 'Sasaran';
+        $allKriteria = KriteriaSasaran::all();
         return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria', 'allMisi'));
     }
-    public static function showNilaiTujuanById($id)
+    public static function showNilaiSasaranById($id)
     {
-        $idMisi = Misi::find($id)['id'];
+        $idMisi = Tujuan::find($id)['id'];
         $allMisi = Misi::all();
         $id = Auth::user()->id;
-        $Kriteria = Tujuan::where('misi_id', $idMisi)->get();
-        $TipeData = 'Tujuan';
-        $allKriteria = KriteriaTujuan::all();
+        $Kriteria = Sasaran::where('tujuan_id', $idMisi)->get();
+        $TipeData = 'Sasaran';
+        $allKriteria = KriteriaSasaran::all();
         return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria','allMisi'));
     }
-    public function addKriteriaTujuan()
+    public function addKriteriaSasaran()
     {
-        $Kriteria = KriteriaTujuan::all();
-        $TipeData = 'Tujuan';
+        $Kriteria = KriteriaSasaran::all();
+        $TipeData = 'Sasaran';
         return view('inputkriteria', compact('TipeData', 'Kriteria')); 
     }
-    public function storeKriteriaTujuan(request $request)
+    public function storeKriteriaSasaran(request $request)
     {
         $validator = \Validator::make($request->all(), [
                     'kriteria' => 'required',
@@ -101,16 +113,16 @@ class BappedaController extends Controller
         
 
         $data = $request->only('kriteria');
-        KriteriaTujuan::create($data);
+        KriteriaSasaran::create($data);
 
 
-        $Kriteria = KriteriaTujuan::all();
-        $TipeData = 'Tujuan';
+        $Kriteria = KriteriaSasaran::all();
+        $TipeData = 'Sasaran';
         
         return view('inputkriteria', compact('TipeData', 'Kriteria')); 
        
     }
-    public function storeNilaiKriteriaTujuan(Request $request)
+    public function storeNilaiKriteriaSasaran(Request $request)
     {
         $id = Auth::user()->id;
 
@@ -122,56 +134,56 @@ class BappedaController extends Controller
             $arr['bobot'] = $data;
             $arr['user_id'] = $id;
 
-            $bobotNya = BobotKriteriaTujuan::where([['user_id', $id], ['kriteria_id', $arr['kriteria_id']], ['kriteria2_id', $arr['kriteria2_id']]])->first();
+            $bobotNya = BobotKriteriaSasaran::where([['user_id', $id], ['kriteria_id', $arr['kriteria_id']], ['kriteria2_id', $arr['kriteria2_id']]])->first();
             if($bobotNya!=null){
                 $bobotNya->bobot = $arr['bobot'];
                 $bobotNya->save();
             }
             else{
-                BobotKriteriaTujuan::create($arr);
+                BobotKriteriaSasaran::create($arr);
             }
         }
 
-        $Kriteria = KriteriaTujuan::all();
-        $TipeData = 'Tujuan';
+        $Kriteria = KriteriaSasaran::all();
+        $TipeData = 'Sasaran';
         return view('nilaikriteria', compact('TipeData', 'Kriteria'));
     }
-    public function storeNilaiTujuan(Request $request, KriteriaTujuan $kriteria)
+    public function storeNilaiSasaran(Request $request, KriteriaSasaran $kriteria)
     {
         $id = Auth::user()->id;
         $misiId = 0;
 
-        foreach ($request['tujuan'] as $key => $data) {
+        foreach ($request['sasaran'] as $key => $data) {
             $pilihan = explode("-",$key);
             $arr = [];
-            $arr['tujuan_id'] = $pilihan[0];
-            $arr['tujuan2_id'] = $pilihan[1];
+            $arr['sasaran_id'] = $pilihan[0];
+            $arr['sasaran2_id'] = $pilihan[1];
             $arr['bobot'] = $data;
             $arr['user_id'] = $id;
             $arr['kriteria_id'] = $kriteria['id'];
 
-            $bobotNya = BobotTujuan::where([['user_id', $id], ['tujuan_id', $arr['tujuan_id']], ['tujuan2_id', $arr['tujuan2_id']], ['kriteria_id', $arr['kriteria_id']]])->first();
+            $bobotNya = BobotSasaran::where([['user_id', $id], ['sasaran_id', $arr['sasaran_id']], ['sasaran2_id', $arr['sasaran2_id']], ['kriteria_id', $arr['kriteria_id']]])->first();
             if($bobotNya!=null){
                 $bobotNya->bobot = $arr['bobot'];
                 $bobotNya->save();
             }
             else{
-                BobotTujuan::create($arr);
+                BobotSasaran::create($arr);
             }
 
-            $misiId = Tujuan::find($pilihan[0])['misi_id'];
+            $misiId = Sasaran::find($pilihan[0])['tujuan_id'];
         }
 
         $id = Auth::user()->id;
         $allMisi = Misi::all();
-        $idMisi = Misi::find($misiId)['id'];
-        $Kriteria = Tujuan::where('misi_id', $idMisi)->get();
-        $TipeData = 'Tujuan';
-        $allKriteria = KriteriaTujuan::all();
+        $idMisi = Tujuan::find($misiId)['id'];
+        $Kriteria = Sasaran::where('tujuan_id', $idMisi)->get();
+        $TipeData = 'Sasaran';
+        $allKriteria = KriteriaSasaran::all();
         return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria','allMisi'));
     }
 
-    public function storeEigenKriteriaTujuan(Request $request)
+    public function storeEigenKriteriaSasaran(Request $request)
     {
         // return response()->json(['result' => $request['kriteria']]);
         $id = Auth::user()->id;
@@ -181,14 +193,13 @@ class BappedaController extends Controller
                 $arr['eigen'] = $request['eigen'][$i];
                 $arr['user_id'] = $id;
                 $arr['kriteria_id'] = $i;
-
-                $eigenNya = EigenKriteriaTujuan::where([['user_id', $id], ['kriteria_id', $i]])->first();
+                $eigenNya = EigenKriteriaSasaran::where([['user_id', $id], ['kriteria_id', $i]])->first();
                 if($eigenNya!=null){
                     $eigenNya->eigen = $arr['eigen'];
                     $eigenNya->save();
                 }
                 else{
-                    EigenKriteriaTujuan::create($arr);
+                    EigenKriteriaSasaran::create($arr);
                 }
             }
         }
@@ -196,26 +207,26 @@ class BappedaController extends Controller
         return response()->json(['result' => 'Berhasil']);
         
     }
-    public function storeEigenTujuan(Request $request)
+    public function storeEigenSasaran(Request $request)
     {
         $id = Auth::user()->id;
-        $allKriteria = KriteriaTujuan::all();
+        $allKriteria = KriteriaSasaran::all();
         if($request->has('eigen') && $request->has('kriteria')){
             foreach ($allKriteria as $kriteriaNya) {
                 foreach ($request['eigen'][$kriteriaNya['id']] as $key => $value){
                     $arr = [];
-                    $arr['tujuan_id'] = $key;
+                    $arr['sasaran_id'] = $key;
                     $arr['eigen'] = $request['eigen'][$kriteriaNya['id']][$key];
                     $arr['user_id'] = $id;
                     $arr['kriteria_id'] = $kriteriaNya['id'];
 
-                    $eigenNya = EigenTujuan::where([['user_id', $arr['user_id']], ['kriteria_id', $arr['kriteria_id']], ['tujuan_id', $arr['tujuan_id']]])->first();
+                    $eigenNya = EigenSasaran::where([['user_id', $arr['user_id']], ['kriteria_id', $arr['kriteria_id']], ['sasaran_id', $arr['sasaran_id']]])->first();
                     if($eigenNya!=null){
                         $eigenNya->eigen = $arr['eigen'];
                         $eigenNya->save();
                     }
                     else{
-                        EigenTujuan::create($arr);
+                        EigenSasaran::create($arr);
                     }
                 }
 
@@ -225,14 +236,14 @@ class BappedaController extends Controller
         return response()->json(['result' => 'Berhasil']);
         
     }
-    public function hasilAhpTujuan()
+    public function hasilAhpSasaran()
     {
         $id = Auth::user()->id;
         $VisiMisi = Visi::where('user_id', $id)->first();
         $allMisi = $VisiMisi->misiSort;
-        $Misis = $allMisi[3]->tujuan;
-        $TipeData = 'Tujuan';
-        $Kriterias = KriteriaTujuan::all();
+        $Misis = $allMisi[1]->tujuan[0]->sasaran;
+        $TipeData = 'Sasaran';
+        $Kriterias = KriteriaSasaran::all();
         return view('hasilseleksi', compact('TipeData', 'Misis', 'Kriterias', 'allMisi'));
     }
 

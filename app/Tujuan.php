@@ -36,7 +36,7 @@ class Tujuan extends Model
     {
         return $this->hasMany('App\BobotTujuan', 'tujuan2_id', 'id')->where('user_id', Auth::user()->id);
     }
-    public function eigemisi()
+    public function eigenmisi()
     {
         return $this->hasMany('App\EigenTujuan', 'tujuan_id', 'id');
     }
