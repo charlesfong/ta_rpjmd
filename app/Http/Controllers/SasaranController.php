@@ -247,18 +247,18 @@ class SasaranController extends Controller
         return view('hasilseleksi', compact('TipeData', 'Misis', 'Kriterias', 'allMisi'));
     }
 
-    public function hasilAhpTujuanById($idMisi)
+    public function hasilAhpSasaranById($idMisi)
     {
         $id = Auth::user()->id;
         $VisiMisi = Visi::where('user_id', $id)->first();
         $allMisi = $VisiMisi->misiSort;
-        $Misis = Tujuan::where('misi_id', $idMisi)->get();
-        $TipeData = 'Tujuan';
-        $Kriterias = KriteriaTujuan::all();
+        $Misis = Sasaran::where('tujuan_id', $idMisi)->get();
+        $TipeData = 'Sasaran';
+        $Kriterias = KriteriaSasaran::all();
         return view('hasilseleksi', compact('TipeData', 'Misis', 'Kriterias', 'allMisi'));
     }
 
-    public function storeBobotTujuan(Request $request)
+    public function storeBobotSasaran(Request $request)
     {
         $id = Auth::user()->id;
         if($request->has('hasilBobot')){
@@ -266,11 +266,11 @@ class SasaranController extends Controller
                 $arr = [];
                 $arr['bobot'] = $value;
                 
-                $tujuannya = Tujuan::where('id', $key)->first();
+                $sasaranNya = Sasaran::where('id', $key)->first();
                 
-                if($tujuannya!=null){
-                    $tujuannya->bobot = $arr['bobot'];
-                    $tujuannya->save();
+                if($sasaranNya!=null){
+                    $sasaranNya->bobot = $arr['bobot'];
+                    $sasaranNya->save();
                 }
             }
         }

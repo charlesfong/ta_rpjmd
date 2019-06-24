@@ -155,15 +155,22 @@
 
       @php
         $hasilNilaiAkhir = [];
-
+        $temp = " ";
         foreach($Misis as $key => $misi){
           $hasilNilaiAkhir[$misi['id']] = 0;
-          foreach ($hasilNormalisasiKriteria as $kriteriaNya) {
-            foreach ($hasilNormalisasi as $perMisihasil) {
-              $hasilNilaiAkhir[$misi['id']] += $perMisihasil[$misi['id']]*$kriteriaNya;
-              break;
+          foreach ($hasilNormalisasiKriteria as $kunciKriteria => $kriteriaNya) {
+            foreach ($hasilNormalisasi as $kunciKriteria2 => $perMisihasil) {
+              foreach ($perMisihasil as $kunci => $misiNya) {
+                if($kunci == $misi['id'] && $kunciKriteria == ($kunciKriteria2-1)){
+                  $temp .= $misiNya." * ".$kriteriaNya;
+                  $hasilNilaiAkhir[$misi['id']] += $misiNya*$kriteriaNya;
+                  break;
+                }
+              }
+              $temp .= " + ";
             }
           }
+          // dd($temp);
         }
         
       @endphp
@@ -210,7 +217,45 @@
         });
     });
      $('#pilihMisi').change(function(){
-          var url = '{{ route('hasilAhpTujuanById', ['idMisi' => '']) }}';
+          @if($TipeData == 'Tujuan')
+            var url = '{{ route('hasilAhpTujuanById', ['idMisi' => '']) }}';
+            var idPilihan = $(this).val();
+            window.location.href = url +'/'+idPilihan;
+          @else
+            var id = $(this).val();
+            $.ajax({
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              type: 'get',
+              url: "{{ route('showTujuan') }}",
+              data: {
+                  'id': id
+              },
+              success: function (data) {
+                  var tujuan = data['result'];
+                  $("#tujuan").empty();
+                  select = document.getElementById("tujuan");
+
+                  var opt = document.createElement('option');
+                  opt.setAttribute("name", "tujuan");
+                  opt.value = "";
+                  opt.innerHTML = "PILIH TUJUAN";
+                  select.appendChild(opt);
+
+                  for(var i = 0; i < tujuan.length; i++){
+                    var opt = document.createElement('option');
+                    opt.setAttribute("name", "tujuan");
+                    opt.value = tujuan[i]['id'];
+                    opt.innerHTML = tujuan[i]['tujuan'];
+                    select.appendChild(opt);
+                    }
+                },
+            });
+          @endif
+        });
+     $('#tujuan').change(function(){
+          var url = '{{ route('hasilAhpSasaranById', ['id' => '']) }}';
           var idPilihan = $(this).val();
           window.location.href = url +'/'+idPilihan;
         });

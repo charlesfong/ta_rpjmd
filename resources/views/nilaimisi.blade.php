@@ -391,6 +391,13 @@
                   var tujuan = data['result'];
                   $("#tujuan").empty();
                   select = document.getElementById("tujuan");
+
+                  var opt = document.createElement('option');
+                  opt.setAttribute("name", "tujuan");
+                  opt.value = "";
+                  opt.innerHTML = "PILIH TUJUAN";
+                  select.appendChild(opt);
+
                   for(var i = 0; i < tujuan.length; i++){
                     var opt = document.createElement('option');
                     opt.setAttribute("name", "tujuan");
