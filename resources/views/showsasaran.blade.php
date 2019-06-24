@@ -28,7 +28,7 @@
                   if( sizeof($misi->tujuanSort) > 0){
                     $totalBaris = sizeof($misi->tujuanSort);                    
                   }
-                @endphp
+                @endphp 
                 <tr>
                   <td rowspan="{{$totalBaris}}">{{$misi['misi']}}</td>
                   @if(sizeof($misi->tujuanSort) > 0)
