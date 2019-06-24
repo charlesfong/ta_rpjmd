@@ -239,7 +239,7 @@ class SasaranController extends Controller
     public function hasilAhpSasaran()
     {
         $id = Auth::user()->id;
-        $VisiMisi = Visi::where('user_id', $id)->first();
+        $VisiMisi = Visi::all()->first();
         $allMisi = $VisiMisi->misiSort;
         $Misis = $allMisi[1]->tujuan[0]->sasaran;
         $TipeData = 'Sasaran';
@@ -250,7 +250,7 @@ class SasaranController extends Controller
     public function hasilAhpSasaranById($idMisi)
     {
         $id = Auth::user()->id;
-        $VisiMisi = Visi::where('user_id', $id)->first();
+        $VisiMisi = Visi::all()->first();
         $allMisi = $VisiMisi->misiSort;
         $Misis = Sasaran::where('tujuan_id', $idMisi)->get();
         $TipeData = 'Sasaran';

@@ -228,7 +228,7 @@ class BappedaController extends Controller
     public function hasilAhpTujuan()
     {
         $id = Auth::user()->id;
-        $VisiMisi = Visi::where('user_id', $id)->first();
+        $VisiMisi = Visi::all()->first();
         $allMisi = $VisiMisi->misiSort;
         $Misis = $allMisi[3]->tujuan;
         $TipeData = 'Tujuan';
@@ -239,7 +239,7 @@ class BappedaController extends Controller
     public function hasilAhpTujuanById($idMisi)
     {
         $id = Auth::user()->id;
-        $VisiMisi = Visi::where('user_id', $id)->first();
+        $VisiMisi = Visi::all()->first();
         $allMisi = $VisiMisi->misiSort;
         $Misis = Tujuan::where('misi_id', $idMisi)->get();
         $TipeData = 'Tujuan';

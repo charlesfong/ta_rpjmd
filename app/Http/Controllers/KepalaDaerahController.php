@@ -23,7 +23,7 @@ class KepalaDaerahController extends Controller
     public function showVisiMisi()
     {
         $id = Auth::user()->id;
-        $VisiMisi = Visi::where('user_id', $id)->first();
+        $VisiMisi = Visi::whereNotNull('id')->first();
         return view('kepaladaerah.showvisimisi', compact('VisiMisi')); 
     }
     public function storeVisiMisi(request $request)
@@ -61,7 +61,7 @@ class KepalaDaerahController extends Controller
     public function showNilaiMisi()
     {
         $id = Auth::user()->id;
-        $VisiMisi = Visi::where('user_id', $id)->first();
+        $VisiMisi = Visi::whereNotNull('id')->first();
         $Kriteria = $VisiMisi->misi;
         $TipeData = 'Misi';
         $allKriteria = KriteriaMisi::all();
@@ -203,7 +203,7 @@ class KepalaDaerahController extends Controller
     public function hasilAhpMisi()
     {
         $id = Auth::user()->id;
-        $VisiMisi = Visi::where('user_id', $id)->first();
+        $VisiMisi = Visi::whereNotNull('id')->first();
         $Misis = $VisiMisi->misiSort;
         $TipeData = 'Misi';
         $Kriterias = KriteriaMisi::all();
