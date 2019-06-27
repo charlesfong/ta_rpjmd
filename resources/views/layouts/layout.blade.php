@@ -115,7 +115,7 @@
                   <i class="fa"></i> <span>Seluruh Indikator</span>
                 </a>
               <li>
-                <a href="{{ route('addSasaran') }}">
+                <a href="{{ route('addIndikator') }}">
                   <i class="fa"></i> <span>Input Indikator</span>
                 </a>          
               </li>

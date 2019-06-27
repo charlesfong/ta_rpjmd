@@ -19,6 +19,10 @@ class Misi extends Model
     {
         return $this->hasMany('App\Tujuan');
     }
+    public function indikator()
+    {
+        return $this->hasMany('App\Indikator');
+    }
     public function tujuanSort()
     {
         return $this->hasMany('App\Tujuan')->orderBy('bobot', 'desc');

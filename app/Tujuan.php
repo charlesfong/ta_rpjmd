@@ -24,6 +24,10 @@ class Tujuan extends Model
     {
         return $this->hasMany('App\Sasaran');
     }
+    public function indikator()
+    {
+        return $this->hasMany('App\Indikator');
+    }
     public function sasaranSort()
     {
         return $this->hasMany('App\Sasaran')->orderBy('bobot', 'desc');

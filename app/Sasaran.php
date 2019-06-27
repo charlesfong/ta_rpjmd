@@ -16,6 +16,10 @@ class Sasaran extends Model
     {
         return $this->belongsTo('App\Tujuan');
     }
+    public function indikator()
+    {
+        return $this->hasMany('App\Indikator');
+    }
     public function user()
     {
         return $this->belongsTo('App\User');
