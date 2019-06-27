@@ -14,6 +14,10 @@
       $urlStore = route('storeNilaiKriteriaSasaran');
       $urlEigen = route('storeEigenKriteriaSasaran');
     }
+    else if($TipeData == 'Indikator'){
+      $urlStore = route('storeNilaiKriteriaIndikator');
+      $urlEigen = route('storeEigenKriteriaIndikator');
+    }
   @endphp
   <form method="post" action="{{ $urlStore }}" class="row-fluid margin-none well form-horizontal">
     {{ csrf_field() }}
@@ -236,7 +240,7 @@
               elseif(sizeof($arr2d[1]) == 9){
                 $RI = 1.45;
               }
-              elseif(sizeof($arr2d[1]) == 10){
+              elseif(sizeof($arr2d[1]) >= 10){
                 $RI = 1.49;
               }
               if ($CI!=0)

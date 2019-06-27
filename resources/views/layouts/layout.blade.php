@@ -188,6 +188,29 @@
                     </a>          
                   </li>    
               </li>
+              <li>
+                <a href="#"><span>AHP INDIKATOR</span></a>
+                  <li>
+                    <a href="{{ route('addKriteriaIndikator') }}">
+                      <i class="fa"></i> <span>Input Kriteria Indikator</span>            
+                    </a>          
+                  </li>
+                  <li>
+                    <a href="{{ route('showKriteriaIndikator') }}">
+                      <i class="fa"></i> <span>Nilai Kriteria Indikator</span>            
+                    </a>          
+                  </li>
+                  <li>
+                    <a href="{{ route('showNilaiIndikator') }}">
+                      <i class="fa"></i> <span>Nilai Alternatif Indikator</span>           
+                    </a>         
+                  </li>
+                  <li>
+                    <a href="{{ route('hasilAhpIndikator') }}">
+                      <i class="fa"></i> <span>Hasil Seleksi Indikator</span>            
+                    </a>          
+                  </li>    
+              </li>
             @if(Auth::user()->inRole('admin'))
               <li>
                 <a href="{{ route('addUser') }}">

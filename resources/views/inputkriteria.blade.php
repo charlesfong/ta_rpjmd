@@ -11,6 +11,9 @@
     else if($TipeData == 'Sasaran'){
       $urlStore = route('storeKriteriaSasaran');
     }
+    else if($TipeData == 'Indikator'){
+      $urlStore = route('storeKriteriaIndikator');
+    }
   @endphp
     <table class="table table-striped">
           <tbody>

@@ -96,18 +96,18 @@ Route::group(['prefix' => 'indikator'], function () {
 	Route::get('/show-sasaran', 'IndikatorController@showSasaran')->name('showSasaran');
 
 	//khusus AHP
-	Route::get('/nilai-kriteria-sasaran', 'SasaranController@showKriteriaSasaran')->name('showKriteriaSasaran');
-	Route::get('/nilai-sasaran', 'SasaranController@showNilaiSasaran')->name('showNilaiSasaran');
-	Route::get('/nilai-sasaran/{id}', 'SasaranController@showNilaiSasaranById')->name('showNilaiSasaranById');
-	Route::get('/add-kriteria-sasaran', 'SasaranController@addKriteriaSasaran')->name('addKriteriaSasaran');
-	Route::get('/hasil-ahp-sasaran', 'SasaranController@hasilAhpSasaran')->name('hasilAhpSasaran');
-	Route::get('/hasil-ahp-sasaran/{idMisi}', 'SasaranController@hasilAhpSasaranById')->name('hasilAhpSasaranById');
-	Route::post('/store-kriteria-sasaran', 'SasaranController@storeKriteriaSasaran')->name('storeKriteriaSasaran');
-	Route::post('/store-nilai-kriteria-sasaran', 'SasaranController@storeNilaiKriteriaSasaran')->name('storeNilaiKriteriaSasaran');
-	Route::post('/store-nilai-sasaran/{kriteria}', 'SasaranController@storeNilaiSasaran')->name('storeNilaiSasaran');
-	Route::post('/store-eigen-kriteria-sasaran/', 'SasaranController@storeEigenKriteriaSasaran')->name('storeEigenKriteriaSasaran');
-	Route::post('/store-eigen-sasaran/', 'SasaranController@storeEigenSasaran')->name('storeEigenSasaran');
-	Route::post('/store-bobot-sasaran/', 'SasaranController@storeBobotSasaran')->name('storeBobotSasaran');
+	Route::get('/nilai-kriteria-indikator', 'IndikatorController@showKriteriaIndikator')->name('showKriteriaIndikator');
+	Route::get('/nilai-indikator', 'IndikatorController@showNilaiIndikator')->name('showNilaiIndikator');
+	Route::get('/nilai-indikator/{id}', 'IndikatorController@showNilaiIndikatorById')->name('showNilaiIndikatorById');
+	Route::get('/add-kriteria-indikator', 'IndikatorController@addKriteriaIndikator')->name('addKriteriaIndikator');
+	Route::get('/hasil-ahp-indikator', 'IndikatorController@hasilAhpIndikator')->name('hasilAhpIndikator');
+	Route::get('/hasil-ahp-indikator/{idMisi}', 'IndikatorController@hasilAhpIndikatorById')->name('hasilAhpIndikatorById');
+	Route::post('/store-kriteria-indikator', 'IndikatorController@storeKriteriaIndikator')->name('storeKriteriaIndikator');
+	Route::post('/store-nilai-kriteria-indikator', 'IndikatorController@storeNilaiKriteriaIndikator')->name('storeNilaiKriteriaIndikator');
+	Route::post('/store-nilai-indikator/{kriteria}', 'IndikatorController@storeNilaiIndikator')->name('storeNilaiIndikator');
+	Route::post('/store-eigen-kriteria-indikator/', 'IndikatorController@storeEigenKriteriaIndikator')->name('storeEigenKriteriaIndikator');
+	Route::post('/store-eigen-indikator/', 'IndikatorController@storeEigenIndikator')->name('storeEigenIndikator');
+	Route::post('/store-bobot-indikator/', 'IndikatorController@storeBobotIndikator')->name('storeBobotIndikator');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {

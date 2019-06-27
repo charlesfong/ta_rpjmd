@@ -21,6 +21,12 @@
       $tipeId2 = 'sasaran2_id';
       $tipeName = 'sasaran';
     }
+    else if($TipeData == 'Indikator'){
+      $urlStore = route('storeEigenIndikator');
+      $tipeId = 'indikator_id';
+      $tipeId2 = 'indikator2_id';
+      $tipeName = 'indikator';
+    }
      
     $avg = []; 
     $arr2d = [];
@@ -51,7 +57,60 @@
     </select>
   @endif
 
-  @foreach($allKriteria as $perKriteria)\
+  <!-- @if($TipeData == 'Indikator')
+  @php 
+    if($Kriteria[0]->tujuan != null){
+      $misiNyaKriteriaTerpilih = $Kriteria[0]->tujuan->misi;
+    }
+    else{
+      $misiNyaKriteriaTerpilih = $Kriteria[0]->misi;
+    }
+  @endphp -->
+  <h1 style="text-align: center; margin: 10px auto">MISI : {{ sizeof($Kriteria) > 0 ? $Kriteria[0]->misi['misi'] : "-" }}</h1>
+    <select id="pilihMisi" class="form-control" style="width: 60%; margin: 10px auto">
+      <option disabled="" selected="">PILIH MISI</option>
+      
+      @foreach($allMisi as $val)
+        <option value="{{$val['id']}}" {{ $Kriteria[0]->misi['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['misi']}}</option>
+      @endforeach
+    </select>
+  <h1 style="text-align: center; margin: 10px auto">TUJUAN : {{ sizeof($Kriteria) > 0 ? $Kriteria[0]->tujuan['tujuan'] : "-" }}</h1>
+    <select id="tujuan" class="form-control" style="width: 60%; margin: 10px auto">
+      <option disabled="" selected="">PILIH TUJUAN</option>
+        @if(sizeof($Kriteria) > 0)
+          @php 
+            if($Kriteria[0]->tujuan != null){
+              $tujuanNyaKriteria = $Kriteria[0]->tujuan->misi->tujuan;
+            }
+            else{
+              $tujuanNyaKriteria = $Kriteria[0]->misi->tujuan;
+            }
+          @endphp
+          @foreach($tujuanNyaKriteria as $val)
+            <option value="{{$val['id']}}" {{ $Kriteria[0]->tujuan['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['tujuan']}}</option>
+          @endforeach
+        @endif
+    </select>
+  <h1 style="text-align: center; margin: 10px auto">SASARAN : {{ sizeof($Kriteria) > 0 ? $Kriteria[0]->sasaran['sasaran'] : "-" }}</h1>
+    <select id="sasaran" class="form-control" style="width: 60%; margin: 10px auto">
+      <option disabled="" selected="">PILIH SASARAN</option>
+        @if(sizeof($Kriteria) > 0)
+          @php 
+            if($Kriteria[0]->sasaran != null){
+              $tujuanNyaKriteria = $Kriteria[0]->sasaran->tujuan->sasaran;
+            }
+            else if($Kriteria[0]->tujuan != null){
+              $tujuanNyaKriteria = $Kriteria[0]->tujuan->sasaran;
+            }
+          @endphp
+          @foreach($tujuanNyaKriteria as $val)
+            <option value="{{$val['id']}}" {{ $tujuanNyaKriteria == $val['id'] ? 'selected=""' : "" }}>{{$val['tujuan']}}</option>
+          @endforeach
+        @endif
+    </select>
+  @endif
+
+  @foreach($allKriteria as $perKriteria)
 
   @php
     if($TipeData == 'Misi'){
@@ -62,6 +121,9 @@
     }
     else if($TipeData == 'Sasaran'){
       $urlPush = route('storeNilaiSasaran', ['id' => $perKriteria['id']]);
+    }
+    else if($TipeData == 'Indikator'){
+      $urlPush = route('storeNilaiIndikator', ['id' => $perKriteria['id']]);
     }
   @endphp
 
@@ -376,7 +438,7 @@
             var url = '{{ route('showNilaiTujuanById', ['id' => '']) }}';
             var idPilihan = $(this).val();
             window.location.href = url +'/'+idPilihan;
-          @else
+          @elseif($TipeData == 'Sasaran')
             var id = $(this).val();
             $.ajax({
               headers: {
@@ -407,13 +469,23 @@
                     }
                 },
             });
+          @elseif($TipeData == 'Indikator')
+            var url = '{{ route('showNilaiIndikator') }}';
+            var idPilihan = $(this).val();
+            window.location.href = url +'?id='+idPilihan+"&type=misi";
           @endif
         });
 
         $('#tujuan').change(function(){
-          var url = '{{ route('showNilaiSasaranById', ['id' => '']) }}';
-          var idPilihan = $(this).val();
-          window.location.href = url +'/'+idPilihan;
+          @if($TipeData == 'Sasaran')
+            var url = '{{ route('showNilaiSasaranById', ['id' => '']) }}';
+            var idPilihan = $(this).val();
+            window.location.href = url +'/'+idPilihan;
+          @elseif($TipeData == 'Indikator')
+            var url = '{{ route('showNilaiIndikator') }}';
+            var idPilihan = $(this).val();
+            window.location.href = url +'?id='+idPilihan+"&type=tujuan";
+          @endif
         });
      </script>
 @endsection

@@ -71,7 +71,6 @@ class SasaranController extends Controller
     }
 
     //AHPshowNilaiSasaran
-    ///blom selesai
     public function showKriteriaSasaran()
     {
         $Kriteria = KriteriaSasaran::all();
