@@ -58,13 +58,19 @@
   @endif
 
   @if($TipeData == 'Indikator')
-  @php 
-    if($Kriteria[0]->tujuan != null){
-      $misiNyaKriteriaTerpilih = $Kriteria[0]->tujuan->misi;
+  @php
+    if(sizeof($Kriteria) > 0){
+      if($Kriteria[0]->tujuan != null){
+        $misiNyaKriteriaTerpilih = $Kriteria[0]->tujuan->misi;
+      }
+      else{
+        $misiNyaKriteriaTerpilih = $Kriteria[0]->misi;
+      }
     }
     else{
-      $misiNyaKriteriaTerpilih = $Kriteria[0]->misi;
+      $misiNyaKriteriaTerpilih = null;
     }
+    
   @endphp
   <h1 style="text-align: center; margin: 10px auto">MISI : {{ sizeof($Kriteria) > 0 ? $misiNyaKriteriaTerpilih['misi'] : "-" }}</h1>
     <select id="pilihMisi" class="form-control" style="width: 60%; margin: 10px auto">

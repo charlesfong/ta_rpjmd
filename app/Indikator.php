@@ -28,17 +28,17 @@ class Indikator extends Model
     {
         return $this->belongsTo('App\User');
     }
-    public function bobotsasaran()
+    public function bobotindikator()
     {
-        return $this->hasMany('App\BobotSasaran');
+        return $this->hasMany('App\BobotIndikator');
     }
     public function bobotkriteriamisi()
     {
-        return $this->hasMany('App\BobotSasaran', 'sasaran_id', 'id')->where('user_id', Auth::user()->id);
+        return $this->hasMany('App\BobotIndikator', 'indikator_id', 'id')->where('user_id', Auth::user()->id);
     }
     public function bobotkriteriamisi2()
     {
-        return $this->hasMany('App\BobotSasaran', 'sasaran2_id', 'id')->where('user_id', Auth::user()->id);
+        return $this->hasMany('App\BobotIndikator', 'indikator2_id', 'id')->where('user_id', Auth::user()->id);
     }
     // public function eigenmisi()
     // {
