@@ -57,7 +57,7 @@
     </select>
   @endif
 
-  <!-- @if($TipeData == 'Indikator')
+  @if($TipeData == 'Indikator')
   @php 
     if($Kriteria[0]->tujuan != null){
       $misiNyaKriteriaTerpilih = $Kriteria[0]->tujuan->misi;
@@ -65,13 +65,13 @@
     else{
       $misiNyaKriteriaTerpilih = $Kriteria[0]->misi;
     }
-  @endphp -->
-  <h1 style="text-align: center; margin: 10px auto">MISI : {{ sizeof($Kriteria) > 0 ? $Kriteria[0]->misi['misi'] : "-" }}</h1>
+  @endphp
+  <h1 style="text-align: center; margin: 10px auto">MISI : {{ sizeof($Kriteria) > 0 ? $misiNyaKriteriaTerpilih['misi'] : "-" }}</h1>
     <select id="pilihMisi" class="form-control" style="width: 60%; margin: 10px auto">
       <option disabled="" selected="">PILIH MISI</option>
       
       @foreach($allMisi as $val)
-        <option value="{{$val['id']}}" {{ $Kriteria[0]->misi['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['misi']}}</option>
+        <option value="{{$val['id']}}" {{ $misiNyaKriteriaTerpilih['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['misi']}}</option>
       @endforeach
     </select>
   <h1 style="text-align: center; margin: 10px auto">TUJUAN : {{ sizeof($Kriteria) > 0 ? $Kriteria[0]->tujuan['tujuan'] : "-" }}</h1>
@@ -102,10 +102,15 @@
             else if($Kriteria[0]->tujuan != null){
               $tujuanNyaKriteria = $Kriteria[0]->tujuan->sasaran;
             }
+            else{
+              $tujuanNyaKriteria = null;
+            }
           @endphp
-          @foreach($tujuanNyaKriteria as $val)
-            <option value="{{$val['id']}}" {{ $tujuanNyaKriteria == $val['id'] ? 'selected=""' : "" }}>{{$val['tujuan']}}</option>
-          @endforeach
+          @if(sizeof($tujuanNyaKriteria) > 0)
+            @foreach($tujuanNyaKriteria as $val)
+              <option value="{{$val['id']}}" {{ $tujuanNyaKriteria == $val['id'] ? 'selected=""' : "" }}>{{$val['tujuan']}}</option>
+            @endforeach
+          @endif
         @endif
     </select>
   @endif
