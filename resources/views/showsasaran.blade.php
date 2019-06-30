@@ -28,6 +28,9 @@
                   if( sizeof($misi->tujuanSort) > 0){
                     $totalBaris = sizeof($misi->tujuanSort);                    
                   }
+                  foreach ($misi->tujuanSort as $setiapTujuan) {
+                    $totalBaris += sizeof($setiapTujuan->sasaranSort);
+                  }
                 @endphp 
                 <tr>
                   <td rowspan="{{$totalBaris}}">{{$misi['misi']}}</td>
@@ -35,7 +38,7 @@
                     @php
                       $totalBaris = 1;
                       if( sizeof($misi->tujuanSort[0]->sasaran) > 0){
-                        $totalBaris = sizeof($misi->tujuanSort[0]);
+                        $totalBaris = sizeof($misi->tujuanSort[0]->sasaran);
                       }
                     @endphp
                     <td rowspan="{{$totalBaris}}">{{$misi->tujuanSort[0]['tujuan']}}</td>
@@ -53,6 +56,13 @@
                     <td>{{$misi->tujuanSort[$i]['tujuan']}}</td>
                   </tr>
                 @endfor
+                <tr>
+                  <td></td>
+                  <td>123</td>
+                </tr>
+                <tr>
+                  <td>123</td>
+                </tr>
               @endforeach
             </tfoot>
           </table>

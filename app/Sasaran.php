@@ -24,6 +24,10 @@ class Sasaran extends Model
     {
         return $this->belongsTo('App\User');
     }
+    public function indikatorSort()
+    {
+        return $this->hasMany('App\Indikator')->orderBy('bobot', 'desc');
+    }
     public function bobotsasaran()
     {
         return $this->hasMany('App\BobotSasaran');
