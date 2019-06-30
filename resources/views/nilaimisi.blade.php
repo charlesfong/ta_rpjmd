@@ -63,8 +63,11 @@
       if($Kriteria[0]->tujuan != null){
         $misiNyaKriteriaTerpilih = $Kriteria[0]->tujuan->misi;
       }
-      else{
+      else if($Kriteria[0]->misi != null){
         $misiNyaKriteriaTerpilih = $Kriteria[0]->misi;
+      }
+      else{
+        $misiNyaKriteriaTerpilih = $Kriteria[0]->sasaran->tujuan->misi;
       }
     }
     else{
@@ -75,28 +78,41 @@
   <h1 style="text-align: center; margin: 10px auto">MISI : {{ sizeof($Kriteria) > 0 ? $misiNyaKriteriaTerpilih['misi'] : "-" }}</h1>
     <select id="pilihMisi" class="form-control" style="width: 60%; margin: 10px auto">
       <option disabled="" selected="">PILIH MISI</option>
-      
       @foreach($allMisi as $val)
         <option value="{{$val['id']}}" {{ $misiNyaKriteriaTerpilih['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['misi']}}</option>
       @endforeach
     </select>
-  <h1 style="text-align: center; margin: 10px auto">TUJUAN : {{ sizeof($Kriteria) > 0 ? $Kriteria[0]->tujuan['tujuan'] : "-" }}</h1>
+
+  @if(sizeof($Kriteria) > 0)
+    @php 
+      $tujuanTerpilih = null;
+      if($Kriteria[0]->tujuan != null){
+        $tujuanNyaKriteria = $Kriteria[0]->tujuan->misi->tujuan;
+        $tujuanTerpilih = $Kriteria[0]->tujuan;
+      }
+      else if($Kriteria[0]->misi != null){
+        $tujuanNyaKriteria = $Kriteria[0]->misi->tujuan;
+      }
+      else{
+        $tujuanNyaKriteria = $Kriteria[0]->sasaran->tujuan->misi->tujuan;
+        $tujuanTerpilih = $Kriteria[0]->sasaran->tujuan;
+      }
+    @endphp
+  @else
+    @php
+      $tujuanNyaKriteria = null;
+    @endphp
+  @endif
+  <h1 style="text-align: center; margin: 10px auto">TUJUAN : {{ sizeof($Kriteria) > 0 ? $tujuanTerpilih['tujuan'] : "-" }}</h1>
     <select id="tujuan" class="form-control" style="width: 60%; margin: 10px auto">
       <option disabled="" selected="">PILIH TUJUAN</option>
-        @if(sizeof($Kriteria) > 0)
-          @php 
-            if($Kriteria[0]->tujuan != null){
-              $tujuanNyaKriteria = $Kriteria[0]->tujuan->misi->tujuan;
-            }
-            else{
-              $tujuanNyaKriteria = $Kriteria[0]->misi->tujuan;
-            }
-          @endphp
+        @if(sizeof($tujuanNyaKriteria) > 0)
           @foreach($tujuanNyaKriteria as $val)
-            <option value="{{$val['id']}}" {{ $Kriteria[0]->tujuan['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['tujuan']}}</option>
+            <option value="{{$val['id']}}" {{ $tujuanTerpilih['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['tujuan']}}</option>
           @endforeach
         @endif
     </select>
+
   <h1 style="text-align: center; margin: 10px auto">SASARAN : {{ sizeof($Kriteria) > 0 ? $Kriteria[0]->sasaran['sasaran'] : "-" }}</h1>
     <select id="sasaran" class="form-control" style="width: 60%; margin: 10px auto">
       <option disabled="" selected="">PILIH SASARAN</option>
@@ -114,7 +130,7 @@
           @endphp
           @if(sizeof($tujuanNyaKriteria) > 0)
             @foreach($tujuanNyaKriteria as $val)
-              <option value="{{$val['id']}}" {{ $tujuanNyaKriteria == $val['id'] ? 'selected=""' : "" }}>{{$val['tujuan']}}</option>
+              <option value="{{$val['id']}}" {{ $Kriteria[0]->sasaran['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['sasaran']}}</option>
             @endforeach
           @endif
         @endif
@@ -496,6 +512,14 @@
             var url = '{{ route('showNilaiIndikator') }}';
             var idPilihan = $(this).val();
             window.location.href = url +'?id='+idPilihan+"&type=tujuan";
+          @endif
+        });
+
+        $('#sasaran').change(function(){
+          @if($TipeData == 'Indikator')
+            var url = '{{ route('showNilaiIndikator') }}';
+            var idPilihan = $(this).val();
+            window.location.href = url +'?id='+idPilihan+"&type=sasaran";
           @endif
         });
      </script>

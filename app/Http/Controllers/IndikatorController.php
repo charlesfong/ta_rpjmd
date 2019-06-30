@@ -14,6 +14,9 @@ use App\Indikator;
 use App\KriteriaIndikator;
 use App\BobotKriteriaIndikator;
 use App\EigenKriteriaIndikator;
+use App\BobotIndikator;
+use App\EigenIndikator;
+
 
 class IndikatorController extends Controller
 {
@@ -144,7 +147,7 @@ class IndikatorController extends Controller
         $allKriteria = KriteriaIndikator::all();
         return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria', 'allMisi'));
     }
-    public static function showNilaiIndikatorById($id)//belum
+    public static function showNilaiIndikatorById($id)//gk di pakai
     {
         dd($id);
         $idMisi = Tujuan::find($id)['id'];
@@ -206,39 +209,42 @@ class IndikatorController extends Controller
         return view('nilaikriteria', compact('TipeData', 'Kriteria'));
     }
 
-    public function storeNilaiSasaran(Request $request, KriteriaSasaran $kriteria)
+    public function storeNilaiIndikator(Request $request, KriteriaIndikator $kriteria)//belumm
     {
         $id = Auth::user()->id;
-        $misiId = 0;
+        $indikatorNya = 0;
 
-        foreach ($request['sasaran'] as $key => $data) {
+        foreach ($request['indikator'] as $key => $data) {
             $pilihan = explode("-",$key);
             $arr = [];
-            $arr['sasaran_id'] = $pilihan[0];
-            $arr['sasaran2_id'] = $pilihan[1];
+            $arr['indikator_id'] = $pilihan[0];
+            $arr['indikator2_id'] = $pilihan[1];
             $arr['bobot'] = $data;
             $arr['user_id'] = $id;
             $arr['kriteria_id'] = $kriteria['id'];
 
-            $bobotNya = BobotSasaran::where([['user_id', $id], ['sasaran_id', $arr['sasaran_id']], ['sasaran2_id', $arr['sasaran2_id']], ['kriteria_id', $arr['kriteria_id']]])->first();
+            $bobotNya = BobotIndikator::where([['user_id', $id], ['indikator_id', $arr['indikator_id']], ['indikator2_id', $arr['indikator2_id']], ['kriteria_id', $arr['kriteria_id']]])->first();
             if($bobotNya!=null){
                 $bobotNya->bobot = $arr['bobot'];
                 $bobotNya->save();
             }
             else{
-                BobotSasaran::create($arr);
+                BobotIndikator::create($arr);
             }
-
-            $misiId = Sasaran::find($pilihan[0])['tujuan_id'];
+            $indikatorNya = Indikator::find($pilihan[0]);
         }
 
-        $id = Auth::user()->id;
-        $allMisi = Misi::all();
-        $idMisi = Tujuan::find($misiId)['id'];
-        $Kriteria = Sasaran::where('tujuan_id', $idMisi)->get();
-        $TipeData = 'Sasaran';
-        $allKriteria = KriteriaSasaran::all();
-        return view('nilaimisi', compact('TipeData', 'Kriteria', 'allKriteria','allMisi'));
+        $request = new \Illuminate\Http\Request();
+        if($indikatorNya->misi != null){
+            $request->replace(['id' => $indikatorNya->misi['id'], 'type' => 'misi']);
+        }
+        else if($indikatorNya->tujuan != null){
+            $request->replace(['id' => $indikatorNya->tujuan['id'], 'type' => 'tujuan']);
+        }
+        else if($indikatorNya->sasaran != null){
+            $request->replace(['id' => $indikatorNya->sasaran['id'], 'type' => 'sasaran']);
+        }
+        return $this->showNilaiIndikator($request);
     }
 
     public function storeEigenKriteriaIndikator(Request $request)
@@ -258,6 +264,93 @@ class IndikatorController extends Controller
                 }
                 else{
                     EigenKriteriaIndikator::create($arr);
+                }
+            }
+        }
+        
+        return response()->json(['result' => 'Berhasil']);
+    }
+    public function storeEigenIndikator(Request $request)
+    {
+        $id = Auth::user()->id;
+        $allKriteria = KriteriaIndikator::all();
+        if($request->has('eigen') && $request->has('kriteria')){
+            foreach ($allKriteria as $kriteriaNya) {
+                foreach ($request['eigen'][$kriteriaNya['id']] as $key => $value){
+                    $arr = [];
+                    $arr['indikator_id'] = $key;
+                    $arr['eigen'] = $request['eigen'][$kriteriaNya['id']][$key];
+                    $arr['user_id'] = $id;
+                    $arr['kriteria_id'] = $kriteriaNya['id'];
+
+                    $eigenNya = EigenIndikator::where([['user_id', $arr['user_id']], ['kriteria_id', $arr['kriteria_id']], ['indikator_id', $arr['indikator_id']]])->first();
+                    if($eigenNya!=null){
+                        $eigenNya->eigen = $arr['eigen'];
+                        $eigenNya->save();
+                    }
+                    else{
+                        EigenIndikator::create($arr);
+                    }
+                }
+
+            }
+        }
+        
+        return response()->json(['result' => 'Berhasil']);
+    }
+
+    public function hasilAhpIndikator(Request $request)
+    {
+        $id = Auth::user()->id;
+        $VisiMisi = Visi::all()->first();
+        $allMisi = $VisiMisi->misiSort;
+        // $Misis = $allMisi[1]->tujuan[0]->sasaran->indakikator;
+
+        $Misis = Indikator::all();
+
+        if($Misis != null){
+            if($Misis[0]->sasaran != null){
+                $Misis = Indikator::where('sasaran_id', $Misis[0]->sasaran['id'])->get();
+            }
+            else if($Misis[0]->tujuan != null){
+                $Misis = Indikator::where('tujuan_id', $Misis[0]->tujuan['id'])->get();
+            }
+            else if($Misis[0]->misi != null){
+                $Misis = Indikator::where('misi_id', $Misis[0]->misi['id'])->get();
+            }   
+            // dd($Misis);
+            if($request->has('id') && $request->has('type')){
+                if($request->type == 'sasaran'){
+                    $Misis = Indikator::where('sasaran_id', $request->id)->get();
+                }
+                else if($request->type == 'tujuan'){
+                    $Misis = Indikator::where('tujuan_id', $request->id)->get();
+                }
+                else if($request->type == 'misi'){
+                    $Misis = Indikator::where('misi_id', $request->id)->get();
+                }  
+            }
+        }
+
+        $TipeData = 'Indikator';
+        $Kriterias = KriteriaIndikator::all();
+        return view('hasilseleksi', compact('TipeData', 'Misis', 'Kriterias', 'allMisi'));
+    }
+
+
+    public function storeBobotIndikator(Request $request)
+    {
+        $id = Auth::user()->id;
+        if($request->has('hasilBobot')){
+            foreach ($request['hasilBobot'] as $key => $value) {
+                $arr = [];
+                $arr['bobot'] = $value;
+                
+                $indikatorNya = Indikator::where('id', $key)->first();
+                
+                if($indikatorNya!=null){
+                    $indikatorNya->bobot = $arr['bobot'];
+                    $indikatorNya->save();
                 }
             }
         }

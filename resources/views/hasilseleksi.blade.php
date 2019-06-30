@@ -17,6 +17,11 @@
       $tipeMenu = 'Sasaran';
       $tipeTampilan = 'sasaran';
     }
+    else if($TipeData == 'Indikator'){
+      $urlStore = route('storeBobotIndikator');
+      $tipeMenu = 'Indikator';
+      $tipeTampilan = 'indikator';
+    }
   @endphp
 
         @if($TipeData == 'Tujuan')
@@ -42,6 +47,86 @@
           <option disabled="" selected="">PILIH TUJUAN</option>
 
         </select>
+        @endif
+
+        @if($TipeData == 'Indikator')
+        @php
+          if(sizeof($Misis) > 0){
+            if($Misis[0]->tujuan != null){
+              $misiNyaMisisTerpilih = $Misis[0]->tujuan->misi;
+            }
+            else if($Misis[0]->misi != null){
+              $misiNyaMisisTerpilih = $Misis[0]->misi;
+            }
+            else{
+              $misiNyaMisisTerpilih = $Misis[0]->sasaran->tujuan->misi;
+            }
+          }
+          else{
+            $misiNyaMisisTerpilih = null;
+          }
+
+        @endphp
+        <h1 style="text-align: center; margin: 10px auto">MISI : {{ sizeof($Misis) > 0 ? $misiNyaMisisTerpilih['misi'] : "-" }}</h1>
+          <select id="pilihMisi" class="form-control" style="width: 60%; margin: 10px auto">
+            <option disabled="" selected="">PILIH MISI</option>
+            @foreach($allMisi as $val)
+              <option value="{{$val['id']}}" {{ $misiNyaMisisTerpilih['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['misi']}}</option>
+            @endforeach
+          </select>
+
+        @if(sizeof($Misis) > 0)
+          @php 
+            $tujuanTerpilih = null;
+            if($Misis[0]->tujuan != null){
+              $tujuanNyaMisis = $Misis[0]->tujuan->misi->tujuan;
+              $tujuanTerpilih = $Misis[0]->tujuan;
+            }
+            else if($Misis[0]->misi != null){
+              $tujuanNyaMisis = $Misis[0]->misi->tujuan;
+            }
+            else{
+              $tujuanNyaMisis = $Misis[0]->sasaran->tujuan->misi->tujuan;
+              $tujuanTerpilih = $Misis[0]->sasaran->tujuan;
+            }
+          @endphp
+        @else
+          @php
+            $tujuanNyaMisis = null;
+          @endphp
+        @endif
+        <h1 style="text-align: center; margin: 10px auto">TUJUAN : {{ sizeof($Misis) > 0 ? $tujuanTerpilih['tujuan'] : "-" }}</h1>
+          <select id="tujuan" class="form-control" style="width: 60%; margin: 10px auto">
+            <option disabled="" selected="">PILIH TUJUAN</option>
+              @if(sizeof($tujuanNyaMisis) > 0)
+                @foreach($tujuanNyaMisis as $val)
+                  <option value="{{$val['id']}}" {{ $tujuanTerpilih['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['tujuan']}}</option>
+                @endforeach
+              @endif
+          </select>
+
+        <h1 style="text-align: center; margin: 10px auto">SASARAN : {{ sizeof($Misis) > 0 ? $Misis[0]->sasaran['sasaran'] : "-" }}</h1>
+          <select id="sasaran" class="form-control" style="width: 60%; margin: 10px auto">
+            <option disabled="" selected="">PILIH SASARAN</option>
+              @if(sizeof($Misis) > 0)
+                @php 
+                  if($Misis[0]->sasaran != null){
+                    $tujuanNyaMisis = $Misis[0]->sasaran->tujuan->sasaran;
+                  }
+                  else if($Misis[0]->tujuan != null){
+                    $tujuanNyaMisis = $Misis[0]->tujuan->sasaran;
+                  }
+                  else{
+                    $tujuanNyaMisis = null;
+                  }
+                @endphp
+                @if(sizeof($tujuanNyaMisis) > 0)
+                  @foreach($tujuanNyaMisis as $val)
+                    <option value="{{$val['id']}}" {{ $Misis[0]->sasaran['id'] == $val['id'] ? 'selected=""' : "" }}>{{$val['sasaran']}}</option>
+                  @endforeach
+                @endif
+              @endif
+          </select>
         @endif
 
         <h1>Hasil Akumulasi Kriteria</h1>
@@ -221,7 +306,7 @@
             var url = '{{ route('hasilAhpTujuanById', ['idMisi' => '']) }}';
             var idPilihan = $(this).val();
             window.location.href = url +'/'+idPilihan;
-          @else
+          @elseif($TipeData == 'Sasaran')
             var id = $(this).val();
             $.ajax({
               headers: {
@@ -252,12 +337,30 @@
                     }
                 },
             });
+          @elseif($TipeData == 'Indikator')
+            var url = '{{ route('hasilAhpIndikator') }}';
+            var idPilihan = $(this).val();
+            window.location.href = url +'?id='+idPilihan+"&type=misi";
           @endif
         });
      $('#tujuan').change(function(){
-          var url = '{{ route('hasilAhpSasaranById', ['id' => '']) }}';
-          var idPilihan = $(this).val();
-          window.location.href = url +'/'+idPilihan;
+          @if($TipeData == 'Sasaran')
+            var url = '{{ route('hasilAhpSasaranById', ['id' => '']) }}';
+            var idPilihan = $(this).val();
+            window.location.href = url +'/'+idPilihan;
+          @elseif($TipeData == 'Indikator')
+            var url = '{{ route('hasilAhpIndikator') }}';
+            var idPilihan = $(this).val();
+            window.location.href = url +'?id='+idPilihan+"&type=tujuan";
+          @endif
         });
+
+      $('#sasaran').change(function(){
+        @if($TipeData == 'Indikator')
+          var url = '{{ route('hasilAhpIndikator') }}';
+          var idPilihan = $(this).val();
+          window.location.href = url +'?id='+idPilihan+"&type=sasaran";
+        @endif
+      });
        </script>
 @endsection

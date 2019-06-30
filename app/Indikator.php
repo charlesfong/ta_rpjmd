@@ -40,8 +40,8 @@ class Indikator extends Model
     {
         return $this->hasMany('App\BobotIndikator', 'indikator2_id', 'id')->where('user_id', Auth::user()->id);
     }
-    // public function eigenmisi()
-    // {
-    //     return $this->hasMany('App\EigenSasaran', 'sasaran_id', 'id');
-    // }
+    public function eigenmisi()
+    {
+        return $this->hasMany('App\EigenIndikator', 'indikator_id', 'id');
+    }
 }
