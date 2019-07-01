@@ -31,9 +31,18 @@
                   }
                   foreach ($misi->tujuanSort as $setiapTujuan) {
                     $totalBaris += sizeof($setiapTujuan->sasaranSort);
-                    if(sizeof($setiapTujuan->sasaranSort) > 0){
-                      $totalBaris--;
+
+                    // indikator punya
+                    $totalBaris += sizeof($setiapTujuan->indikatorSort);
+                    foreach ($setiapTujuan->sasaranSort as $setiapSasaran){
+                      $totalBaris += sizeof($setiapSasaran->indikatorSort);
+                      if(sizeof($setiapSasaran->indikatorSort) > 0){
+                        $totalBaris--;
+                      }
                     }
+                  }
+                  if( sizeof($misi->indikatorSort) > 0){
+                    $totalBaris += sizeof($misi->indikatorSort);
                   }
                 @endphp 
                 <tr>

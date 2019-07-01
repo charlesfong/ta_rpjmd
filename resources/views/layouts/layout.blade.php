@@ -111,7 +111,7 @@
                 </a>          
               </li>
               <li>
-                <a href="{{ route('browseSasaran') }}">
+                <a href="{{ route('browseIndikator') }}">
                   <i class="fa"></i> <span>Seluruh Indikator</span>
                 </a>
               <li>
