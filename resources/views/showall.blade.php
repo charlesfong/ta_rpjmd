@@ -173,7 +173,7 @@
                           <td>-</td>
                         @endif
                       </tr>                      
-                      @if(!$awalanMisiIndikator)
+                      @if(!$awalanTujuanIndikator)
                         @for($j = 1; $j < sizeof($misi->tujuanSort[$i]->sasaranSort); $j++)
                           <tr>
                             <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
@@ -186,6 +186,29 @@
                             <td></td>
                             <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['indikator']}}</td>
                           </tr>
+                        @endfor
+                        {{-- //untuk sasaran selanjutnya --}}
+                        @for($j = 0; $j < sizeof($misi->tujuanSort[$i]->sasaranSort); $j++)
+                          @php
+                            $totalBaris = 1;
+                            if( sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0){
+                              $totalBaris = sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort);
+                            }
+                          @endphp
+                          <tr>
+                            <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
+                            @if(sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0)
+                              <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['indikator']}}</td>
+                            @else
+                              <td>-</td>
+                            @endif
+                          </tr>
+                          {{-- SISA INDIKATORNTYA --}}
+                          @for($k = 1; $k < sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort); $k++)
+                            <tr>
+                              <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['indikator']}}</td>
+                            </tr>
+                          @endfor
                         @endfor
                       @endif
                     @endfor
