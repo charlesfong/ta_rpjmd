@@ -1,5 +1,6 @@
 @extends('layouts.layout')
 
-@section('content')
-
-@endsection
+@php
+    $Misis = App\Visi::first()->Misi->sortByDesc('bobot');
+@endphp
+@extends('showall')
