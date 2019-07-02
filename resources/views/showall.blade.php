@@ -36,19 +36,19 @@
                     if(sizeof($setiapTujuan->sasaranSort) > 1){
                       $totalBaris--;
                     }
+                    foreach ($setiapTujuan->sasaranSort as $setiapSasaran){
+                      $totalBaris += sizeof($setiapSasaran->indikatorSort);
+                      if(sizeof($setiapSasaran->indikatorSort) > 1){
+                        $totalBaris--;
+                      }
+                    }
+
                     // indikator punya
                     if(sizeof($setiapTujuan->sasaranSort) < 1){
                       $totalBaris += sizeof($setiapTujuan->indikatorSort);
                       // if(sizeof($setiapTujuan->indikatorSort) > 1){
                       //   $totalBaris--;
                       // }
-                    }
-
-                    foreach ($setiapTujuan->sasaranSort as $setiapSasaran){
-                      $totalBaris += sizeof($setiapSasaran->indikatorSort);
-                      if(sizeof($setiapSasaran->indikatorSort) > 1){
-                        $totalBaris--;
-                      }
                     }
                   }
                   if( sizeof($misi->indikatorSort) > 0){
