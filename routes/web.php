@@ -26,6 +26,7 @@ Route::group(['prefix' => 'visimisi'], function () {
 	Route::get('/browse-visimisi', 'KepalaDaerahController@showVisiMisi')->name('browseVisiMisi');
 	Route::get('/add-visimisi', 'KepalaDaerahController@showInputVisiMisi')->name('addVisiMisi');
 	Route::post('/store-visimisi', 'KepalaDaerahController@storeVisiMisi')->name('storeVisiMisi');
+	Route::post('/delete-visimisi', 'KepalaDaerahController@delete')->name('deleteVisiMisi');
 
 	//khusus AHP
 	Route::get('/nilai-kriteria-misi', 'KepalaDaerahController@showKriteriaMisi')->name('showKriteriaMisi');

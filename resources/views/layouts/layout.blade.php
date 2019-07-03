@@ -233,6 +233,33 @@
 
   </div>
 
+{{-- MODAL DELETE --}}
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content" style="top: 30vh;">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="text-align: center; color: black;">
+          <strong id="model-change-status-questions">Apakah Anda Yakin Ingin Menghapus Ini ?</strong>
+        </p>
+        <div class="clearfix"></div>
+      </div>
+      <div class="modal-footer">
+        <form id="frmDelete" method="post" action="" style="display: inline-block;">
+            {{csrf_field()}}
+            <input id="submit-delete" type="hidden" name="type" value="">
+            <button id="btn-submit-delete" type="submit" class="btn btn-danger" name="id" value="">Yes</button>
+        </form>
+        <button type="submit" class="btn btn-secondary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+    <!-- //Modal content-->
+  </div>
+</div>
+
 <script src="{{asset('asset/bower_components/jquery/dist/jquery.min.js')}}"></script>
 <script src="{{asset('asset/bower_components/jquery-ui/jquery-ui.min.js')}}"></script>
 <script>

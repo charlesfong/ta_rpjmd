@@ -9,9 +9,15 @@ use App\Misi;
 use App\User;
 use App\KriteriaMisi;
 use App\BobotKriteriaMisi;
+use App\EigenKriteriaMisi;
 use App\BobotMisi;
 use App\EigenMisi;
-use App\EigenKriteriaMisi;
+use App\BobotTujuan;
+use App\EigenTujuan;
+use App\BobotSasaran;
+use App\EigenSasaran;
+use App\BobotIndikator;
+use App\EigenIndikator;
 use DB;
 
 class KepalaDaerahController extends Controller
@@ -49,6 +55,79 @@ class KepalaDaerahController extends Controller
 		
         return view('kepaladaerah.inputvisimisi');
        
+    }
+
+    public function delete(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                    'type' => 'required',
+                ]);
+        $validator->validate();
+
+        if($request['type'] == "visi"){
+            $visiNya = Visi::find($request['id']);
+            if($visiNya != null){
+                BobotIndikator::truncate();
+                EigenIndikator::truncate();
+                BobotSasaran::truncate();
+                EigenSasaran::truncate();
+                BobotTujuan::truncate();
+                EigenTujuan::truncate();
+                BobotMisi::truncate();
+                EigenMisi::truncate();
+
+                foreach ($visiNya->misiSort as $misiNya) {
+                    foreach ($misiNya->indikatorSort as $indikatorNya) {
+                        $indikatorNya->delete();
+                    }
+                    foreach ($misiNya->tujuanSort as $tujuanNya) {
+                        foreach ($tujuanNya->indikatorSort as $indikatorNya) {
+                            $indikatorNya->delete();
+                        }
+                        foreach ($tujuanNya->sasaranSort as $sasaranNya) {
+                            foreach ($sasaranNya->indikatorSort as $indikatorNya) {
+                                $indikatorNya->delete();
+                            }
+                            $sasaranNya->delete();
+                        }
+                        $tujuanNya->delete();
+                    }
+                    $misiNya->delete();
+                }
+                $visiNya->delete();
+            }
+        }
+        else{
+            $misiNya = Misi::find($request['id']);
+            if($misiNya != null){
+                BobotIndikator::truncate();
+                EigenIndikator::truncate();
+                BobotSasaran::truncate();
+                EigenSasaran::truncate();
+                BobotTujuan::truncate();
+                EigenTujuan::truncate();
+                BobotMisi::truncate();
+                EigenMisi::truncate();
+                foreach ($misiNya->indikatorSort as $indikatorNya) {
+                    $indikatorNya->delete();
+                }
+                foreach ($misiNya->tujuanSort as $tujuanNya) {
+                    foreach ($tujuanNya->indikatorSort as $indikatorNya) {
+                        $indikatorNya->delete();
+                    }
+                    foreach ($tujuanNya->sasaranSort as $sasaranNya) {
+                        foreach ($sasaranNya->indikatorSort as $indikatorNya) {
+                            $indikatorNya->delete();
+                        }
+                        $sasaranNya->delete();
+                    }
+                    $tujuanNya->delete();
+                }
+                $misiNya->delete();
+            }
+        }
+
+        return $this->showVisiMisi();
     }
 
     //AHPshowNilaiMisi

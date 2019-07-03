@@ -117,10 +117,10 @@ html,body{
                       <th rowspan="3" style="vertical-align: inherit;">Kondisi Akhir</th>
                     </tr>
                     <tr>
-                      <th style="vertical-align: inherit;">{{ (Carbon\Carbon::now()->year)+1 }}</th>
-                      <th style="vertical-align: inherit;">{{ (Carbon\Carbon::now()->year)+2 }}</th>
-                      <th style="vertical-align: inherit;">{{ (Carbon\Carbon::now()->year)+3 }}</th>
-                      <th style="vertical-align: inherit;">{{ (Carbon\Carbon::now()->year)+4 }}</th>
+                      <th style="vertical-align: inherit;">{{ (App\Visi::first()['created_at']->year)+1 }}</th>
+                      <th style="vertical-align: inherit;">{{ (App\Visi::first()['created_at']->year)+2 }}</th>
+                      <th style="vertical-align: inherit;">{{ (App\Visi::first()['created_at']->year)+3 }}</th>
+                      <th style="vertical-align: inherit;">{{ (App\Visi::first()['created_at']->year)+4 }}</th>
                     </tr>
                     <tr>
                       <th style="vertical-align: inherit;">(n-2)</th>
