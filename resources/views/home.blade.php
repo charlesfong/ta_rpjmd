@@ -95,7 +95,7 @@ html,body{
         <h2 style="text-align: center;">{{ App\Visi::first()['visi'] }}</h2>
         <section class="content">
           <div class="row">
-            <div class="col-xl-12">
+            <div class="col-xs-12">
               
               <!-- /.box -->
 
@@ -106,44 +106,91 @@ html,body{
                 <!-- /.box-header -->
                 <div class="box-body">
                   <table id="example1" class="table table-bordered table-striped">
-                    <thead>
+                    <thead style="text-align: center;">
                     <tr>
-                      <th>Misi</th>
-                      <th>Tujuan</th>
-                      <th>Sasaran</th>
-                      <th>Indikator</th>
+                      <th rowspan="3" style="vertical-align: inherit;">Misi</th>
+                      <th rowspan="3" style="vertical-align: inherit;">Tujuan</th>
+                      <th rowspan="3" style="vertical-align: inherit;">Sasaran</th>
+                      <th rowspan="3" style="vertical-align: inherit;">Indikator</th>
+                      <th rowspan="2" style="vertical-align: inherit;">Kondisi Awal</th>
+                      <th colspan="4" style="vertical-align: inherit;">Target Capaian</th>
+                      <th rowspan="3" style="vertical-align: inherit;">Kondisi Akhir</th>
                     </tr>
+                    <tr>
+                      <th style="vertical-align: inherit;">{{ (Carbon\Carbon::now()->year)+1 }}</th>
+                      <th style="vertical-align: inherit;">{{ (Carbon\Carbon::now()->year)+2 }}</th>
+                      <th style="vertical-align: inherit;">{{ (Carbon\Carbon::now()->year)+3 }}</th>
+                      <th style="vertical-align: inherit;">{{ (Carbon\Carbon::now()->year)+4 }}</th>
+                    </tr>
+                    <tr>
+                      <th style="vertical-align: inherit;">(n-2)</th>
+                      <th style="vertical-align: inherit;">(n)</th>
+                      <th style="vertical-align: inherit;">(n+1)</th>
+                      <th style="vertical-align: inherit;">(n+2)</th>
+                      <th style="vertical-align: inherit;">(n+3)</th>
+                    </tr>
+                    {{-- <tr>
+                      <th>Kondisi Akhir</th>
+                    </tr> --}}
                     </thead>
                     <tbody>
 
                       @foreach($Misis as $misi)
                         @php
                           $awalanMisiIndikator = false;
-                          $idkMin1 = true;
-                          $totalBaris = 1;
-                          if( sizeof($misi->tujuanSort) > 0){
-                            $totalBaris = sizeof($misi->tujuanSort);                    
-                          }
-                          foreach ($misi->tujuanSort as $setiapTujuan) {
-                            $totalBaris += sizeof($setiapTujuan->sasaranSort);
-                            if(sizeof($setiapTujuan->sasaranSort) > 1){
-                              $totalBaris--;
-                            }
-                            // indikator punya
-                            if(sizeof($setiapTujuan->sasaranSort) < 1){
-                              $totalBaris += sizeof($setiapTujuan->indikatorSort);
-                              // if(sizeof($setiapTujuan->indikatorSort) > 1){
-                              //   $totalBaris--;
-                              // }
-                            }
 
-                            foreach ($setiapTujuan->sasaranSort as $setiapSasaran){
-                              $totalBaris += sizeof($setiapSasaran->indikatorSort);
-                              if(sizeof($setiapSasaran->indikatorSort) > 1){
-                                $totalBaris--;
+                          // $totalBaris = 1;
+                          // if( sizeof($misi->tujuanSort) > 0){
+                          //   $totalBaris = sizeof($misi->tujuanSort);
+                          //   if(sizeof($misi->tujuanSort) > 1){
+                          //     $totalBaris--;
+                          //   }                   
+                          // }
+                          // foreach ($misi->tujuanSort as $setiapTujuan) {
+                          //   $totalBaris += sizeof($setiapTujuan->sasaranSort);
+                          //   if(sizeof($setiapTujuan->sasaranSort) > 1){
+                          //     $totalBaris--;
+                          //   }
+                          //   foreach ($setiapTujuan->sasaranSort as $setiapSasaran){
+                          //     $totalBaris += sizeof($setiapSasaran->indikatorSort);
+                          //     if(sizeof($setiapSasaran->indikatorSort) > 1){
+                          //       $totalBaris--;
+                          //     }
+                          //   }
+
+                          //   // indikator punya
+                          //   if(sizeof($setiapTujuan->indikatorSort) > 0 && sizeof($setiapTujuan->sasaranSort) < 1){
+                          //     $totalBaris += sizeof($setiapTujuan->indikatorSort);
+                          //     if(sizeof($setiapTujuan->indikatorSort) > 1){
+                          //       $totalBaris--;
+                          //     }
+                          //   }
+                          // }
+
+                          $totalBaris = 0;
+                          foreach ($misi->tujuanSort as $tujuan) {
+                            foreach ($tujuan->sasaranSort as $sasaran) {
+                              foreach ($sasaran->indikatorSort as $indikator) {
+                                $totalBaris++;
+                              }
+                              if(sizeof($sasaran->indikatorSort) < 1){
+                                $totalBaris++;
                               }
                             }
+                            if(sizeof($tujuan->indikatorSort) > 0){
+                              if($totalBaris > 0){
+                                $totalBaris += sizeof($tujuan->indikatorSort);
+                              }
+                              else{
+                                $totalBaris = sizeof($tujuan->indikatorSort);
+                              }
+                            }
+                            if(sizeof($tujuan->sasaranSort) < 1){
+                              $totalBaris++;
+                            }
+                            // dd($totalBaris);
                           }
+
                           if( sizeof($misi->indikatorSort) > 0){
                             if($totalBaris > 0){
                               $totalBaris += sizeof($misi->indikatorSort);
@@ -192,19 +239,38 @@ html,body{
                               <td rowspan="{{$totalBaris}}">{{$misi->tujuanSort[0]->sasaranSort[0]['sasaran']}}</td>
                               @if(sizeof($misi->tujuanSort[0]->sasaranSort[0]->indikatorSort) > 0)
                                 <td>{{$misi->tujuanSort[0]->sasaranSort[0]->indikatorSort[0]['indikator']}}</td>
+                                <td>{{$misi->tujuanSort[0]->sasaranSort[0]->indikatorSort[0]['n-2']}}</td>
+                                <td>{{$misi->tujuanSort[0]->sasaranSort[0]->indikatorSort[0]['n']}}</td>
+                                <td>{{$misi->tujuanSort[0]->sasaranSort[0]->indikatorSort[0]['n+1']}}</td>
+                                <td>{{$misi->tujuanSort[0]->sasaranSort[0]->indikatorSort[0]['n+2']}}</td>
+                                <td>{{$misi->tujuanSort[0]->sasaranSort[0]->indikatorSort[0]['n+3']}}</td>
+                                <td>{{$misi->tujuanSort[0]->sasaranSort[0]->indikatorSort[0]['kondisi_akhir']}}</td>
                               @else
                                 <td>-</td>
                               @endif
                             @elseif($awalanTujuanIndikator)
                               <td></td>
                               <td>{{$misi->tujuanSort[0]->indikatorSort[0]['indikator']}}</td>
+                              <td>{{$misi->tujuanSort[0]->indikatorSort[0]['n-2']}}</td>
+                              <td>{{$misi->tujuanSort[0]->indikatorSort[0]['n']}}</td>
+                              <td>{{$misi->tujuanSort[0]->indikatorSort[0]['n+1']}}</td>
+                              <td>{{$misi->tujuanSort[0]->indikatorSort[0]['n+2']}}</td>
+                              <td>{{$misi->tujuanSort[0]->indikatorSort[0]['n+3']}}</td>
+                              <td>{{$misi->tujuanSort[0]->indikatorSort[0]['kondisi_akhir']}}</td>
                             @else
+                              <td>-</td>
                               <td>-</td>
                             @endif
                           @elseif($awalanMisiIndikator)
                             <td></td>
                             <td></td>
                             <td>{{$misi->indikatorSort[0]['indikator']}}</td>
+                              <td>{{$misi->indikatorSort[0]['n-2']}}</td>
+                              <td>{{$misi->indikatorSort[0]['n']}}</td>
+                              <td>{{$misi->indikatorSort[0]['n+1']}}</td>
+                              <td>{{$misi->indikatorSort[0]['n+2']}}</td>
+                              <td>{{$misi->indikatorSort[0]['n+3']}}</td>
+                              <td>{{$misi->indikatorSort[0]['kondisi_akhir']}}</td>
                           @else
                             <td>-</td>
                           @endif
@@ -216,6 +282,12 @@ html,body{
                               <tr>
                                 <td></td>
                                 <td>{{$misi->tujuanSort[0]->indikatorSort[$i]['indikator']}}</td>
+                                <td>{{$misi->tujuanSort[0]->indikatorSort[$i]['n-2']}}</td>
+                                <td>{{$misi->tujuanSort[0]->indikatorSort[$i]['n']}}</td>
+                                <td>{{$misi->tujuanSort[0]->indikatorSort[$i]['n+1']}}</td>
+                                <td>{{$misi->tujuanSort[0]->indikatorSort[$i]['n+2']}}</td>
+                                <td>{{$misi->tujuanSort[0]->indikatorSort[$i]['n+3']}}</td>
+                                <td>{{$misi->tujuanSort[0]->indikatorSort[$i]['kondisi_akhir']}}</td>
                               </tr>
                             @endfor
                             {{-- //untuk sasaran selanjutnya --}}
@@ -230,6 +302,12 @@ html,body{
                                 <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[0]->sasaranSort[$i]['sasaran']}}</td>
                                 @if(sizeof($misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort) > 0)
                                   <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['indikator']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['n-2']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['n']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['n+1']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['n+2']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['n+3']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['kondisi_akhir']}}</td>
                                 @else
                                   <td>-</td>
                                 @endif
@@ -238,6 +316,12 @@ html,body{
                               @for($j = 1; $j < sizeof($misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort); $j++)
                                 <tr>
                                   <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['indikator']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['n-2']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['n']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['n+1']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['n+2']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['n+3']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['kondisi_akhir']}}</td>
                                 </tr>
                               @endfor
                             @endfor
@@ -281,12 +365,24 @@ html,body{
                                   <!-- Indikator Nya -->
                                   @if(sizeof($misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort) > 0)
                                     <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['indikator']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n-2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n+1']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n+2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n+3']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['kondisi_akhir']}}</td>
                                   @else
                                     <td>-</td>
                                   @endif
                                 @elseif($awalanTujuanIndikator)
                                   <td></td>
                                   <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['indikator']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n-2']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n+1']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n+2']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n+3']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['kondisi_akhir']}}</td>
                                 @else
                                   <td>-</td>
                                   <td>-</td>
@@ -304,6 +400,12 @@ html,body{
                                     <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
                                     @if(sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0)
                                       <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['indikator']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n-2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+1']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+3']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['kondisi_akhir']}}</td>
                                     @else
                                       <td>-</td>
                                     @endif
@@ -312,6 +414,12 @@ html,body{
                                   @for($k = 1; $k < sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort); $k++)
                                     <tr>
                                       <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['indikator']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n-2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+1']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+3']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['kondisi_akhir']}}</td>
                                     </tr>
                                   @endfor
                                 @endfor
@@ -321,6 +429,12 @@ html,body{
                                   <tr>
                                     <td></td>
                                     <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['indikator']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n-2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n+1']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n+2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n+3']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['kondisi_akhir']}}</td>
                                   </tr>
                                   {{-- @php dd($misi->tujuanSort[$i]->indikatorSort[$j]['indikator']) @endphp --}}
                                 @endfor
@@ -336,6 +450,12 @@ html,body{
                                     <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
                                     @if(sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0)
                                       <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['indikator']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n-2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+1']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+3']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['kondisi_akhir']}}</td>
                                     @else
                                       <td>-</td>
                                     @endif
@@ -344,6 +464,12 @@ html,body{
                                   @for($k = 1; $k < sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort); $k++)
                                     <tr>
                                       <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['indikator']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n-2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+1']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+3']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['kondisi_akhir']}}</td>
                                     </tr>
                                   @endfor
                                 @endfor
@@ -364,6 +490,12 @@ html,body{
                                 <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[0]->sasaranSort[$i]['sasaran']}}</td>
                                 @if(sizeof($misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort) > 0)
                                   <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['indikator']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['n-2']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['n']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['n+1']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['n+2']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['n+3']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[0]['kondisi_akhir']}}</td>
                                 @else
                                   <td>-</td>
                                 @endif
@@ -372,6 +504,12 @@ html,body{
                               @for($j = 1; $j < sizeof($misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort); $j++)
                                 <tr>
                                   <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['indikator']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['n-2']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['n']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['n+1']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['n+2']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['n+3']}}</td>
+                                  <td>{{$misi->tujuanSort[0]->sasaranSort[$i]->indikatorSort[$j]['kondisi_akhir']}}</td>
                                 </tr>
                               @endfor
                             @endfor
@@ -414,12 +552,24 @@ html,body{
                                   <!-- Indikator Nya -->
                                   @if(sizeof($misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort) > 0)
                                     <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['indikator']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n-2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n+1']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n+2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n+3']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['kondisi_akhir']}}</td>
                                   @else
                                     <td>-</td>
                                   @endif
                                 @elseif($awalanTujuanIndikator)
                                   <td></td>
                                   <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['indikator']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n-2']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n+1']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n+2']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n+3']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['kondisi_akhir']}}</td>
                                 @else
                                   <td>-</td>
                                   <td>-</td>
@@ -437,6 +587,12 @@ html,body{
                                     <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
                                     @if(sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0)
                                       <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['indikator']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n-2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+1']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+3']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['kondisi_akhir']}}</td>
                                     @else
                                       <td>-</td>
                                     @endif
@@ -445,6 +601,12 @@ html,body{
                                   @for($k = 1; $k < sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort); $k++)
                                     <tr>
                                       <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['indikator']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n-2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+1']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+3']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['kondisi_akhir']}}</td>
                                     </tr>
                                   @endfor
                                 @endfor
@@ -454,6 +616,12 @@ html,body{
                                   <tr>
                                     <td></td>
                                     <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['indikator']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n-2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n+1']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n+2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n+3']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['kondisi_akhir']}}</td>
                                   </tr>
                                 @endfor
                                 {{-- //untuk sasaran selanjutnya --}}
@@ -468,6 +636,12 @@ html,body{
                                     <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
                                     @if(sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0)
                                       <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['indikator']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n-2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+1']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+3']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['kondisi_akhir']}}</td>
                                     @else
                                       <td>-</td>
                                     @endif
@@ -476,6 +650,12 @@ html,body{
                                   @for($k = 1; $k < sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort); $k++)
                                     <tr>
                                       <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['indikator']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n-2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+1']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+2']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+3']}}</td>
+                                      <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['kondisi_akhir']}}</td>
                                     </tr>
                                   @endfor
                                 @endfor
@@ -489,6 +669,12 @@ html,body{
                               <td></td>
                               <td></td>
                               <td>{{$misi->indikatorSort[$i]['indikator']}}</td>
+                              <td>{{$misi->indikatorSort[$i]['n-2']}}</td>
+                              <td>{{$misi->indikatorSort[$i]['n']}}</td>
+                              <td>{{$misi->indikatorSort[$i]['n+1']}}</td>
+                              <td>{{$misi->indikatorSort[$i]['n+2']}}</td>
+                              <td>{{$misi->indikatorSort[$i]['n+3']}}</td>
+                              <td>{{$misi->indikatorSort[$i]['kondisi_akhir']}}</td>
                             </tr>
                           @endfor
 
@@ -524,21 +710,63 @@ html,body{
                                 <!-- Indikator Nya -->
                                 @if(sizeof($misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort) > 0)
                                   <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['indikator']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n-2']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n+1']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n+2']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['n+3']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->sasaranSort[0]->indikatorSort[0]['kondisi_akhir']}}</td>
                                 @else
                                   <td>-</td>
                                 @endif
                               @elseif($awalanTujuanIndikator)
                                 <td></td>
                                 <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['indikator']}}</td>
+                                <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n-2']}}</td>
+                                <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n']}}</td>
+                                <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n+1']}}</td>
+                                <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n+2']}}</td>
+                                <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['n+3']}}</td>
+                                <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['kondisi_akhir']}}</td>
                               @else
+                                <td>-</td>
                                 <td>-</td>
                               @endif
                             </tr>                      
-                            @if(!$awalanMisiIndikator)
+                            @if(!$awalanTujuanIndikator)
                               @for($j = 1; $j < sizeof($misi->tujuanSort[$i]->sasaranSort); $j++)
+                                @php
+                                  $totalBaris = 1;
+                                  if( sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0){
+                                    $totalBaris = sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort);
+                                  }
+                                @endphp
                                 <tr>
-                                  <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
+                                  <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
+                                  @if(sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0)
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['indikator']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n-2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+1']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+3']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['kondisi_akhir']}}</td>
+                                  @else
+                                    <td>-</td>
+                                  @endif
                                 </tr>
+                                {{-- SISA INDIKATORNTYA --}}
+                                @for($k = 1; $k < sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort); $k++)
+                                  <tr>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['indikator']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n-2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+1']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+3']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['kondisi_akhir']}}</td>
+                                  </tr>
+                                @endfor
                               @endfor
                             @else
                               {{-- //untuk indikator tujuan selanjutnya --}}
@@ -546,7 +774,49 @@ html,body{
                                 <tr>
                                   <td></td>
                                   <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['indikator']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n-2']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n+1']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n+2']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['n+3']}}</td>
+                                  <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['kondisi_akhir']}}</td>
                                 </tr>
+                                {{-- @php dd($misi->tujuanSort[$i]->indikatorSort[$j]['indikator']) @endphp --}}
+                              @endfor
+                              {{-- //untuk sasaran selanjutnya --}}
+                              @for($j = 0; $j < sizeof($misi->tujuanSort[$i]->sasaranSort); $j++)
+                                @php
+                                  $totalBaris = 1;
+                                  if( sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0){
+                                    $totalBaris = sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort);
+                                  }
+                                @endphp
+                                <tr>
+                                  <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
+                                  @if(sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0)
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['indikator']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n-2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+1']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['n+3']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['kondisi_akhir']}}</td>
+                                  @else
+                                    <td>-</td>
+                                  @endif
+                                </tr>
+                                {{-- SISA INDIKATORNTYA --}}
+                                @for($k = 1; $k < sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort); $k++)
+                                  <tr>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['indikator']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n-2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+1']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+2']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['n+3']}}</td>
+                                    <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['kondisi_akhir']}}</td>
+                                  </tr>
+                                @endfor
                               @endfor
                             @endif
                           @endfor

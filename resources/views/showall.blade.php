@@ -26,31 +26,59 @@
               @foreach($Misis as $misi)
                 @php
                   $awalanMisiIndikator = false;
-                  $idkMin1 = true;
-                  $totalBaris = 1;
-                  if( sizeof($misi->tujuanSort) > 0){
-                    $totalBaris = sizeof($misi->tujuanSort);                    
-                  }
-                  foreach ($misi->tujuanSort as $setiapTujuan) {
-                    $totalBaris += sizeof($setiapTujuan->sasaranSort);
-                    if(sizeof($setiapTujuan->sasaranSort) > 1){
-                      $totalBaris--;
-                    }
-                    foreach ($setiapTujuan->sasaranSort as $setiapSasaran){
-                      $totalBaris += sizeof($setiapSasaran->indikatorSort);
-                      if(sizeof($setiapSasaran->indikatorSort) > 1){
-                        $totalBaris--;
+
+                  // $totalBaris = 1;
+                  // if( sizeof($misi->tujuanSort) > 0){
+                  //   $totalBaris = sizeof($misi->tujuanSort);
+                  //   if(sizeof($misi->tujuanSort) > 1){
+                  //     $totalBaris--;
+                  //   }                   
+                  // }
+                  // foreach ($misi->tujuanSort as $setiapTujuan) {
+                  //   $totalBaris += sizeof($setiapTujuan->sasaranSort);
+                  //   if(sizeof($setiapTujuan->sasaranSort) > 1){
+                  //     $totalBaris--;
+                  //   }
+                  //   foreach ($setiapTujuan->sasaranSort as $setiapSasaran){
+                  //     $totalBaris += sizeof($setiapSasaran->indikatorSort);
+                  //     if(sizeof($setiapSasaran->indikatorSort) > 1){
+                  //       $totalBaris--;
+                  //     }
+                  //   }
+
+                  //   // indikator punya
+                  //   if(sizeof($setiapTujuan->indikatorSort) > 0 && sizeof($setiapTujuan->sasaranSort) < 1){
+                  //     $totalBaris += sizeof($setiapTujuan->indikatorSort);
+                  //     if(sizeof($setiapTujuan->indikatorSort) > 1){
+                  //       $totalBaris--;
+                  //     }
+                  //   }
+                  // }
+
+                  $totalBaris = 0;
+                  foreach ($misi->tujuanSort as $tujuan) {
+                    foreach ($tujuan->sasaranSort as $sasaran) {
+                      foreach ($sasaran->indikatorSort as $indikator) {
+                        $totalBaris++;
+                      }
+                      if(sizeof($sasaran->indikatorSort) < 1){
+                        $totalBaris++;
                       }
                     }
-
-                    // indikator punya
-                    if(sizeof($setiapTujuan->sasaranSort) < 1){
-                      $totalBaris += sizeof($setiapTujuan->indikatorSort);
-                      // if(sizeof($setiapTujuan->indikatorSort) > 1){
-                      //   $totalBaris--;
-                      // }
+                    if(sizeof($tujuan->indikatorSort) > 0){
+                      if($totalBaris > 0){
+                        $totalBaris += sizeof($tujuan->indikatorSort);
+                      }
+                      else{
+                        $totalBaris = sizeof($tujuan->indikatorSort);
+                      }
                     }
+                    if(sizeof($tujuan->sasaranSort) < 1){
+                      $totalBaris++;
+                    }
+                    // dd($totalBaris);
                   }
+
                   if( sizeof($misi->indikatorSort) > 0){
                     if($totalBaris > 0){
                       $totalBaris += sizeof($misi->indikatorSort);
@@ -106,6 +134,7 @@
                       <td></td>
                       <td>{{$misi->tujuanSort[0]->indikatorSort[0]['indikator']}}</td>
                     @else
+                      <td>-</td>
                       <td>-</td>
                     @endif
                   @elseif($awalanMisiIndikator)
@@ -439,13 +468,31 @@
                         <td>{{$misi->tujuanSort[$i]->indikatorSort[0]['indikator']}}</td>
                       @else
                         <td>-</td>
+                        <td>-</td>
                       @endif
                     </tr>                      
-                    @if(!$awalanMisiIndikator)
+                    @if(!$awalanTujuanIndikator)
                       @for($j = 1; $j < sizeof($misi->tujuanSort[$i]->sasaranSort); $j++)
+                        @php
+                          $totalBaris = 1;
+                          if( sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0){
+                            $totalBaris = sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort);
+                          }
+                        @endphp
                         <tr>
-                          <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
+                          <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
+                          @if(sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0)
+                            <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['indikator']}}</td>
+                          @else
+                            <td>-</td>
+                          @endif
                         </tr>
+                        {{-- SISA INDIKATORNTYA --}}
+                        @for($k = 1; $k < sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort); $k++)
+                          <tr>
+                            <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['indikator']}}</td>
+                          </tr>
+                        @endfor
                       @endfor
                     @else
                       {{-- //untuk indikator tujuan selanjutnya --}}
@@ -454,6 +501,30 @@
                           <td></td>
                           <td>{{$misi->tujuanSort[$i]->indikatorSort[$j]['indikator']}}</td>
                         </tr>
+                        {{-- @php dd($misi->tujuanSort[$i]->indikatorSort[$j]['indikator']) @endphp --}}
+                      @endfor
+                      {{-- //untuk sasaran selanjutnya --}}
+                      @for($j = 0; $j < sizeof($misi->tujuanSort[$i]->sasaranSort); $j++)
+                        @php
+                          $totalBaris = 1;
+                          if( sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0){
+                            $totalBaris = sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort);
+                          }
+                        @endphp
+                        <tr>
+                          <td rowspan="{{ $totalBaris }}">{{$misi->tujuanSort[$i]->sasaranSort[$j]['sasaran']}}</td>
+                          @if(sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort) > 0)
+                            <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[0]['indikator']}}</td>
+                          @else
+                            <td>-</td>
+                          @endif
+                        </tr>
+                        {{-- SISA INDIKATORNTYA --}}
+                        @for($k = 1; $k < sizeof($misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort); $k++)
+                          <tr>
+                            <td>{{$misi->tujuanSort[$i]->sasaranSort[$j]->indikatorSort[$k]['indikator']}}</td>
+                          </tr>
+                        @endfor
                       @endfor
                     @endif
                   @endfor
