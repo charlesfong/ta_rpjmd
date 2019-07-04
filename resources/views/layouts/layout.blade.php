@@ -20,13 +20,15 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link href="{{ asset('asset/dist/css/skins/_all-skins.min.css') }}" rel="stylesheet"/>
+  <!-- CSRF Token -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <style>
     html,body{
            width: 100%;
-         height: 100%;
+           height: 100%;
     }
      body {
         

@@ -27,6 +27,9 @@ Route::group(['prefix' => 'visimisi'], function () {
 	Route::get('/add-visimisi', 'KepalaDaerahController@showInputVisiMisi')->name('addVisiMisi');
 	Route::post('/store-visimisi', 'KepalaDaerahController@storeVisiMisi')->name('storeVisiMisi');
 	Route::post('/delete-visimisi', 'KepalaDaerahController@delete')->name('deleteVisiMisi');
+	Route::post('/update-visimisi', 'KepalaDaerahController@update')->name('updateVisiMisi');
+	Route::post('/edit-visi', 'KepalaDaerahController@editVisi')->name('editVisi');
+	Route::post('/edit-misi', 'KepalaDaerahController@editMisi')->name('editMisi');
 
 	//khusus AHP
 	Route::get('/nilai-kriteria-misi', 'KepalaDaerahController@showKriteriaMisi')->name('showKriteriaMisi');
@@ -47,6 +50,9 @@ Route::group(['prefix' => 'tujuan'], function () {
 	Route::get('/add-tujuan', 'BappedaController@addTujuan')->name('addTujuan');
 	Route::post('/store-tujuan', 'BappedaController@storeTujuan')->name('storeTujuan');
 	Route::get('/show-misi', 'BappedaController@showMisi')->name('showMisi');
+	Route::post('/delete-tujuan', 'BappedaController@delete')->name('deleteTujuan');
+	Route::post('/update-tujuan', 'BappedaController@update')->name('updateTujuan');
+	Route::post('/edit-tujuan', 'BappedaController@edit')->name('editTujuan');
 
 	//khusus AHP
 	Route::get('/nilai-kriteria-tujuan', 'BappedaController@showKriteriaTujuan')->name('showKriteriaTujuan');

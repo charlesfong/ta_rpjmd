@@ -126,8 +126,68 @@ class KepalaDaerahController extends Controller
                 $misiNya->delete();
             }
         }
-
         return $this->showVisiMisi();
+    }
+
+    public function update(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                    'type' => 'required',
+                    'content' => 'required',
+                ]);
+        $validator->validate();
+
+        if($request['type'] == "visi"){
+            $visiNya = Visi::find($request['id']);            
+            if($visiNya != null){
+                $visiNya['visi'] = $request['content'];
+                $visiNya->save();
+
+                BobotIndikator::truncate();
+                EigenIndikator::truncate();
+                BobotSasaran::truncate();
+                EigenSasaran::truncate();
+                BobotTujuan::truncate();
+                EigenTujuan::truncate();
+                BobotMisi::truncate();
+                EigenMisi::truncate();
+            }
+        }
+        else{
+            $misiNya = Misi::find($request['id']);
+            if($misiNya != null){
+                $misiNya['misi'] = $request['content'];
+                $misiNya->save();
+
+                BobotIndikator::truncate();
+                EigenIndikator::truncate();
+                BobotSasaran::truncate();
+                EigenSasaran::truncate();
+                BobotTujuan::truncate();
+                EigenTujuan::truncate();
+                BobotMisi::truncate();
+                EigenMisi::truncate();
+            }
+        }
+        return $this->showVisiMisi();
+    }
+
+    public function editVisi(Request $request) {
+        if ($request->has('id')) {
+            $visiNya = Visi::find($request->get('id'));
+            return response()->json(['result' => $visiNya]);
+        } else {
+            return response()->json(['result' => 'Gagal!!']);
+        }
+    }
+
+    public function editMisi(Request $request) {
+        if ($request->has('id')) {
+            $misiNya = Misi::find($request->get('id'));
+            return response()->json(['result' => $misiNya]);
+        } else {
+            return response()->json(['result' => 'Gagal!!']);
+        }
     }
 
     //AHPshowNilaiMisi

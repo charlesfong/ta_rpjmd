@@ -13,8 +13,14 @@ use App\Sasaran;
 use App\KriteriaSasaran;
 use App\BobotKriteriaSasaran;
 use App\EigenKriteriaSasaran;
+use App\BobotMisi;
+use App\EigenMisi;
+use App\BobotTujuan;
+use App\EigenTujuan;
 use App\BobotSasaran;
 use App\EigenSasaran;
+use App\BobotIndikator;
+use App\EigenIndikator;
 
 class SasaranController extends Controller
 {
@@ -68,6 +74,57 @@ class SasaranController extends Controller
 
         $VisiMisi = Visi::all();
         return view('inputsasaran',compact('VisiMisi'));
+    }
+
+    public function delete(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                ]);
+        $validator->validate();
+
+        $sasaranNya = Sasaran::find($request['id']);
+        if($sasaranNya != null){
+            BobotIndikator::truncate();
+            EigenIndikator::truncate();
+            BobotSasaran::truncate();
+            EigenSasaran::truncate();
+            BobotTujuan::truncate();
+            EigenTujuan::truncate();
+            BobotMisi::truncate();
+            EigenMisi::truncate();
+
+            foreach ($sasaranNya->indikatorSort as $indikatorNya) {
+                $indikatorNya->delete();
+            }
+            $sasaranNya->delete();
+        }
+
+        return $this->showSasaran();
+    }
+
+    public function update(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                    'content' => 'required',
+                ]);
+        $validator->validate();
+
+        $sasaranNya = Sasaran::find($request['id']);
+        if($sasaranNya != null){
+            $sasaranNya['sasaran'] = $request['content'];
+            $sasaranNya->save();
+
+            BobotIndikator::truncate();
+            EigenIndikator::truncate();
+            BobotSasaran::truncate();
+            EigenSasaran::truncate();
+            BobotTujuan::truncate();
+            EigenTujuan::truncate();
+            BobotMisi::truncate();
+            EigenMisi::truncate();
+        }
+
+        return $this->showSasaran();
     }
 
     //AHPshowNilaiSasaran

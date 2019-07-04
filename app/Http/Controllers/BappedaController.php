@@ -10,10 +10,16 @@ use App\Tujuan;
 use App\Visi;
 use App\Misi;
 use App\KriteriaTujuan;
-use App\BobotTujuan;
 use App\BobotKriteriaTujuan;
 use App\EigenKriteriaTujuan;
+use App\BobotMisi;
+use App\EigenMisi;
+use App\BobotTujuan;
 use App\EigenTujuan;
+use App\BobotSasaran;
+use App\EigenSasaran;
+use App\BobotIndikator;
+use App\EigenIndikator;
 
 
 class BappedaController extends Controller
@@ -57,6 +63,73 @@ class BappedaController extends Controller
 
         $VisiMisi = Visi::all();
         return view('bappeda.inputtujuan',compact('VisiMisi'));
+    }
+
+    public function delete(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                ]);
+        $validator->validate();
+
+        $tujuanNya = Tujuan::find($request['id']);
+        if($tujuanNya != null){
+            BobotIndikator::truncate();
+            EigenIndikator::truncate();
+            BobotSasaran::truncate();
+            EigenSasaran::truncate();
+            BobotTujuan::truncate();
+            EigenTujuan::truncate();
+            BobotMisi::truncate();
+            EigenMisi::truncate();
+
+            foreach ($tujuanNya->indikatorSort as $indikatorNya) {
+                $indikatorNya->delete();
+            }
+            foreach ($tujuanNya->sasaranSort as $sasaranNya) {
+                foreach ($sasaranNya->indikatorSort as $indikatorNya) {
+                    $indikatorNya->delete();
+                }
+                $sasaranNya->delete();
+            }
+            $tujuanNya->delete();
+        }
+        
+        $request = new \Illuminate\Http\Request();
+        return $this->showTujuan($request);
+    }
+
+    public function update(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                    'content' => 'required',
+                ]);
+        $validator->validate();
+
+        $tujuanNya = Tujuan::find($request['id']);
+        if($tujuanNya != null){
+            $tujuanNya['tujuan'] = $request['content'];
+            $tujuanNya->save();
+
+            BobotIndikator::truncate();
+            EigenIndikator::truncate();
+            BobotSasaran::truncate();
+            EigenSasaran::truncate();
+            BobotTujuan::truncate();
+            EigenTujuan::truncate();
+            BobotMisi::truncate();
+            EigenMisi::truncate();
+        }
+
+        return $this->showTujuan();
+    }
+
+    public function edit(Request $request) {
+        if ($request->has('id')) {
+            $tujuanNya = Tujuan::find($request->get('id'));
+            return response()->json(['result' => $tujuanNya]);
+        } else {
+            return response()->json(['result' => 'Gagal!!']);
+        }
     }
 
     //AHPshowNilaiMisi

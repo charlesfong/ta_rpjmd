@@ -11,12 +11,17 @@
                    <form class="well form-horizontal" method="post" action="{{ route('storeVisiMisi') }}">
                     {{ csrf_field() }}
                       <fieldset>
-                         <div class="form-group">
-                            <label class="col-md-1 control-label">Visi</label>
-                            <div class="col-md-11 inputGroupContainer">
-                               <div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span><input id="visi" name="visi" placeholder="Visi" class="form-control" required="true" value="" type="text"></div>
-                            </div>
-                         </div>
+                        @php
+                            $Visi = App\Visi::first();
+                        @endphp
+                        @if($Visi == null)
+                          <div class="form-group">
+                              <label class="col-md-1 control-label">Visi</label>
+                              <div class="col-md-11 inputGroupContainer">
+                                 <div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span><input id="visi" name="visi" placeholder="Visi" class="form-control" required="true" value="" type="text"></div>
+                              </div>
+                          </div>
+                        @endif
                          <div id="misi_div" >
                              
                          </div>

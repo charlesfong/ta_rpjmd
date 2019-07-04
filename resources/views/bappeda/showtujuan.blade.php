@@ -13,40 +13,37 @@
           <!-- <h3 class="box-title">Data Table With Full Features</h3> -->
         </div>
         <!-- /.box-header -->
-        <div class="box-body">
-          <table id="example1" class="table table-bordered table-striped">
-            <thead>
-            <tr>
-              <th>Misi</th>
-              <th>Tujuan</th>
-            </tr>
-            </thead>
-            <tbody>
-              @foreach($Misis as $misi)
-                @php
-                  $totalBaris = 1;
-                  if( sizeof($misi->tujuanSort) > 0){
-                    $totalBaris = sizeof($misi->tujuanSort);                    
-                  }
-                @endphp
+        @foreach($Misis as $misi)
+          <div class="box-body">
+            <table id="" class="table table-bordered table-striped">
+              <thead>
                 <tr>
-                  <td rowspan="{{$totalBaris}}">{{$misi['misi']}}</td>
-                  @if(sizeof($misi->tujuanSort) > 0)
-                    <td>{{$misi->tujuanSort[0]['tujuan']}}</td>
-                  @else
-                    <td>-</td>
-                  @endif
+                  <th colspan="3" style="text-align: center;"><h4>MISI : <b>{{$misi['misi']}}</b></h4></th>
                 </tr>
-                @for($i = 1; $i < sizeof($misi->tujuanSort); $i++)
+                <tr>
+                  <th>Tujuan</th>
+                  <th>Ubah</th>
+                  <th>Hapus</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($misi->tujuanSort as $tujuanNya)
                   <tr>
-                    <td>{{$misi->tujuanSort[$i]['tujuan']}}</td>
+                    <td>{{$tujuanNya['tujuan']}}</td>
+                    <td style="width: 50px; text-align: center;">
+                      <button type="button" data-toggle="modal" data-target="#modal-update" class="btn btn-primary btn-sm btn-editVisi" value="{{$tujuanNya['id']}}"><i class="fa fa-edit"></i></button>
+                    </td>
+                    <td style="width: 50px; text-align: center;">
+                      <button type="button" data-toggle="modal" data-target="#modal-delete" class="btn btn-danger btn-sm btn-delete" value="{{$tujuanNya['id']}}"><i class="fa fa-trash"></i></button>
+                    </td>
                   </tr>
-                @endfor
-              @endforeach
-            </tfoot>
-          </table>
-        </div>
-        <!-- /.box-body -->
+                @endforeach
+              </tfoot>
+            </table>
+          </div>
+          <!-- /.box-body -->
+          <br>
+        @endforeach
       </div>
       <!-- /.box -->
     </div>
@@ -55,5 +52,46 @@
   <!-- /.row -->
 </section>
 <!-- /.content -->
+
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript">
+    $(".btn-delete").click(function(e) {
+      $("#frmDelete").attr("action",  "{{ route('deleteTujuan') }}");
+      $("#btn-submit-delete").attr("value", $(this).val());
+      $("#submit-delete").attr("value", "misi");
+    });
+    $(".btn-editMisi").click(function(e) {
+      $("#cbo_visi").hide();
+      fetchEdit($(this).val(), '{{ route('editMisi') }}', 'misi');
+      $("#actionEdit").attr("action",  "{{ route('updateVisiMisi') }}");
+      $("#btn-confirmUpdate").attr("value", $(this).val());
+      $("#txtModalEdit").html("Edit Misi");
+      $("#txtEdit").html("Misi");
+      $("#idType").attr("value", "misi");
+    });
+
+    function fetchEdit(idNya, urlNya, type) {
+      $.ajax({
+          headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+          type: 'post',
+          url: urlNya,
+          data: {
+              'id': idNya
+          },
+          success: function(data){
+            $("#edit_content").html(data['result'][type]);
+            if(type == 'misi'){
+              $("#cbo_visi").show();
+            }
+          },
+          error: function (data) {
+            console.log(data.responseText);
+          }
+      });
+    }
+  </script>
 
 @endsection

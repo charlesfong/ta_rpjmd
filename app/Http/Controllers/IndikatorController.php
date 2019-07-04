@@ -14,6 +14,12 @@ use App\Indikator;
 use App\KriteriaIndikator;
 use App\BobotKriteriaIndikator;
 use App\EigenKriteriaIndikator;
+use App\BobotMisi;
+use App\EigenMisi;
+use App\BobotTujuan;
+use App\EigenTujuan;
+use App\BobotSasaran;
+use App\EigenSasaran;
 use App\BobotIndikator;
 use App\EigenIndikator;
 
@@ -103,6 +109,54 @@ class IndikatorController extends Controller
 
         $VisiMisi = Visi::all();
         return view('inputindikator',compact('VisiMisi'));
+    }
+
+    public function delete(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                ]);
+        $validator->validate();
+
+        $indikatorNya = Indikator::find($request['id']);
+        if($indikatorNya != null){
+            BobotIndikator::truncate();
+            EigenIndikator::truncate();
+            BobotSasaran::truncate();
+            EigenSasaran::truncate();
+            BobotTujuan::truncate();
+            EigenTujuan::truncate();
+            BobotMisi::truncate();
+            EigenMisi::truncate();
+
+            $indikatorNya->delete();
+        }
+
+        return $this->showindikator();
+    }
+
+    public function update(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                    'content' => 'required',
+                ]);
+        $validator->validate();
+
+        $indikatorNya = Indikator::find($request['id']);
+        if($indikatorNya != null){
+            $indikatorNya['indikator'] = $request['content'];
+            $indikatorNya->save();
+
+            BobotIndikator::truncate();
+            EigenIndikator::truncate();
+            BobotSasaran::truncate();
+            EigenSasaran::truncate();
+            BobotTujuan::truncate();
+            EigenTujuan::truncate();
+            BobotMisi::truncate();
+            EigenMisi::truncate();
+        }
+
+        return $this->showindikator();
     }
 
 
