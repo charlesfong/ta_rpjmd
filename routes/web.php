@@ -76,6 +76,9 @@ Route::group(['prefix' => 'sasaran'], function () {
 	Route::post('/store-sasaran', 'SasaranController@storeSasaran')->name('storeSasaran');
 	Route::get('/show-misi', 'SasaranController@showMisi')->name('showMisi');
 	Route::get('/show-tujuan', 'SasaranController@showTujuan')->name('showTujuan');
+	Route::post('/delete-sasaran', 'SasaranController@delete')->name('deleteSasaran');
+	Route::post('/update-sasaran', 'SasaranController@update')->name('updateSasaran');
+	Route::post('/edit-sasaran', 'SasaranController@edit')->name('editSasaran');
 
 	//khusus AHP
 	Route::get('/nilai-kriteria-sasaran', 'SasaranController@showKriteriaSasaran')->name('showKriteriaSasaran');

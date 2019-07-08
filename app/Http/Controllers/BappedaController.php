@@ -93,7 +93,7 @@ class BappedaController extends Controller
             }
             $tujuanNya->delete();
         }
-        
+
         $request = new \Illuminate\Http\Request();
         return $this->showTujuan($request);
     }
@@ -120,7 +120,8 @@ class BappedaController extends Controller
             EigenMisi::truncate();
         }
 
-        return $this->showTujuan();
+        $request = new \Illuminate\Http\Request();
+        return $this->showTujuan($request);
     }
 
     public function edit(Request $request) {

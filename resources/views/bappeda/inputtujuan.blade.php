@@ -71,19 +71,6 @@
        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
        <script type="text/javascript">
         var iCnt = 0;
-        // $("#visi").change(function() {
-        //     $("#tujuan_div").empty();
-        //     $("#btAdd").show();
-        //     $("#btRemove").show();
-        //     $("#btsimpan").show();
-        //     iCnt=0;
-        //     // if (iCnt > 0) { $('#' + iCnt).remove(); iCnt =0; }
-        //     if (iCnt==0)
-        //     {
-        //         iCnt = iCnt + 1;
-        //             $('#tujuan_div').append('<div class="form-group" id="'+iCnt+'"><label class="col-md-1 control-label">Tujuan '+iCnt+'</label><div class="col-md-11 inputGroupContainer"><div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span><input type=text class="form-control" name="tujuan[]" required="true" value="" placeholder="Tujuan '+iCnt+'"/></div></div></div>');
-        //     }
-        // });
         $("#misi").change(function() {
             console.log($('#misi').val());
             $("#tujuan_div").empty();

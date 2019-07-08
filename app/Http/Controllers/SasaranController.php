@@ -99,7 +99,8 @@ class SasaranController extends Controller
             $sasaranNya->delete();
         }
 
-        return $this->showSasaran();
+        $request = new \Illuminate\Http\Request();
+        return $this->showSasaran($request);
     }
 
     public function update(Request $request){
@@ -124,7 +125,19 @@ class SasaranController extends Controller
             EigenMisi::truncate();
         }
 
-        return $this->showSasaran();
+        $request = new \Illuminate\Http\Request();
+        return $this->showSasaran($request);
+    }
+
+    public function edit(Request $request) {
+        if ($request->has('id')) {
+            $sasaranNya = Sasaran::where('sasarans.id', $request->get('id'))
+                ->join('tujuans', 'sasarans.tujuan_id', '=', 'tujuans.id')
+                ->join('misis', 'tujuans.misi_id', '=', 'misis.id')->get();
+            return response()->json(['result' => $sasaranNya]);
+        } else {
+            return response()->json(['result' => 'Gagal!!']);
+        }
     }
 
     //AHPshowNilaiSasaran
