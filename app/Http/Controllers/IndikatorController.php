@@ -137,13 +137,13 @@ class IndikatorController extends Controller
     public function update(Request $request){
         $validator = \Validator::make($request->all(), [
                     'id' => 'required',
-                    'content' => 'required',
+                    'indikator' => 'required',
                 ]);
         $validator->validate();
 
         $indikatorNya = Indikator::find($request['id']);
         if($indikatorNya != null){
-            $indikatorNya['indikator'] = $request['content'];
+            $indikatorNya['indikator'] = $request['indikator'];
             $indikatorNya->save();
 
             BobotIndikator::truncate();
@@ -157,6 +157,30 @@ class IndikatorController extends Controller
         }
 
         return $this->showindikator();
+    }
+
+    public function edit(Request $request) {
+        if ($request->has('id')) {
+            $indikatorNya = Indikator::find($request->get('id'));
+            if($indikatorNya['sasaran_id'] != null){
+                $indikatorNya = Indikator::where('indikators.id', $request->get('id'))
+                    ->join('sasarans', 'indikators.sasaran_id', '=', 'sasarans.id')
+                    ->join('tujuans', 'sasarans.tujuan_id', '=', 'tujuans.id')
+                    ->join('misis', 'tujuans.misi_id', '=', 'misis.id')->get();
+            }
+            else if($indikatorNya['tujuan_id'] != null){
+                $indikatorNya = Indikator::where('indikators.id', $request->get('id'))
+                    ->join('tujuans', 'indikators.tujuan_id', '=', 'tujuans.id')
+                    ->join('misis', 'tujuans.misi_id', '=', 'misis.id')->get();
+            }
+            else{
+                $indikatorNya = Indikator::where('indikators.id', $request->get('id'))
+                    ->join('misis', 'indikators.misi_id', '=', 'misis.id')->get();
+                }
+            return response()->json(['result' => $indikatorNya]);
+        } else {
+            return response()->json(['result' => 'Gagal!!']);
+        }
     }
 
 

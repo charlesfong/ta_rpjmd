@@ -18,11 +18,17 @@
 					<table id="" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th colspan="3" style="text-align: center;"><h4>MISI : <b>{{$misi['misi']}}</b></h4></th>
+								<th colspan="8" style="text-align: center;"><h4>MISI : <b>{{$misi['misi']}}</b></h4></th>
 							</tr>
 							@if(sizeof($misi->indikatorSort) > 0)
 								<tr>
 									<th>Indikator</th>
+									<th>(n-2)</th>
+									<th>(n)</th>
+									<th>(n+1)</th>
+									<th>(n+2)</th>
+									<th>(n+3)</th>
+									<th>Kondisi Akhir</th>
 									<th>Ubah</th>
 									<th>Hapus</th>
 								</tr>
@@ -33,6 +39,12 @@
 								@foreach($misi->indikatorSort as $indikatorNya)
 								<tr>
 									<td>{{$indikatorNya['indikator']}}</td>
+									<td>{{$indikatorNya['n-2']}}</td>
+									<td>{{$indikatorNya['n']}}</td>
+									<td>{{$indikatorNya['n+1']}}</td>
+									<td>{{$indikatorNya['n+2']}}</td>
+									<td>{{$indikatorNya['n+3']}}</td>
+									<td>{{$indikatorNya['kondisi_akhir']}}</td>
 									<td style="width: 50px; text-align: center;">
 										<button type="button" data-toggle="modal" data-target="#modal-update" class="btn btn-primary btn-sm btn-edit" value="{{$indikatorNya['id']}}"><i class="fa fa-edit"></i></button>
 									</td>
@@ -47,11 +59,17 @@
 						@foreach($misi->tujuanSort as $tujuanNya)
 							<thead>
 								<tr>
-									<th colspan="3" style="text-align: center;"><h4>TUJUAN : <b>{{$tujuanNya['tujuan']}}</b></h4></th>
+									<th colspan="8" style="text-align: center;"><h4>TUJUAN : <b>{{$tujuanNya['tujuan']}}</b></h4></th>
 								</tr>
 								@if(sizeof($tujuanNya->indikatorSort) > 0)
 									<tr>
 										<th>Indikator</th>
+										<th>(n-2)</th>
+										<th>(n)</th>
+										<th>(n+1)</th>
+										<th>(n+2)</th>
+										<th>(n+3)</th>
+										<th>Kondisi Akhir</th>
 										<th>Ubah</th>
 										<th>Hapus</th>
 									</tr>
@@ -62,6 +80,12 @@
 									@foreach($tujuanNya->indikatorSort as $indikatorNya)
 									<tr>
 										<td>{{$indikatorNya['indikator']}}</td>
+										<td>{{$indikatorNya['n-2']}}</td>
+										<td>{{$indikatorNya['n']}}</td>
+										<td>{{$indikatorNya['n+1']}}</td>
+										<td>{{$indikatorNya['n+2']}}</td>
+										<td>{{$indikatorNya['n+3']}}</td>
+										<td>{{$indikatorNya['kondisi_akhir']}}</td>
 										<td style="width: 50px; text-align: center;">
 											<button type="button" data-toggle="modal" data-target="#modal-update" class="btn btn-primary btn-sm btn-edit" value="{{$indikatorNya['id']}}"><i class="fa fa-edit"></i></button>
 										</td>
@@ -76,10 +100,16 @@
 							@foreach($tujuanNya->sasaranSort as $sasaranNya)
 							<thead>
 								<tr>
-									<th colspan="3" style="text-align: center;"><h4>SASARAN : <b>{{$sasaranNya['sasaran']}}</b></h4></th>
+									<th colspan="8" style="text-align: center;"><h4>SASARAN : <b>{{$sasaranNya['sasaran']}}</b></h4></th>
 								</tr>
 								<tr>
 									<th>Indikator</th>
+									<th>(n-2)</th>
+									<th>(n)</th>
+									<th>(n+1)</th>
+									<th>(n+2)</th>
+									<th>(n+3)</th>
+									<th>Kondisi Akhir</th>
 									<th>Ubah</th>
 									<th>Hapus</th>
 								</tr>
@@ -88,6 +118,12 @@
 								@foreach($sasaranNya->indikatorSort as $indikatorNya)
 								<tr>
 									<td>{{$indikatorNya['indikator']}}</td>
+									<td>{{$indikatorNya['n-2']}}</td>
+									<td>{{$indikatorNya['n']}}</td>
+									<td>{{$indikatorNya['n+1']}}</td>
+									<td>{{$indikatorNya['n+2']}}</td>
+									<td>{{$indikatorNya['n+3']}}</td>
+									<td>{{$indikatorNya['kondisi_akhir']}}</td>
 									<td style="width: 50px; text-align: center;">
 										<button type="button" data-toggle="modal" data-target="#modal-update" class="btn btn-primary btn-sm btn-edit" value="{{$indikatorNya['id']}}"><i class="fa fa-edit"></i></button>
 									</td>
@@ -168,7 +204,49 @@
                     </div>
                     <div class="form-group">
                         <h4 id="txtEdit">-</h4>
-                        <textarea id="edit_content" name="content" class="form-control form-control-sm" required></textarea>
+                        <textarea id="edit_indikator" name="indikator" class="form-control form-control-sm" required></textarea>
+                        <span class="invalid-feedback">
+                            <strong></strong>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <h4 id="txtEdit">(n-2)</h4>
+                        <input id="edit_n-2" name="n-2" class="form-control form-control-sm" required>
+                        <span class="invalid-feedback">
+                            <strong></strong>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <h4 id="txtEdit">(n)</h4>
+                        <input id="edit_n" name="n" class="form-control form-control-sm" required>
+                        <span class="invalid-feedback">
+                            <strong></strong>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <h4 id="txtEdit">(n+1)</h4>
+                        <input id="edit_n1" name="n+1" class="form-control form-control-sm" required>
+                        <span class="invalid-feedback">
+                            <strong></strong>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <h4 id="txtEdit">(n+2)</h4>
+                        <input id="edit_n2" name="n+2" class="form-control form-control-sm" required>
+                        <span class="invalid-feedback">
+                            <strong></strong>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <h4 id="txtEdit">(n+3)</h4>
+                        <input id="edit_n3" name="n+3" class="form-control form-control-sm" required>
+                        <span class="invalid-feedback">
+                            <strong></strong>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <h4 id="txtEdit">Kondisi Akhir</h4>
+                        <input id="edit_kondisi_akhir" name="kondisi_akhir" class="form-control form-control-sm" required>
                         <span class="invalid-feedback">
                             <strong></strong>
                         </span>
@@ -212,9 +290,15 @@
           },
           success: function(data){
             console.log(data);
-            $("#edit_content").html(data['result'][0][type]);
+            $("#edit_indikator").html(data['result'][0][type]);
+            $("#edit_n-2").val(data['result'][0]['n-2']);
+            $("#edit_n").val(data['result'][0]['n']);
+            $("#edit_n1").val(data['result'][0]['n+1']);
+            $("#edit_n2").val(data['result'][0]['n+2']);
+            $("#edit_n3").val(data['result'][0]['n+3']);
+            $("#edit_kondisi_akhir").val(data['result'][0]['kondisi_akhir']);
             $("#edit-misi").val(data['result'][0]['misi_id']);
-            fetchTujuan(data['result'][0]['misi_id'], data['result'][0]['tujuan_id']);
+            fetchTujuan(data['result'][0]['misi_id'], data['result'][0]['tujuan_id'], data['result'][0]['sasaran_id']);
           },
           error: function (data) {
             console.log(data.responseText);
@@ -222,7 +306,7 @@
       });
     }
 
-    function fetchTujuan(idNya, idTujuanNya){
+    function fetchTujuan(idNya, idTujuanNya, idSasaranNya){
       $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -239,6 +323,8 @@
 
             var opt = document.createElement('option');
             opt.setAttribute("name", "tujuan");
+            opt.setAttribute("disabled", "");
+            opt.setAttribute("selected", "");
             opt.value = "";
             opt.innerHTML = "PILIH TUJUAN";
             select.appendChild(opt);
@@ -251,39 +337,44 @@
               select.appendChild(opt);
             }
             $("#edit-tujuan").val(idTujuanNya);
+            fetchSasaran(idTujuanNya, idSasaranNya);
           },
       });
     }
-    function fetchSasaran(idNya, idTujuanNya){
+    function fetchSasaran(idNya, idSasaranNya){
       $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         type: 'get',
-        url: "{{ route('showTujuan') }}",
+        url: "{{ route('showSasaran') }}",
         data: {
             'id': idNya
         },
         success: function (data) {
-            var tujuan = data['result'];
-            $("#edit-tujuan").empty();
-            select = document.getElementById("edit-tujuan");
+            var sasaran = data['result'];
+            $("#edit-sasaran").empty();
+            select = document.getElementById("edit-sasaran");
 
             var opt = document.createElement('option');
-            opt.setAttribute("name", "tujuan");
+            opt.setAttribute("name", "sasaran");
+            opt.setAttribute("disabled", "");
+            opt.setAttribute("selected", "");
             opt.value = "";
-            opt.innerHTML = "PILIH TUJUAN";
+            opt.innerHTML = "PILIH SASARAN";
             select.appendChild(opt);
 
-            for(var i = 0; i < tujuan.length; i++){
+            for(var i = 0; i < sasaran.length; i++){
               var opt = document.createElement('option');
-              opt.setAttribute("name", "tujuan");
-              opt.value = tujuan[i]['id'];
-              opt.innerHTML = tujuan[i]['tujuan'];
+              opt.setAttribute("name", "sasaran");
+              opt.value = sasaran[i]['id'];
+              opt.innerHTML = sasaran[i]['sasaran'];
               select.appendChild(opt);
             }
-            $("#edit-tujuan").val(idTujuanNya);
-          },
+            if(idSasaranNya != null){
+	            $("#edit-sasaran").val(idSasaranNya);
+	        }
+        },
       });
     }
   </script>

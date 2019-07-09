@@ -104,6 +104,9 @@ Route::group(['prefix' => 'indikator'], function () {
 	Route::get('/show-misi', 'IndikatorController@showMisi')->name('showMisi');
 	Route::get('/show-tujuan', 'IndikatorController@showTujuan')->name('showTujuan');
 	Route::get('/show-sasaran', 'IndikatorController@showSasaran')->name('showSasaran');
+	Route::post('/delete-indikator', 'IndikatorController@delete')->name('deleteIndikator');
+	Route::post('/update-indikator', 'IndikatorController@update')->name('updateIndikator');
+	Route::post('/edit-indikator', 'IndikatorController@edit')->name('editIndikator');
 
 	//khusus AHP
 	Route::get('/nilai-kriteria-indikator', 'IndikatorController@showKriteriaIndikator')->name('showKriteriaIndikator');
