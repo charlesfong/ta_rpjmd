@@ -95,27 +95,35 @@
                 </a>          
               </li>
               <li>
-                <a href="{{ route('browseTujuan') }}">
-                  <i class="fa"></i> <span>Seluruh Tujuan</span>            
-                </a>
+                @if(sizeof(App\Visi::first()) > 0)
+                  <a href="{{ route('browseTujuan') }}">
+                    <i class="fa"></i> <span>Seluruh Tujuan</span>            
+                  </a>
+                @endif
               <li>
                 <a href="{{ route('addTujuan') }}">
                   <i class="fa"></i> <span>Input Tujuan</span>            
                 </a>          
               </li>
               <li>
-                <a href="{{ route('browseSasaran') }}">
-                  <i class="fa"></i> <span>Seluruh Sasaran</span>
-                </a>
+                @if(sizeof(App\Visi::first()) > 0)
+                  @if(sizeof(App\Visi::first()->misi) > 0)
+                    <a href="{{ route('browseSasaran') }}">
+                      <i class="fa"></i> <span>Seluruh Sasaran</span>
+                    </a>
+                  @endif
+                @endif
               <li>
                 <a href="{{ route('addSasaran') }}">
                   <i class="fa"></i> <span>Input Sasaran</span>            
                 </a>          
               </li>
               <li>
-                <a href="{{ route('browseIndikator') }}">
-                  <i class="fa"></i> <span>Seluruh Indikator</span>
-                </a>
+                @if(sizeof(App\Visi::first()) > 0)
+                  <a href="{{ route('browseIndikator') }}">
+                    <i class="fa"></i> <span>Seluruh Indikator</span>
+                  </a>
+                @endif
               <li>
                 <a href="{{ route('addIndikator') }}">
                   <i class="fa"></i> <span>Input Indikator</span>
@@ -139,9 +147,11 @@
                     </a>         
                   </li>
                   <li>
-                    <a href="{{ route('hasilAhpMisi') }}">
-                      <i class="fa"></i> <span>Hasil Seleksi Misi</span>            
-                    </a>          
+                    @if(sizeof(App\EigenKriteriaMisi::first()) > 0 && sizeof(App\EigenMisi::first()) > 0)
+                      <a href="{{ route('hasilAhpMisi') }}">
+                        <i class="fa"></i> <span>Hasil Seleksi Misi</span>            
+                      </a>          
+                    @endif
                   </li>    
               </li>
               <li>
@@ -162,9 +172,11 @@
                     </a>         
                   </li>
                   <li>
-                    <a href="{{ route('hasilAhpTujuan') }}">
-                      <i class="fa"></i> <span>Hasil Seleksi Tujuan</span>            
-                    </a>          
+                    @if(sizeof(App\EigenKriteriaTujuan::first()) > 0 && sizeof(App\EigenTujuan::first()) > 0)
+                      <a href="{{ route('hasilAhpTujuan') }}">
+                        <i class="fa"></i> <span>Hasil Seleksi Tujuan</span>            
+                      </a>
+                    @endif    
                   </li>    
               </li>
               <li>
@@ -185,9 +197,11 @@
                     </a>         
                   </li>
                   <li>
+                    @if(sizeof(App\EigenKriteriaSasaran::first()) > 0 && sizeof(App\EigenSasaran::first()) > 0)
                     <a href="{{ route('hasilAhpSasaran') }}">
                       <i class="fa"></i> <span>Hasil Seleksi Sasaran</span>            
-                    </a>          
+                    </a> 
+                    @endif         
                   </li>    
               </li>
               <li>
@@ -208,9 +222,11 @@
                     </a>         
                   </li>
                   <li>
+                    @if(sizeof(App\EigenKriteriaIndikator::first()) > 0 && sizeof(App\EigenIndikator::first()) > 0)
                     <a href="{{ route('hasilAhpIndikator') }}">
                       <i class="fa"></i> <span>Hasil Seleksi Indikator</span>            
-                    </a>          
+                    </a>  
+                    @endif        
                   </li>    
               </li>
             @if(Auth::user()->inRole('admin'))

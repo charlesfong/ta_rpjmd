@@ -264,7 +264,6 @@
         <thead>
         <tr>
           <th>{{$tipeMenu}}</th>
-          <th>Nilai</th>
           <th>Ranking</th>
         </tr>
         </thead>
@@ -272,7 +271,6 @@
           @foreach($Misis as $key => $misi)
             <tr>
               <td>{{$misi[$tipeTampilan]}}</td>
-              <td>{{$hasilEigen[$key]}}</td>
               <td>{{$hasilNilaiAkhir[$misi['id']]}}</td>
             </tr>
           @endforeach

@@ -42,23 +42,33 @@ class KepalaDaerahController extends Controller
     public function storeVisiMisi(request $request)
     {
         $validator = \Validator::make($request->all(), [
-                    'visi' => 'required',
                     'misi' => 'required',
         ]);
         $validator->validate();
         
+        if($request->has('visi')){
+            $data = $request->only('visi', 'misi');
+            $data['user_id'] = Auth::user()->id;
+            $visi = Visi::create($data);
 
-        $data = $request->only('visi', 'misi');
-        $data['user_id'] = Auth::user()->id;
-        $visi = Visi::create($data);
-
-        $tempMisi = [];
-        foreach ($data['misi'] as $misiNya) {
-            $tempMisi['misi'] = $misiNya;
-            $tempMisi['visi_id'] = $visi->id;
-            $misi = Misi::create($tempMisi);
+            $tempMisi = [];
+            foreach ($data['misi'] as $misiNya) {
+                $tempMisi['misi'] = $misiNya;
+                $tempMisi['visi_id'] = $visi->id;
+                $misi = Misi::create($tempMisi);
+            }
         }
-        // dd($data['misi']);
+        else{
+            $data = $request->only('misi');
+            $data['user_id'] = Auth::user()->id;
+
+            $tempMisi = [];
+            foreach ($data['misi'] as $misiNya) {
+                $tempMisi['misi'] = $misiNya;
+                $tempMisi['visi_id'] = Visi::all()->first()['id'];
+                $misi = Misi::create($tempMisi);
+            }
+        }
 		
         return view('kepaladaerah.inputvisimisi');
        
