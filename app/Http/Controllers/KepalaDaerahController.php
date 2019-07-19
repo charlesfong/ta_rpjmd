@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Visi;
@@ -10,6 +11,12 @@ use App\User;
 use App\KriteriaMisi;
 use App\BobotKriteriaMisi;
 use App\EigenKriteriaMisi;
+use App\BobotKriteriaTujuan;
+use App\EigenKriteriaTujuan;
+use App\BobotKriteriaSasaran;
+use App\EigenKriteriaSasaran;
+use App\BobotKriteriaIndikator;
+use App\EigenKriteriaIndikator;
 use App\BobotMisi;
 use App\EigenMisi;
 use App\BobotTujuan;
@@ -191,6 +198,61 @@ class KepalaDaerahController extends Controller
     }
 
     //AHPshowNilaiMisi
+    public function deleteKriteria(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                ]);
+        $validator->validate();
+
+        $objNya = KriteriaMisi::find($request['id']);
+        if($objNya != null){
+            BobotKriteriaIndikator::truncate();
+            EigenKriteriaIndikator::truncate();
+            BobotKriteriaSasaran::truncate();
+            EigenKriteriaSasaran::truncate();
+            BobotKriteriaTujuan::truncate();
+            EigenKriteriaTujuan::truncate();
+            BobotKriteriaMisi::truncate();
+            EigenKriteriaMisi::truncate();
+
+            $objNya->delete();
+        }
+        return $this->addKriteriaMisi();
+    }
+
+    public function updateKriteria(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                    'content' => 'required',
+                ]);
+        $validator->validate();
+
+        $objNya = KriteriaMisi::find($request['id']);            
+        if($objNya != null){
+            $objNya['kriteria'] = $request['content'];
+            $objNya->save();
+
+            BobotKriteriaIndikator::truncate();
+            EigenKriteriaIndikator::truncate();
+            BobotKriteriaSasaran::truncate();
+            EigenKriteriaSasaran::truncate();
+            BobotKriteriaTujuan::truncate();
+            EigenKriteriaTujuan::truncate();
+            BobotKriteriaMisi::truncate();
+            EigenKriteriaMisi::truncate();
+        }
+        return $this->addKriteriaMisi();
+    }
+
+    public function editKriteria(Request $request) {
+        if ($request->has('id')) {
+            $objNya = KriteriaMisi::find($request->get('id'));
+            return response()->json(['result' => $objNya]);
+        } else {
+            return response()->json(['result' => 'Gagal!!']);
+        }
+    }
+
     public function showKriteriaMisi()
     {
         $Kriteria = KriteriaMisi::all();
@@ -341,12 +403,21 @@ class KepalaDaerahController extends Controller
     }
     public function hasilAhpMisi()
     {
-        $id = Auth::user()->id;
-        $VisiMisi = Visi::whereNotNull('id')->first();
-        $Misis = $VisiMisi->misiSort;
-        $TipeData = 'Misi';
-        $Kriterias = KriteriaMisi::all();
-        return view('hasilseleksi', compact('TipeData', 'Misis', 'Kriterias'));
+        $isThereEigen = EigenMisi::all();
+        //cek ada gk yg udah input
+        if(sizeof($isThereEigen) > 0){
+            $id = Auth::user()->id;
+            $VisiMisi = Visi::whereNotNull('id')->first();
+            $Misis = $VisiMisi->misiSort;
+            $TipeData = 'Misi';
+            $Kriterias = KriteriaMisi::all();
+            return view('hasilseleksi', compact('TipeData', 'Misis', 'Kriterias'));
+        }
+        else{
+            $host = parse_url(request()->headers->get('referer'), PHP_URL_HOST);
+            return Redirect::away(request()->headers->get('referer'));
+        }
+       
     }
     public function storeBobotMisi(Request $request)
     {

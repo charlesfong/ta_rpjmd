@@ -12,6 +12,12 @@ use App\Tujuan;
 use App\Sasaran;
 use App\Indikator;
 use App\KriteriaIndikator;
+use App\BobotKriteriaMisi;
+use App\EigenKriteriaMisi;
+use App\BobotKriteriaTujuan;
+use App\EigenKriteriaTujuan;
+use App\BobotKriteriaSasaran;
+use App\EigenKriteriaSasaran;
 use App\BobotKriteriaIndikator;
 use App\EigenKriteriaIndikator;
 use App\BobotMisi;
@@ -131,7 +137,8 @@ class IndikatorController extends Controller
             $indikatorNya->delete();
         }
 
-        return $this->showindikator();
+        $request = new \Illuminate\Http\Request();
+        return $this->showindikator($request);
     }
 
     public function update(Request $request){
@@ -144,6 +151,12 @@ class IndikatorController extends Controller
         $indikatorNya = Indikator::find($request['id']);
         if($indikatorNya != null){
             $indikatorNya['indikator'] = $request['indikator'];
+            $indikatorNya['n-2'] = $request['n-2'];
+            $indikatorNya['n'] = $request['n'];
+            $indikatorNya['n+1'] = $request['n+1'];
+            $indikatorNya['n+2'] = $request['n+2'];
+            $indikatorNya['n+3'] = $request['n+3'];
+            $indikatorNya['kondisi_akhir'] = $request['kondisi_akhir'];
             $indikatorNya->save();
 
             BobotIndikator::truncate();
@@ -155,8 +168,9 @@ class IndikatorController extends Controller
             BobotMisi::truncate();
             EigenMisi::truncate();
         }
-
-        return $this->showindikator();
+        
+        $request = new \Illuminate\Http\Request();
+        return $this->showindikator($request);
     }
 
     public function edit(Request $request) {
@@ -185,6 +199,61 @@ class IndikatorController extends Controller
 
 
     //AHPshowNilaiIndikator
+    public function deleteKriteria(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                ]);
+        $validator->validate();
+
+        $objNya = KriteriaIndikator::find($request['id']);
+        if($objNya != null){
+            BobotKriteriaIndikator::truncate();
+            EigenKriteriaIndikator::truncate();
+            BobotKriteriaSasaran::truncate();
+            EigenKriteriaSasaran::truncate();
+            BobotKriteriaTujuan::truncate();
+            EigenKriteriaTujuan::truncate();
+            BobotKriteriaMisi::truncate();
+            EigenKriteriaMisi::truncate();
+
+            $objNya->delete();
+        }
+        return $this->addKriteriaIndikator();
+    }
+
+    public function updateKriteria(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                    'content' => 'required',
+                ]);
+        $validator->validate();
+
+        $objNya = KriteriaIndikator::find($request['id']);            
+        if($objNya != null){
+            $objNya['kriteria'] = $request['content'];
+            $objNya->save();
+
+            BobotKriteriaIndikator::truncate();
+            EigenKriteriaIndikator::truncate();
+            BobotKriteriaSasaran::truncate();
+            EigenKriteriaSasaran::truncate();
+            BobotKriteriaTujuan::truncate();
+            EigenKriteriaTujuan::truncate();
+            BobotKriteriaMisi::truncate();
+            EigenKriteriaMisi::truncate();
+        }
+        return $this->addKriteriaIndikator();
+    }
+
+    public function editKriteria(Request $request) {
+        if ($request->has('id')) {
+            $objNya = KriteriaIndikator::find($request->get('id'));
+            return response()->json(['result' => $objNya]);
+        } else {
+            return response()->json(['result' => 'Gagal!!']);
+        }
+    }
+
     public function showKriteriaIndikator()
     {
         $Kriteria = KriteriaIndikator::all();

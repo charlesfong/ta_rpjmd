@@ -150,7 +150,7 @@
 
       $(".btn-editVisi").click(function(e) {
         $("#cbo_visi").hide();
-        fetchEdit($(this).val(), '{{ route('editVisi') }}', 'visi')
+        fetchEdit($(this).val(), '{{ route('editVisi') }}', 'visi');
         $("#actionEdit").attr("action",  "{{ route('updateVisiMisi') }}");
         $("#btn-confirmUpdate").attr("value", $(this).val());
         $("#txtModalEdit").html("Edit Visi");

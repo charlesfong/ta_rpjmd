@@ -11,8 +11,14 @@ use App\Misi;
 use App\Tujuan;
 use App\Sasaran;
 use App\KriteriaSasaran;
+use App\BobotKriteriaMisi;
+use App\EigenKriteriaMisi;
+use App\BobotKriteriaTujuan;
+use App\EigenKriteriaTujuan;
 use App\BobotKriteriaSasaran;
 use App\EigenKriteriaSasaran;
+use App\BobotKriteriaIndikator;
+use App\EigenKriteriaIndikator;
 use App\BobotMisi;
 use App\EigenMisi;
 use App\BobotTujuan;
@@ -141,6 +147,62 @@ class SasaranController extends Controller
     }
 
     //AHPshowNilaiSasaran
+    public function deleteKriteria(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                ]);
+        $validator->validate();
+
+        $objNya = KriteriaSasaran::find($request['id']);
+        if($objNya != null){
+            BobotKriteriaIndikator::truncate();
+            EigenKriteriaIndikator::truncate();
+            BobotKriteriaSasaran::truncate();
+            EigenKriteriaSasaran::truncate();
+            BobotKriteriaTujuan::truncate();
+            EigenKriteriaTujuan::truncate();
+            BobotKriteriaMisi::truncate();
+            EigenKriteriaMisi::truncate();
+
+            $objNya->delete();
+        }
+        return $this->addKriteriaSasaran();
+    }
+
+    public function updateKriteria(Request $request){
+        $validator = \Validator::make($request->all(), [
+                    'id' => 'required',
+                    'content' => 'required',
+                ]);
+        $validator->validate();
+
+        $objNya = KriteriaSasaran::find($request['id']);            
+        if($objNya != null){
+            $objNya['kriteria'] = $request['content'];
+            $objNya->save();
+
+            BobotKriteriaIndikator::truncate();
+            EigenKriteriaIndikator::truncate();
+            BobotKriteriaSasaran::truncate();
+            EigenKriteriaSasaran::truncate();
+            BobotKriteriaTujuan::truncate();
+            EigenKriteriaTujuan::truncate();
+            BobotKriteriaMisi::truncate();
+            EigenKriteriaMisi::truncate();
+        }
+        return $this->addKriteriaSasaran();
+    }
+
+    public function editKriteria(Request $request) {
+        if ($request->has('id')) {
+            $objNya = KriteriaSasaran::find($request->get('id'));
+            return response()->json(['result' => $objNya]);
+        } else {
+            return response()->json(['result' => 'Gagal!!']);
+        }
+    }
+
+    
     public function showKriteriaSasaran()
     {
         $Kriteria = KriteriaSasaran::all();

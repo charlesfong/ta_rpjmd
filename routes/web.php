@@ -32,6 +32,10 @@ Route::group(['prefix' => 'visimisi'], function () {
 	Route::post('/edit-misi', 'KepalaDaerahController@editMisi')->name('editMisi');
 
 	//khusus AHP
+	Route::post('/delete-misi-kriteria', 'KepalaDaerahController@deleteKriteria')->name('deleteMisiKriteria');
+	Route::post('/update-misi-kriteria', 'KepalaDaerahController@updateKriteria')->name('updateMisiKriteria');
+	Route::post('/edit-misi-kriteria', 'KepalaDaerahController@editKriteria')->name('editMisiKriteria');
+
 	Route::get('/nilai-kriteria-misi', 'KepalaDaerahController@showKriteriaMisi')->name('showKriteriaMisi');
 	Route::get('/nilai-misi', 'KepalaDaerahController@showNilaiMisi')->name('showNilaiMisi');
 	Route::get('/add-kriteria-misi', 'KepalaDaerahController@addKriteriaMisi')->name('addKriteriaMisi');
@@ -55,6 +59,10 @@ Route::group(['prefix' => 'tujuan'], function () {
 	Route::post('/edit-tujuan', 'BappedaController@edit')->name('editTujuan');
 
 	//khusus AHP
+	Route::post('/delete-tujuan-kriteria', 'BappedaController@deleteKriteria')->name('deleteTujuanKriteria');
+	Route::post('/update-tujuan-kriteria', 'BappedaController@updateKriteria')->name('updateTujuanKriteria');
+	Route::post('/edit-tujuan-kriteria', 'BappedaController@editKriteria')->name('editTujuanKriteria');
+
 	Route::get('/nilai-kriteria-tujuan', 'BappedaController@showKriteriaTujuan')->name('showKriteriaTujuan');
 	Route::get('/nilai-tujuan', 'BappedaController@showNilaiTujuan')->name('showNilaiTujuan');
 	Route::get('/nilai-tujuan/{id}', 'BappedaController@showNilaiTujuanById')->name('showNilaiTujuanById');
@@ -81,6 +89,10 @@ Route::group(['prefix' => 'sasaran'], function () {
 	Route::post('/edit-sasaran', 'SasaranController@edit')->name('editSasaran');
 
 	//khusus AHP
+	Route::post('/delete-sasaran-kriteria', 'SasaranController@deleteKriteria')->name('deleteSasaranKriteria');
+	Route::post('/update-sasaran-kriteria', 'SasaranController@updateKriteria')->name('updateSasaranKriteria');
+	Route::post('/edit-sasaran-kriteria', 'SasaranController@editKriteria')->name('editSasaranKriteria');
+
 	Route::get('/nilai-kriteria-sasaran', 'SasaranController@showKriteriaSasaran')->name('showKriteriaSasaran');
 	Route::get('/nilai-sasaran', 'SasaranController@showNilaiSasaran')->name('showNilaiSasaran');
 	Route::get('/nilai-sasaran/{id}', 'SasaranController@showNilaiSasaranById')->name('showNilaiSasaranById');
@@ -109,6 +121,10 @@ Route::group(['prefix' => 'indikator'], function () {
 	Route::post('/edit-indikator', 'IndikatorController@edit')->name('editIndikator');
 
 	//khusus AHP
+	Route::post('/delete-indikator-kriteria', 'IndikatorController@deleteKriteria')->name('deleteIndikatorKriteria');
+	Route::post('/update-indikator-kriteria', 'IndikatorController@updateKriteria')->name('updateIndikatorKriteria');
+	Route::post('/edit-indikator-kriteria', 'IndikatorController@editKriteria')->name('editIndikatorKriteria');
+
 	Route::get('/nilai-kriteria-indikator', 'IndikatorController@showKriteriaIndikator')->name('showKriteriaIndikator');
 	Route::get('/nilai-indikator', 'IndikatorController@showNilaiIndikator')->name('showNilaiIndikator');
 	Route::get('/nilai-indikator/{id}', 'IndikatorController@showNilaiIndikatorById')->name('showNilaiIndikatorById');
