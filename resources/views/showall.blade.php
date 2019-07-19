@@ -3,6 +3,7 @@
 
 @if(sizeof($Misis) > 0)
 @php
+    $canSee = true;
     foreach ($Misis as $objNya) {
       if(sizeof($objNya->tujuanSort) < 1){
         $canSee = false;
