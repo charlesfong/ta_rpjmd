@@ -150,7 +150,6 @@ html,body{
                           @php
                             $awalanMisiIndikator = false;
                             $awalanTujuanIndikator = false;
-                            $idxMisiNya++;
 
                             $totalBaris = 0;
                             foreach ($misi->tujuanSort as $tujuan) {
