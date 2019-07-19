@@ -2,7 +2,14 @@
 
 
 @if(sizeof($Misis) > 0)
-@if(sizeof($Misis[0]->tujuanSort) > 0)
+@php
+    foreach ($Misis as $objNya) {
+      if(sizeof($objNya->tujuanSort) < 1){
+        $canSee = false;
+      }
+    }
+  @endphp
+@if($canSee)
   <section class="content">
     <div class="row">
       <div class="col-xs-12">

@@ -90,12 +90,18 @@ html,body{
       <div style="padding: 80px;margin: auto;padding-top: 10px;">
         @php
             $Misis = App\Visi::first();
+            $canSee = true;
         @endphp
         @if(sizeof($Misis) > 0)
-        @if(sizeof($Misis->tujuanSort) > 0)
           @php
             $Misis = $Misis->Misi->sortByDesc('bobot');
+            foreach ($Misis as $objNya) {
+              if(sizeof($objNya->tujuanSort) < 1){
+                $canSee = false;
+              }
+            }
           @endphp
+        @if($canSee)
           <h3 style="text-align: center;">VISI : </h3>
           <h2 style="text-align: center;">{{ App\Visi::first()['visi'] }}</h2>
           <section class="content">
@@ -144,6 +150,7 @@ html,body{
                           @php
                             $awalanMisiIndikator = false;
                             $awalanTujuanIndikator = false;
+                            $idxMisiNya++;
 
                             $totalBaris = 0;
                             foreach ($misi->tujuanSort as $tujuan) {
